@@ -1,0 +1,15 @@
+pluginManagement {
+    repositories {
+         maven {
+            url = "https://repo.peddlecloud.com/artifactory/libs-release-local"
+            credentials {
+            username 'rashed_alam'
+            password 'rashed.muhammad'
+            }
+         }
+        gradlePluginPortal()
+        
+    }
+}
+
+rootProject.name = 'service-common'

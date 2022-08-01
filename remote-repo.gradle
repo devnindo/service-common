@@ -1,0 +1,70 @@
+ 
+def releaseRepoURL = "https://repo.peddlecloud.com/artifactory/libs-release-local";
+def snapshotRepoURL = "https://repo.peddlecloud.com/artifactory/libs-snapshot-local";
+def repoUserName = 'rashed_alam';
+def repoPassword = 'rashed.muhammad';
+
+repositories {
+  
+    jcenter()
+    maven { url "https://plugins.gradle.org/m2/" }
+
+    repositories {
+
+        jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven {
+            url url = snapshotRepoURL
+            credentials {
+                username repoUserName
+                password repoPassword
+            }
+            mavenContent {
+                snapshotsOnly()
+            }
+        }
+        maven {
+            url url = releaseRepoURL
+            credentials {
+                username repoUserName
+                password repoPassword
+            }
+            mavenContent {
+                releasesOnly()
+            }
+        }
+
+
+        mavenLocal()
+    }
+
+
+    mavenLocal()
+} 
+
+
+//"${project.name}"
+publishing {
+    publications {
+        /*shadow(MavenPublication) {
+            publication -> project.shadow.component(publication)
+        }*/
+        
+         "${project.name}"(MavenPublication)
+         {
+            from components.java
+         }
+        
+    }
+  repositories {
+    maven {
+        url url = version.endsWith('SNAPSHOT') ? snapshotRepoURL : releaseRepoURL
+        credentials {
+            username repoUserName
+            password repoPassword
+        }
+    }
+    
+  }
+}
+ 

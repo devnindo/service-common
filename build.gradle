@@ -1,0 +1,47 @@
+plugins {
+  id 'idea'
+  id 'java-library'
+  id 'maven-publish'
+  id 'io.devnindo.plugin' version '0.9.10'
+  
+}
+
+group = "io.devnindo"
+version = "0.9.1-rc"
+sourceCompatibility = '1.8'
+
+
+apply from: 'remote-repo.gradle'
+
+
+sourceSets.main.java.srcDirs = ['build/classes/java/main','src/main/java']
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+
+dependencies {
+
+    implementation 'com.google.dagger:dagger:2.42'
+    annotationProcessor("com.google.dagger:dagger-compiler:2.42")
+    implementation('io.devnindo.core:datacommon:0.9.3') {changing = true}
+    implementation  group: 'io.github.classgraph', name: 'classgraph', version: '4.1.0'
+
+    api "io.vertx:vertx-rx-java2:4.+"
+    api "io.vertx:vertx-core:4.+:sources"
+
+    implementation "io.vertx:vertx-web:4.+"
+    implementation 'io.vertx:vertx-web-client:4.+'
+
+    implementation 'org.apache.httpcomponents:httpclient:4.5.8'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.5.1'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams true
+    }
+}

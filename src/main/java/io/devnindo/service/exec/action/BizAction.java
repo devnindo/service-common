@@ -1,0 +1,203 @@
+package io.devnindo.service.exec.action;
+
+import io.devnindo.service.exec.auth.BizAuth;
+import io.devnindo.service.exec.action.request.BizRequest;
+import io.devnindo.service.exec.auth.BizUser;
+import io.devnindo.service.exec.action.response.BizResponse;
+import io.devnindo.core.schema.BeanValidator;
+import io.devnindo.core.schema.DataBean;
+import io.devnindo.core.util.Either;
+import io.devnindo.core.validation.Violation;
+import io.reactivex.Single;
+
+import java.util.Objects;
+
+public abstract class BizAction<T extends DataBean> {
+
+    public final Identity identity;
+    //public final BizStep<BizRequest, ActionRequest<T>> accessStep;
+    private final BeanValidator<T> validator;
+    private final BizAuth accessAuth;
+    protected String step;
+
+    public BizAction(BeanValidator<T> validator$, BizAuth accessAuth$)
+    {
+
+        identity = Identity.createFrom(this.getClass()).right();
+        validator = validator$;
+        accessAuth = accessAuth$;
+
+
+    }
+
+    protected final void $step(String step$)
+    {
+        this.step = step$;
+    }
+
+    /**
+     *  doBiz is a default Rx-complaint biz action that has the
+     *  actionRequest as argument. BlockingBizAction simply provides an
+     *  implementation by providing another implementable function: doBlockingBiz
+     * */
+
+
+
+    protected abstract Single<BizResponse> doBiz(T reqData, BizUser bizUser);
+
+
+    public Single<BizResponse> executeOn(BizRequest request$)
+    {
+
+
+        this.$step(CommonSteps.ACTION_ACCESS);
+        Either<Violation, T> eitherT = validator.apply(request$.reqData);
+        if(eitherT.isLeft())
+            return  Single.just(BizResponse.failed(eitherT.left()));
+
+        Either<Violation, Void> accessEither = accessAuth.checkAccess(request$);
+        if(accessEither.isLeft())
+            return Single.just(BizResponse.failed(accessEither.left()));
+
+        this.$step("BIZ_STEP");
+        BizUser bizUser = request$.bizUser;
+        T reqData = eitherT.right();
+        Single<BizResponse> bizResponseSingle =  this.doBiz(reqData, bizUser)
+                                                    .onErrorResumeNext(this::onErrorResponse0);            ;
+
+        return bizResponseSingle;
+
+    }
+
+    private Single<BizResponse> onErrorResponse0(Throwable throwable$)
+    {
+        // this casting is not meaningful rather errorprone
+        if(throwable$ instanceof BizException)
+        {
+            BizException bizException = (BizException)throwable$;
+            if(bizException.dueToViolation())
+                return Single.just(BizResponse.failed(bizException.violation()));
+            else
+                return Single.error(bizException);
+        }
+        else return Single.error(BizException.onException(this.step, throwable$));
+    }
+
+
+
+    public static class Identity {
+
+
+        public final String actionID; // [module.actionType.simpleName]
+        public final String actionType; // [command, query]
+        public final String execType; // [blocking, fibered, rx]
+        public final String moduleName;
+
+
+
+        public interface ExeTypes
+        {
+            String UNKNOWN = "unknown";
+            String REACTIVE = "reactive";
+            String FIBERED = "fibered";
+            String BLOCKING = "blocking";
+        }
+
+        private  Identity(String actionID$, String type$, String execType$, String moduleName$)
+        {
+            actionID = actionID$;
+            actionType = type$;
+            moduleName = moduleName$;
+            execType = execType$;
+
+        }
+
+        public boolean isReactive()
+        {
+            return  ExeTypes.REACTIVE.equals(execType);
+        }
+
+        public boolean isBlocking()
+        {
+            return  ExeTypes.BLOCKING.equals(execType);
+        }
+
+        public boolean isFibered()
+        {
+            return   ExeTypes.FIBERED.equals(execType);
+        }
+
+        public static Either<String,   Identity> createFrom(String reqName)
+        {
+            return createFrom0(reqName,   ExeTypes.UNKNOWN);
+        }
+        public static Either<String,  Identity> createFrom0(String reqName$, String execType$)
+        {
+            String moduleName;
+            String actionType;
+            String actionID;
+
+            String[] splits = reqName$.split("\\.");
+            int splitCount = splits.length;
+            if(splitCount != 3)
+                return Either.left("Action's package resolution format: module.{coomand, query}.constraint");
+
+            moduleName = splits[0];
+            actionType = splits[1];
+            actionID = reqName$;
+
+            if(! "command".equals(actionType) && ! "query".equals(actionType))
+                return Either.left("Allowed types are: {command, query}");
+
+            return Either.right(new Identity(actionID, actionType, execType$, moduleName));
+        }
+
+        public static Either<String,  Identity> createFrom(Class<? extends  BizAction> actionClz$){
+            //String simpleName = actionClz$.getSimpleName();
+            String execType =  ExeTypes.UNKNOWN;
+            String clzName = actionClz$.getName();
+
+            String[] splits = clzName.split("\\.");
+            String moduleName;
+            String actionType;
+            String actionName;
+
+            //tring fullName = clzName.substring(actionsPackagePath.length());
+            if(BlockingBizAction.class.isAssignableFrom(actionClz$))
+            {
+                execType =   ExeTypes.BLOCKING;
+            }
+            else execType =  ExeTypes.REACTIVE;
+
+            int partIdx = splits.length - 1;
+            actionName = splits[partIdx];
+            partIdx--;
+            actionType = splits[partIdx];
+            partIdx--;
+            moduleName = splits[partIdx];
+
+
+            String actionId = moduleName + "." + actionType + "." + actionName;
+            return Either.right(new  Identity(actionId, actionType, execType, moduleName));
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if(obj == null) return false;
+            if(obj instanceof String)
+            {
+                return obj.equals(this.actionID);
+            }
+            if(obj instanceof  Identity == false)
+                return false;
+            Identity other = (Identity)obj;
+            return this.actionID.equals(other.actionID);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(actionID);
+        }
+    }
+
+}

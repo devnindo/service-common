@@ -14,7 +14,7 @@ import io.devnindo.service.exec.BizLogalyzerApi;
 import io.devnindo.service.exec.BizManagerApi;
 import dagger.Module;
 import dagger.Provides;
-import io.devnindo.core.json.JsonObject;
+import io.devnindo.datatype.json.JsonObject;
 
 import javax.inject.Singleton;
 

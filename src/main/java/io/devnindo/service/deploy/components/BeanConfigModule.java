@@ -5,11 +5,11 @@
  */
 package io.devnindo.service.deploy.components;
  
-import io.devnindo.core.schema.BeanSchema;
-import io.devnindo.core.schema.DataBean;
-import io.devnindo.core.util.Either;
-import io.devnindo.core.validation.Violation;
-import io.devnindo.core.json.JsonObject;
+import io.devnindo.datatype.schema.BeanSchema;
+import io.devnindo.datatype.schema.DataBean;
+import io.devnindo.datatype.util.Either;
+import io.devnindo.datatype.validation.Violation;
+import io.devnindo.datatype.json.JsonObject;
 /**
  *
  * @author prevy-sage

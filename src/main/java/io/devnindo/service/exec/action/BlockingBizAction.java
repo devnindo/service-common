@@ -5,8 +5,8 @@ import io.devnindo.service.exec.action.response.BizResponse;
 import io.devnindo.service.exec.auth.BizAuth;
 import io.devnindo.service.exec.auth.BizUser;
 import io.devnindo.service.util.CompositionUtil;
-import io.devnindo.core.schema.BeanValidator;
-import io.devnindo.core.schema.DataBean;
+import io.devnindo.datatype.schema.BeanValidator;
+import io.devnindo.datatype.schema.DataBean;
 import io.reactivex.Single;
 
 public abstract class BlockingBizAction<T extends DataBean> extends BizAction<T>

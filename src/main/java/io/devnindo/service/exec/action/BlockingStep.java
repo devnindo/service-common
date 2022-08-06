@@ -1,8 +1,8 @@
 package io.devnindo.service.exec.action;
 
 import io.devnindo.service.util.CompositionUtil;
-import io.devnindo.core.util.Either;
-import io.devnindo.core.validation.Violation;
+import io.devnindo.datatype.util.Either;
+import io.devnindo.datatype.validation.Violation;
 import io.reactivex.Single;
 
 public abstract class  BlockingStep<IP, OP> extends BizStep<IP, OP>

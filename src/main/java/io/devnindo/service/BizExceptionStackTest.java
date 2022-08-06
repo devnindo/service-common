@@ -1,7 +1,7 @@
 package io.devnindo.service;
 
 import io.devnindo.service.exec.action.BizException;
-import io.devnindo.core.json.JsonObject;
+import io.devnindo.datatype.json.JsonObject;
 
 import java.io.IOException;
 

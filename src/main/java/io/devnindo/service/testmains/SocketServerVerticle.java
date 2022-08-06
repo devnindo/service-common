@@ -3,7 +3,7 @@ package io.devnindo.service.testmains;
 
 import io.devnindo.service.exec.auth.BizAuth;
 import io.vertx.core.Promise;
-import io.devnindo.core.json.JsonObject;
+import io.devnindo.datatype.json.JsonObject;
 import io.vertx.ext.bridge.PermittedOptions;
 import io.vertx.ext.web.handler.sockjs.SockJSBridgeOptions;
 import io.vertx.ext.web.handler.sockjs.SockJSHandlerOptions;

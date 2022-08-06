@@ -17,7 +17,7 @@ import io.devnindo.service.exec.BizManagerApi;
 import io.devnindo.service.util.DeployParams;
 import dagger.Module;
 import dagger.Provides;
-import io.devnindo.core.json.JsonObject;
+import io.devnindo.datatype.json.JsonObject;
 
 import javax.inject.Named;
 import javax.inject.Singleton;

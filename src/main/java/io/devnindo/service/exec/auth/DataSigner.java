@@ -1,6 +1,6 @@
 package io.devnindo.service.exec.auth;
 
-import io.devnindo.core.json.impl.JsonImplUtil;
+import io.devnindo.datatype.json.impl.JsonImplUtil;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;

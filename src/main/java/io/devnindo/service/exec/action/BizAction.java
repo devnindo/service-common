@@ -4,10 +4,10 @@ import io.devnindo.service.exec.auth.BizAuth;
 import io.devnindo.service.exec.action.request.BizRequest;
 import io.devnindo.service.exec.auth.BizUser;
 import io.devnindo.service.exec.action.response.BizResponse;
-import io.devnindo.core.schema.BeanValidator;
-import io.devnindo.core.schema.DataBean;
-import io.devnindo.core.util.Either;
-import io.devnindo.core.validation.Violation;
+import io.devnindo.datatype.schema.BeanValidator;
+import io.devnindo.datatype.schema.DataBean;
+import io.devnindo.datatype.util.Either;
+import io.devnindo.datatype.validation.Violation;
 import io.reactivex.Single;
 
 import java.util.Objects;

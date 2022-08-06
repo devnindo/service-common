@@ -6,7 +6,7 @@
 package io.devnindo.service.exec;
 
 import io.reactivex.Single;
-import io.devnindo.core.json.JsonObject;
+import io.devnindo.datatype.json.JsonObject;
 
 /**
  *

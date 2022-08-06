@@ -5,7 +5,7 @@ import io.devnindo.service.configmodels.ConfigDeploy;
 import dagger.Module;
 import dagger.Provides;
 import io.vertx.core.VertxOptions;
-import io.devnindo.core.json.JsonObject;
+import io.devnindo.datatype.json.JsonObject;
 import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.ext.web.client.WebClient;
 import org.apache.http.impl.client.CloseableHttpClient;

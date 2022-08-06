@@ -1,7 +1,7 @@
 package io.devnindo.service.exec.action.request;
 
-import io.devnindo.core.schema.DataBean;
-import io.devnindo.core.schema.AField;
+import io.devnindo.datatype.schema.DataBean;
+import io.devnindo.datatype.schema.AField;
 
 public class BizAccessInfo implements DataBean
 {

@@ -14,10 +14,10 @@ import io.devnindo.service.exec.action.request.BizRequest;
 import io.devnindo.service.exec.action.response.BizResponse;
 import io.devnindo.service.exec.auth.BizSessionHandler;
 import io.devnindo.service.util.DeployParams;
-import io.devnindo.core.util.Either;
-import io.devnindo.core.validation.Violation;
+import io.devnindo.datatype.util.Either;
+import io.devnindo.datatype.validation.Violation;
 import io.reactivex.Single;
-import io.devnindo.core.json.JsonObject;
+import io.devnindo.datatype.json.JsonObject;
 import io.vertx.reactivex.core.Vertx;
 
 import javax.inject.Inject;

@@ -1,12 +1,12 @@
 package io.devnindo.service.exec.auth;
 
 import io.devnindo.service.exec.action.request.BizAccessInfo;
-import io.devnindo.core.schema.BeanSchema;
-import io.devnindo.core.util.Either;
+import io.devnindo.datatype.schema.BeanSchema;
+import io.devnindo.datatype.util.Either;
 import io.devnindo.service.util.Values;
-import io.devnindo.core.validation.Violation;
+import io.devnindo.datatype.validation.Violation;
 import io.reactivex.Single;
-import io.devnindo.core.json.JsonObject;
+import io.devnindo.datatype.json.JsonObject;
 
 import javax.inject.Inject;
 

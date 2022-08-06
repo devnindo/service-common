@@ -1,8 +1,8 @@
 package io.devnindo.service.exec.auth;
 
 import io.devnindo.service.exec.action.request.BizRequest;
-import io.devnindo.core.util.Either;
-import io.devnindo.core.validation.Violation;
+import io.devnindo.datatype.util.Either;
+import io.devnindo.datatype.validation.Violation;
 
 import java.util.Objects;
 

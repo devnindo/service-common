@@ -1,6 +1,6 @@
 package io.devnindo.service.util;
 
-import io.devnindo.core.json.JsonObject;
+import io.devnindo.datatype.json.JsonObject;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -5,8 +5,8 @@
  */
 package io.devnindo.service.http;
 
-import io.devnindo.core.util.Either;
-import io.devnindo.core.json.JsonObject;
+import io.devnindo.datatype.util.Either;
+import io.devnindo.datatype.json.JsonObject;
 
 /**
  *

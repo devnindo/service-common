@@ -5,7 +5,7 @@
  */
 package io.devnindo.service.configmodels;
 
-import io.devnindo.core.schema.AField;
+import io.devnindo.datatype.schema.AField;
 
 /**
  *

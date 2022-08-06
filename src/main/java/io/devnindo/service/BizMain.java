@@ -16,8 +16,8 @@ import io.devnindo.service.deploy.dev.DevDeployConfigModule;
 import io.devnindo.service.deploy.production.DaggerProDeployComponent;
 import io.devnindo.service.deploy.production.ProDeployConfigModule;
 import io.devnindo.service.util.JsonConfigUtil;
-import io.devnindo.core.util.ClzUtil;
-import io.devnindo.core.json.JsonObject;
+import io.devnindo.datatype.util.ClzUtil;
+import io.devnindo.datatype.json.JsonObject;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;

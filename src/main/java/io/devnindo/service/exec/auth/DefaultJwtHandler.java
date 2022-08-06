@@ -1,9 +1,9 @@
 package io.devnindo.service.exec.auth;
 
-import io.devnindo.core.json.JsonObject;
-import io.devnindo.core.json.impl.JsonImplUtil;
-import io.devnindo.core.util.Either;
-import io.devnindo.core.validation.Violation;
+import io.devnindo.datatype.json.JsonObject;
+import io.devnindo.datatype.json.impl.JsonImplUtil;
+import io.devnindo.datatype.util.Either;
+import io.devnindo.datatype.validation.Violation;
 
 import java.time.Instant;
 import java.util.Base64;

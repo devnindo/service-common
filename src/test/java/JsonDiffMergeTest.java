@@ -1,7 +1,7 @@
 
-import io.devnindo.core.json.JsonObject;
-import io.devnindo.core.schema.DataDiff;
-import io.devnindo.core.util.JsonUtil;
+import io.devnindo.datatype.json.JsonObject;
+import io.devnindo.datatype.schema.DataDiff;
+import io.devnindo.datatype.util.JsonUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

@@ -1,10 +1,10 @@
 
 import io.devnindo.service.exec.auth.BizUser;
 
-import io.devnindo.core.json.JsonObject;
-import io.devnindo.core.schema.BeanSchema;
-import io.devnindo.core.util.Either;
-import io.devnindo.core.validation.Violation;
+import io.devnindo.datatype.json.JsonObject;
+import io.devnindo.datatype.schema.BeanSchema;
+import io.devnindo.datatype.util.Either;
+import io.devnindo.datatype.validation.Violation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

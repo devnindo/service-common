@@ -8,7 +8,7 @@ package io.devnindo.service.deploy.dev;
 import io.devnindo.service.exec.BizErrorLog;
 import io.devnindo.service.exec.BizManagerApi;
 import io.reactivex.Single;
-import io.devnindo.core.json.JsonObject;
+import io.devnindo.datatype.json.JsonObject;
 
 /**
  *

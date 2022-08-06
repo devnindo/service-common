@@ -6,7 +6,7 @@
 package io.devnindo.service.http;
 
 import io.devnindo.service.configmodels.ConfigApiClient;
-import io.devnindo.core.json.JsonObject;
+import io.devnindo.datatype.json.JsonObject;
 import io.reactivex.Single;
 import io.vertx.reactivex.core.buffer.Buffer;
 import io.vertx.reactivex.ext.web.client.HttpRequest;

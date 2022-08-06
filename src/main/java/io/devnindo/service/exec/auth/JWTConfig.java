@@ -1,8 +1,8 @@
 package io.devnindo.service.exec.auth;
 
-import io.devnindo.core.schema.AField;
-import io.devnindo.core.schema.DataBean;
-import io.devnindo.core.schema.Required;
+import io.devnindo.datatype.schema.AField;
+import io.devnindo.datatype.schema.DataBean;
+import io.devnindo.datatype.schema.Required;
 
 public class JWTConfig implements DataBean
 {

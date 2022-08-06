@@ -5,9 +5,9 @@
  */
 package io.devnindo.service.configmodels;
 
-import io.devnindo.core.schema.DataBean;
-import io.devnindo.core.schema.AField;
-import io.devnindo.core.schema.Required;
+import io.devnindo.datatype.schema.DataBean;
+import io.devnindo.datatype.schema.AField;
+import io.devnindo.datatype.schema.Required;
 
 /**
  *

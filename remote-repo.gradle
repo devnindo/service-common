@@ -50,7 +50,7 @@ publishing {
             publication -> project.shadow.component(publication)
         }*/
         
-         "${project.name}"(MavenPublication)
+         "-${project.name}-"(MavenPublication)
          {
             from components.java
          }

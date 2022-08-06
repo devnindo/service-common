@@ -10,7 +10,7 @@ import io.devnindo.service.configmodels.ConfigApiClient;
 import io.devnindo.service.exec.BizLogalyzerApi;
 import io.devnindo.service.util.DeployParams;
 import io.reactivex.Single;
-import io.devnindo.core.json.JsonObject;
+import io.devnindo.datatype.json.JsonObject;
 import io.vertx.reactivex.ext.web.client.WebClient;
 
 import javax.inject.Inject;

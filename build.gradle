@@ -2,7 +2,7 @@ plugins {
   id 'idea'
   id 'java-library'
   id 'maven-publish'
-  id 'io.devnindo.plugin' version '0.9.10'
+  id 'io.devnindo.schemagen' version '0.9.14'
   
 }
 
@@ -25,7 +25,7 @@ dependencies {
 
     implementation 'com.google.dagger:dagger:2.42'
     annotationProcessor("com.google.dagger:dagger-compiler:2.42")
-    implementation('io.devnindo.core:datacommon:0.9.3') {changing = true}
+    implementation('io.devnindo:type-common:0.9.4') {changing = true}
     implementation  group: 'io.github.classgraph', name: 'classgraph', version: '4.1.0'
 
     api "io.vertx:vertx-rx-java2:4.+"

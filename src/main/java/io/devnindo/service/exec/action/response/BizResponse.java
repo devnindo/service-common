@@ -5,10 +5,10 @@
  */
 package io.devnindo.service.exec.action.response;
 
-import io.devnindo.core.json.JsonArray;
-import io.devnindo.core.json.Jsonable;;
-import io.devnindo.core.validation.Violation;
-import io.devnindo.core.json.JsonObject;
+import io.devnindo.datatype.json.JsonArray;
+import io.devnindo.datatype.json.Jsonable;;
+import io.devnindo.datatype.validation.Violation;
+import io.devnindo.datatype.json.JsonObject;
 
 import java.time.Instant;
 

@@ -6,6 +6,8 @@
 package io.devnindo.service.testmains;
 
 
+import dagger.Module;
+import io.devnindo.service.deploy.base.NftAuthModule;
 import io.devnindo.service.deploy.base.PreBoot;
 
 import java.lang.reflect.Method;
@@ -34,6 +36,10 @@ public class SampleMain {
 
     public static void main(String... args)
     {
+
+        System.out.println(NftAuthModule.class.getAnnotation(Module.class));;
+        if(true)return;
+
         Base base = new Extended();
 
         for(Method m : base.getClass().getDeclaredMethods()){

@@ -1,5 +1,5 @@
 
-import io.devnindo.service.exec.auth.BizUser;
+import io.devnindo.service.auth.BizUser;
 
 import io.devnindo.datatype.json.JsonObject;
 import io.devnindo.datatype.schema.BeanSchema;

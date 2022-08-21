@@ -5,13 +5,13 @@
  */
 package io.devnindo.service.deploy.production;
 
-import io.devnindo.service.exec.auth.BizSessionHandler;
+import io.devnindo.service.auth.BizSessionHandler;
 import io.devnindo.service.deploy.components.BeanConfigModule;
 import io.devnindo.service.configmodels.ConfigApiClient;
 import io.devnindo.service.configmodels.ConfigDeploy;
 import io.devnindo.service.configmodels.ProductionDeployConfig;
-import io.devnindo.service.exec.auth.JWTConfig;
-import io.devnindo.service.exec.auth.JWTSessionHandler;
+import io.devnindo.service.auth.JWTConfig;
+import io.devnindo.service.auth.JWTSessionHandler;
 import io.devnindo.service.exec.BizLogalyzerApi;
 import io.devnindo.service.exec.BizManagerApi;
 import io.devnindo.service.util.DeployParams;

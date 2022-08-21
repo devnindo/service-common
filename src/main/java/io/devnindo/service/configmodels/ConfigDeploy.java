@@ -5,7 +5,7 @@
  */
 package io.devnindo.service.configmodels;
 
-import io.devnindo.service.exec.auth.JWTConfig;
+import io.devnindo.service.auth.JWTConfig;
 import io.devnindo.datatype.schema.DataBean;
 import io.devnindo.datatype.schema.AField;
 import io.devnindo.datatype.schema.Required;

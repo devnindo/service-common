@@ -12,7 +12,7 @@ import io.devnindo.service.exec.action.BizException;
 import io.devnindo.service.exec.action.request.BizAccessInfo;
 import io.devnindo.service.exec.action.request.BizRequest;
 import io.devnindo.service.exec.action.response.BizResponse;
-import io.devnindo.service.exec.auth.BizSessionHandler;
+import io.devnindo.service.auth.BizSessionHandler;
 import io.devnindo.service.util.DeployParams;
 import io.devnindo.datatype.util.Either;
 import io.devnindo.datatype.validation.Violation;

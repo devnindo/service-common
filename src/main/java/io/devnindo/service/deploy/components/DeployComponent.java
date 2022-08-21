@@ -5,7 +5,7 @@
  */
 package io.devnindo.service.deploy.components;
 
-import io.devnindo.service.exec.auth.BizSessionHandler;
+import io.devnindo.service.auth.BizSessionHandler;
 import io.devnindo.service.configmodels.ConfigDeploy;
 import io.devnindo.service.exec.BizLogalyzerApi;
 import io.devnindo.service.exec.BizManagerApi;

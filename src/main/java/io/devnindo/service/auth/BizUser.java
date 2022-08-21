@@ -1,4 +1,4 @@
-package io.devnindo.service.exec.auth;
+package io.devnindo.service.auth;
 
 import io.devnindo.service.util.Values;
 import io.devnindo.datatype.schema.DataBean;

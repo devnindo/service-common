@@ -1,10 +1,9 @@
-package io.devnindo.service.exec.auth;
+package io.devnindo.service.auth;
 
 import java.time.Instant;
 
-import static io.devnindo.service.exec.auth.BizUserIF.*;
 public final class BizUserBuilder
-    implements  IBuild, IUserId, IPrefName,  IRole, IDomain, IChannel, IChannelClient
+    implements BizUserIF.IBuild, BizUserIF.IUserId, BizUserIF.IPrefName, BizUserIF.IRole, BizUserIF.IDomain, BizUserIF.IChannel, BizUserIF.IChannelClient
 {
 
     private final BizUser bizUser;
@@ -22,7 +21,7 @@ public final class BizUserBuilder
 
 
     @Override
-    public IPrefName userId(Long userId$) {
+    public BizUserIF.IPrefName userId(Long userId$) {
 
         bizUser.userId = userId$;
         return this;
@@ -32,38 +31,38 @@ public final class BizUserBuilder
 
 
     @Override
-    public IRole prefName(String prefName$) {
+    public BizUserIF.IRole prefName(String prefName$) {
         bizUser.prefName = prefName$;
         return this;
     }
 
 
     @Override
-    public IDomain role(String role$) {
+    public BizUserIF.IDomain role(String role$) {
         bizUser.role = role$;
         return this;
     }
 
     @Override
-    public IChannel domain(String domainId$) {
+    public BizUserIF.IChannel domain(String domainId$) {
         bizUser.domainId = domainId$;
         return this;
     }
 
     @Override
-    public IChannelClient channel(String channelId$) {
+    public BizUserIF.IChannelClient channel(String channelId$) {
         bizUser.channelId = channelId$;
         return this;
     }
 
     @Override
-    public IBuild channelClient(String clientId$) {
+    public BizUserIF.IBuild channelClient(String clientId$) {
         bizUser.channelClientId = clientId$;
         return this;
     }
 
     @Override
-    public IBuild signedDatime(Instant signedDatime$) {
+    public BizUserIF.IBuild signedDatime(Instant signedDatime$) {
         bizUser.signedDatime = signedDatime$;
         return this;
     }

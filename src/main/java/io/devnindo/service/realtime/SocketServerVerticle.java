@@ -1,7 +1,7 @@
 package io.devnindo.service.realtime;
 
 
-import io.devnindo.service.exec.auth.BizAuth;
+import io.devnindo.service.auth.BizAuth;
 import io.vertx.core.Promise;
 import io.devnindo.datatype.json.JsonObject;
 import io.vertx.ext.web.handler.sockjs.SockJSBridgeOptions;

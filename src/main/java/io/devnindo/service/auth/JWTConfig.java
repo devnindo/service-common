@@ -6,16 +6,15 @@ import io.devnindo.datatype.schema.Required;
 
 public class JWTConfig implements DataBean
 {
-    @AField @Required
+    @Required
     protected String issuer;
 
-    @AField @Required
+    @Required
     protected String secret;
 
-    @AField
     protected String algorithm;
 
-    @AField @Required
+    @Required
     protected Integer expireInSeconds;
 
     public String getIssuer() {

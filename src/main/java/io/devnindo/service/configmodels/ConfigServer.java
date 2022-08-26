@@ -15,16 +15,16 @@ import io.devnindo.datatype.schema.Required;
  */
 public class ConfigServer implements DataBean{
     
-    @AField @Required
+      @Required
     Integer port;
     
-    @AField @Required
+      @Required
     Boolean sslEnabled;
     
-    @AField @Required
+      @Required
     String sslCertLocation;
     
-    @AField @Required
+      @Required
     String sslKeyLocation;
 
     public Integer getPort() {

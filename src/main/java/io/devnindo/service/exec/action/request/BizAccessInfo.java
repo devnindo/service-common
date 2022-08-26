@@ -5,11 +5,11 @@ import io.devnindo.datatype.schema.AField;
 
 public class BizAccessInfo implements DataBean
 {
-    @AField
+     
     String accessToken;
 
 
-    @AField
+     
     BizUserClientInfo clientInfo; // screen-size, os+version, ip-address
 
 

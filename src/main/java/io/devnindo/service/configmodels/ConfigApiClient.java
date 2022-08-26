@@ -13,16 +13,16 @@ import io.devnindo.datatype.schema.AField;
  * @author prevy-sage
  */
 public class ConfigApiClient implements DataBean{
-    @AField
+     
     String host;
     
-    @AField
+     
     Integer port;
     
-    @AField
+     
     Boolean sslEnabled;
     
-    @AField
+     
     String apiRoot;
 
     public String getHost() {

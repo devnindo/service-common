@@ -17,16 +17,16 @@ import io.devnindo.datatype.schema.Required;
 public class ConfigDeploy implements DataBean
 {
 
-    @AField @Required
+      @Required
     Integer serverVerticleCount;
 
-    @AField @Required
+      @Required
     Integer execWorkerPoolSize;
 
-    @AField @Required
+      @Required
     ConfigServer serverConfig;
 
-    @AField @Required
+      @Required
     JWTConfig jwtSessionConfig;
 
 

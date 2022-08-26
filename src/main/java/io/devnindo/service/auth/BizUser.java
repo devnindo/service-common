@@ -8,38 +8,30 @@ import java.time.Instant;
 
 public class BizUser implements DataBean
 {
-    @AField
     Long userId;
 
-    @AField
     String prefName;
 
-    @AField
     Instant signedDatime;
 
-    @AField
     BizUserStatus status;
 
-    @AField
     String role; //schema -> {channel_id: role_name_id}
 
     /*
      *  channelId: channel bizUser trying to access with this token
      * */
-    @AField
     String channelId;
 
     /**
      *  domain under which its accessing channel exposes services for user
      *  for example: elearning-app is the domain of channel lojens
      * */
-    @AField
     String domainId;
 
     /**
      *  clientId: src client through which user initiated the access
      * */
-    @AField
     String channelClientId;
 
     /**

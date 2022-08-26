@@ -13,10 +13,10 @@ import io.devnindo.datatype.schema.AField;
  */
 public class ProductionDeployConfig extends ConfigDeploy {
     
-    @AField
+     
     ConfigApiClient managerApi;
     
-    @AField
+     
     ConfigApiClient logalyzerApi;
 
     public ConfigApiClient getManagerApi() {

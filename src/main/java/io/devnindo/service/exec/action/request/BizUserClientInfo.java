@@ -5,11 +5,11 @@ import io.devnindo.datatype.schema.AField;
 
 public class BizUserClientInfo implements DataBean
 {
-    @AField
+     
     String ip;
 
 
-    @AField
+     
     String userAgent;
 
     public String getIp() {

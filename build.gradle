@@ -2,7 +2,7 @@ plugins {
   id 'idea'
   id 'java-library'
   id 'maven-publish'
-  id 'devnindo-schemagen' version '0.9.14'
+  id 'devnindo-schemagen' version '0.9.15'
   
 }
 

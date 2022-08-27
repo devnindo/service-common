@@ -5,8 +5,8 @@ import io.devnindo.datatype.schema.BeanSchema;
 import io.devnindo.datatype.util.Either;
 import io.devnindo.service.util.Values;
 import io.devnindo.datatype.validation.Violation;
-import io.reactivex.Single;
 import io.devnindo.datatype.json.JsonObject;
+import io.reactivex.rxjava3.core.Single;
 
 import javax.inject.Inject;
 

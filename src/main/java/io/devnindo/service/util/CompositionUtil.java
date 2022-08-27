@@ -1,9 +1,10 @@
 package io.devnindo.service.util;
 
-import io.reactivex.Single;
-import io.vertx.reactivex.core.Context;
-import io.vertx.reactivex.core.RxHelper;
-import io.vertx.reactivex.core.Vertx;
+
+import io.reactivex.rxjava3.core.Single;
+import io.vertx.rxjava3.core.Context;
+import io.vertx.rxjava3.core.RxHelper;
+import io.vertx.rxjava3.core.Vertx;
 
 import java.util.Objects;
 

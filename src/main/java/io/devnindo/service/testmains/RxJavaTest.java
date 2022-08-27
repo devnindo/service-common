@@ -1,9 +1,10 @@
 package io.devnindo.service.testmains;
 
-import io.reactivex.Single;
-import io.vertx.reactivex.core.RxHelper;;
-import io.vertx.reactivex.core.Vertx;
-import io.vertx.reactivex.core.eventbus.Message;
+
+import io.reactivex.rxjava3.core.Single;
+import io.vertx.rxjava3.core.RxHelper;
+import io.vertx.rxjava3.core.Vertx;
+import io.vertx.rxjava3.core.eventbus.Message;
 
 import java.util.Arrays;
 

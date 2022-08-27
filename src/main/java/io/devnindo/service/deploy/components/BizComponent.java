@@ -10,7 +10,7 @@ import io.devnindo.service.deploy.ServiceDeployer;
 import io.devnindo.service.exec.action.BizAction;
 import io.devnindo.service.exec.BizExecutor;
 import dagger.Component;
-import io.vertx.reactivex.core.Vertx;
+import io.vertx.rxjava3.core.Vertx;
 
 import java.util.Map;
 import javax.inject.Provider;

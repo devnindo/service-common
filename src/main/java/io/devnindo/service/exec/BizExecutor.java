@@ -16,9 +16,9 @@ import io.devnindo.service.auth.BizSessionHandler;
 import io.devnindo.service.util.DeployParams;
 import io.devnindo.datatype.util.Either;
 import io.devnindo.datatype.validation.Violation;
-import io.reactivex.Single;
 import io.devnindo.datatype.json.JsonObject;
-import io.vertx.reactivex.core.Vertx;
+import io.reactivex.rxjava3.core.Single;
+import io.vertx.rxjava3.core.Vertx;
 
 import javax.inject.Inject;
 import javax.inject.Named;

@@ -6,12 +6,12 @@ import io.vertx.core.Promise;
 import io.devnindo.datatype.json.JsonObject;
 import io.vertx.ext.web.handler.sockjs.SockJSBridgeOptions;
 import io.vertx.ext.web.handler.sockjs.SockJSHandlerOptions;
-import io.vertx.reactivex.core.AbstractVerticle;
-import io.vertx.reactivex.core.http.HttpServer;
-import io.vertx.reactivex.core.http.HttpServerRequest;
-import io.vertx.reactivex.ext.web.Router;
-import io.vertx.reactivex.ext.web.handler.CorsHandler;
-import io.vertx.reactivex.ext.web.handler.sockjs.SockJSHandler;
+import io.vertx.rxjava3.core.AbstractVerticle;
+import io.vertx.rxjava3.core.http.HttpServer;
+import io.vertx.rxjava3.core.http.HttpServerRequest;
+import io.vertx.rxjava3.ext.web.Router;
+import io.vertx.rxjava3.ext.web.handler.CorsHandler;
+import io.vertx.rxjava3.ext.web.handler.sockjs.SockJSHandler;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -22,7 +22,7 @@ public class SocketServerVerticle extends AbstractVerticle
     Map<String, BizAuth> permAuth;
 
     @Inject
-    SocketServerVerticle( ){
+    public SocketServerVerticle( ){
 
     }
 
@@ -32,14 +32,15 @@ public class SocketServerVerticle extends AbstractVerticle
         try{
 
             Router router = mountEventBus();
-            HttpServer server = vertx.createHttpServer();
+            HttpServer httpServer = vertx.createHttpServer();
 
-            server
-                    .requestHandler(router)
-                    .listen(8082, (async) -> {
-                        startPromise$.complete();
-                        System.out.println("Socket JS server deployed on port : " + async.result().actualPort());
-                    });
+            httpServer
+                .requestHandler(router)
+                .listen(8082)
+                .subscribe(server -> {
+                    startPromise$.complete();
+                    System.out.println("Socket JS server deployed on port : " + server.actualPort());
+                });
         }catch (Throwable excp){
             excp.printStackTrace();
         }

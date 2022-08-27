@@ -9,8 +9,8 @@ import io.devnindo.service.auth.BizSessionHandler;
 import io.devnindo.service.configmodels.ConfigDeploy;
 import io.devnindo.service.exec.BizLogalyzerApi;
 import io.devnindo.service.exec.BizManagerApi;
-import io.vertx.reactivex.core.Vertx;
-import io.vertx.reactivex.ext.web.client.WebClient;
+import io.vertx.rxjava3.core.Vertx;
+import io.vertx.rxjava3.ext.web.client.WebClient;
 
 /**
  *

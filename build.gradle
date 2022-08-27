@@ -2,12 +2,12 @@ plugins {
   id 'idea'
   id 'java-library'
   id 'maven-publish'
-  id 'devnindo-schemagen' version '0.9.15'
+  id 'devnindo-schemagen' version '0.9.16'
   
 }
 
 group = "io.devnindo.core"
-version = "0.9.1-rc"
+version = "0.9.1"
 sourceCompatibility = '1.8'
 
 
@@ -28,7 +28,7 @@ dependencies {
     implementation('io.devnindo.core:type-common:0.9.4') {changing = true}
     implementation  group: 'io.github.classgraph', name: 'classgraph', version: '4.1.0'
 
-    api "io.vertx:vertx-rx-java2:4.+"
+    api "io.vertx:vertx-rx-java3:4.+"
     api "io.vertx:vertx-core:4.+:sources"
 
     implementation "io.vertx:vertx-web:4.+"

@@ -14,13 +14,13 @@ import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerOptions;
 import io.devnindo.datatype.json.JsonObject;
 import io.vertx.core.net.PemKeyCertOptions;
-import io.vertx.reactivex.core.AbstractVerticle;
-import io.vertx.reactivex.core.http.HttpServerRequest;
-import io.vertx.reactivex.core.http.HttpServerResponse;
-import io.vertx.reactivex.ext.web.Router;
-import io.vertx.reactivex.ext.web.RoutingContext;
-import io.vertx.reactivex.ext.web.handler.BodyHandler;
-import io.vertx.reactivex.ext.web.handler.CorsHandler;
+import io.vertx.rxjava3.core.AbstractVerticle;
+import io.vertx.rxjava3.core.http.HttpServerRequest;
+import io.vertx.rxjava3.core.http.HttpServerResponse;
+import io.vertx.rxjava3.ext.web.Router;
+import io.vertx.rxjava3.ext.web.RoutingContext;
+import io.vertx.rxjava3.ext.web.handler.BodyHandler;
+import io.vertx.rxjava3.ext.web.handler.CorsHandler;
 
 
 public class ServerVerticle extends AbstractVerticle {
@@ -69,9 +69,10 @@ public class ServerVerticle extends AbstractVerticle {
 
          vertx.createHttpServer(serverOps)
              .requestHandler(router)
-             .listen(serverConfig.getPort(), (async) -> {
+             .listen(serverConfig.getPort())
+             .subscribe((server) -> {
                  startFuture.complete();
-                 System.out.println("HTTP Server deployed with port: " + async.result().actualPort());
+                 System.out.println("HTTP Server deployed with port: " + server.actualPort());
              });
 
          //startFuture.complete();

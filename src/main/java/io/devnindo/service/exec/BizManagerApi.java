@@ -5,8 +5,8 @@
  */
 package io.devnindo.service.exec;
 
-import io.reactivex.Single;
 import io.devnindo.datatype.json.JsonObject;
+import io.reactivex.rxjava3.core.Single;
 
 /**
  *

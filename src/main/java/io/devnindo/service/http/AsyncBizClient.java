@@ -7,10 +7,10 @@ package io.devnindo.service.http;
 
 import io.devnindo.service.configmodels.ConfigApiClient;
 import io.devnindo.datatype.json.JsonObject;
-import io.reactivex.Single;
-import io.vertx.reactivex.core.buffer.Buffer;
-import io.vertx.reactivex.ext.web.client.HttpRequest;
-import io.vertx.reactivex.ext.web.client.WebClient;
+import io.reactivex.rxjava3.core.Single;
+import io.vertx.rxjava3.core.buffer.Buffer;
+import io.vertx.rxjava3.ext.web.client.HttpRequest;
+import io.vertx.rxjava3.ext.web.client.WebClient;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +21,7 @@ import java.util.Map;
  * @author prevy-sage
  */
 public abstract class AsyncBizClient {
-    private final WebClient webClient ;//=  WebClient.create(ServiceMain.VERTX); 
+    private final WebClient webClient ;//=  WebClient.create(ServiceMain.VERTX);
  
     protected final Integer port;
     protected final String host;

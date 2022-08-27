@@ -10,12 +10,13 @@ import io.devnindo.service.exec.action.BizAction;
 import io.devnindo.service.configmodels.ConfigDeploy;
 import io.devnindo.service.configmodels.ServiceIdentity;
 import io.devnindo.datatype.json.JsonArray;
-import io.reactivex.Single;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Verticle;
 import io.devnindo.datatype.json.JsonObject;
-import io.vertx.reactivex.core.Vertx;
+import io.vertx.rxjava3.core.Vertx;
+
 import java.util.function.Supplier;
 import java.net.DatagramSocket;
 import java.net.InetAddress;

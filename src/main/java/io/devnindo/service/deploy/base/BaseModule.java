@@ -6,8 +6,8 @@ import dagger.Module;
 import dagger.Provides;
 import io.vertx.core.VertxOptions;
 import io.devnindo.datatype.json.JsonObject;
-import io.vertx.reactivex.core.Vertx;
-import io.vertx.reactivex.ext.web.client.WebClient;
+import io.vertx.rxjava3.core.Vertx;
+import io.vertx.rxjava3.ext.web.client.WebClient;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 

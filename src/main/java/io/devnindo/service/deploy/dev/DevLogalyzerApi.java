@@ -6,8 +6,8 @@
 package io.devnindo.service.deploy.dev;
 
 import io.devnindo.service.exec.BizLogalyzerApi;
-import io.reactivex.Single;
 import io.devnindo.datatype.json.JsonObject;
+import io.reactivex.rxjava3.core.Single;
 
 /**
  *

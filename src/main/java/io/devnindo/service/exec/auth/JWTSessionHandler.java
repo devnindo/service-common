@@ -1,4 +1,4 @@
-package io.devnindo.service.auth;
+package io.devnindo.service.exec.auth;
 
 import io.devnindo.service.exec.action.request.BizAccessInfo;
 import io.devnindo.datatype.schema.BeanSchema;

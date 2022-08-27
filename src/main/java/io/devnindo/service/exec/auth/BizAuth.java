@@ -1,4 +1,4 @@
-package io.devnindo.service.auth;
+package io.devnindo.service.exec.auth;
 
 import io.devnindo.service.exec.action.request.BizRequest;
 import io.devnindo.datatype.util.Either;

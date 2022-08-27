@@ -1,4 +1,4 @@
-package io.devnindo.service.auth;
+package io.devnindo.service.exec.auth;
 
 public enum BizUserStatus {
 

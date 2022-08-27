@@ -1,8 +1,7 @@
-package io.devnindo.service.auth;
+package io.devnindo.service.exec.auth;
 
 import io.devnindo.service.util.Values;
 import io.devnindo.datatype.schema.DataBean;
-import io.devnindo.datatype.schema.AField;
 
 import java.time.Instant;
 

@@ -1,7 +1,6 @@
 package io.devnindo.service.util;
 
 import io.devnindo.datatype.json.JsonObject;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -17,5 +16,9 @@ public final class JsonConfigUtil
         String path = configDir + "/" + runtimeMode+"/" + componentName$+".json";
         String content = new String(Files.readAllBytes(Paths.get(path)));
         return new JsonObject(content);
+    }
+
+    public static io.vertx.core.json.JsonObject toVertxJS(JsonObject obj){
+        return new io.vertx.core.json.JsonObject(obj.getMap());
     }
 }

@@ -7,8 +7,6 @@ public class BizUserClientInfo implements DataBean
 {
      
     String ip;
-
-
      
     String userAgent;
 

@@ -1,6 +1,7 @@
 package io.devnindo.service.exec.auth;
 
-import io.devnindo.datatype.json.impl.JsonImplUtil;
+
+import io.devnindo.datatype.util.JsonUtil;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -56,7 +57,7 @@ public class DataSigner
     public String sign(String data){
         Objects.requireNonNull(data);
         byte[] signedBytes = hmacAlgo.doFinal(data.getBytes(StandardCharsets.UTF_8));
-        return JsonImplUtil.BASE64_ENCODER.encodeToString(signedBytes);
+        return JsonUtil.BASE64_ENCODER.encodeToString(signedBytes);
     }
     public boolean verify(String data, String signedData){
         Objects.requireNonNull(signedData);

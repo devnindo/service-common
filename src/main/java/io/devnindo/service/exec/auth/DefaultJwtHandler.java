@@ -1,8 +1,8 @@
 package io.devnindo.service.exec.auth;
 
 import io.devnindo.datatype.json.JsonObject;
-import io.devnindo.datatype.json.impl.JsonImplUtil;
 import io.devnindo.datatype.util.Either;
+import io.devnindo.datatype.util.JsonUtil;
 import io.devnindo.datatype.validation.Violation;
 
 import java.time.Instant;
@@ -73,7 +73,7 @@ public class DefaultJwtHandler implements JwtHandlerIF
         return encodeJWT0(payload.encode());
     }
     private String encodeJWT0(String payload){
-        String encodedPayload = JsonImplUtil.BASE64_ENCODER.encodeToString (payload.getBytes());
+        String encodedPayload = JsonUtil.BASE64_ENCODER.encodeToString (payload.getBytes());
         String encodedData = encodedHeader+"."+encodedPayload;
         return encodedData+"."+dataSigner.sign(encodedData);
 

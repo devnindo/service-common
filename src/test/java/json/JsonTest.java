@@ -1,6 +1,8 @@
 package json;
 
 import io.devnindo.datatype.json.*;
+import io.devnindo.service.util.JsonArrayMessageCodec;
+import io.devnindo.service.util.JsonObjectMessageCodec;
 import io.vertx.core.Vertx;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

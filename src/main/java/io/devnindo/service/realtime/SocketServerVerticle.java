@@ -84,7 +84,7 @@ public class SocketServerVerticle extends AbstractVerticle
             });
             sockJSSocket.handler( buffer -> {
 
-                JsonObject data = new JsonObject(buffer.getDelegate());
+                JsonObject data = new JsonObject(buffer.getDelegate().getBytes());
                 System.out.println("### received: "+data.encode());
                 sockJSSocket.write(new JsonObject().put("### replying", "adios!!").encode());
             });

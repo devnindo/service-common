@@ -1,17 +1,19 @@
 package io.devnindo.service.util;
 
-import io.devnindo.datatype.json.JsonObject;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.eventbus.MessageCodec;
+import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.ClusterSerializable;
 import io.vertx.core.shareddata.Shareable;
 
-public class SharableData implements ClusterSerializable, Shareable
+public class DataSharable<T> implements ClusterSerializable
 {
     byte[] byteData;
-    public SharableData(JsonObject jsObj)
+    public DataSharable(T jsObj)
     {
         //byteData = jsObj.toByteData();
     }
+
 
     @Override
     public void writeToBuffer(Buffer buffer) {
@@ -23,10 +25,6 @@ public class SharableData implements ClusterSerializable, Shareable
         return 0;
     }
 
-    @Override
-    public Shareable copy() {
-        return Shareable.super.copy();
-    }
 
     /*@Override
     public default void writeToBuffer(Buffer buffer) {

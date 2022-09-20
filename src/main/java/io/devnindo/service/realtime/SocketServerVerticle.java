@@ -1,11 +1,8 @@
 package io.devnindo.service.realtime;
 
 
-import io.devnindo.service.exec.auth.BizAuth;
 import io.vertx.core.Promise;
 import io.devnindo.datatype.json.JsonObject;
-import io.vertx.ext.web.handler.sockjs.SockJSBridgeOptions;
-import io.vertx.ext.web.handler.sockjs.SockJSHandlerOptions;
 import io.vertx.rxjava3.core.AbstractVerticle;
 import io.vertx.rxjava3.core.http.HttpServer;
 import io.vertx.rxjava3.core.http.HttpServerRequest;
@@ -14,12 +11,11 @@ import io.vertx.rxjava3.ext.web.handler.CorsHandler;
 import io.vertx.rxjava3.ext.web.handler.sockjs.SockJSHandler;
 
 import javax.inject.Inject;
-import java.util.Map;
 
 
 public class SocketServerVerticle extends AbstractVerticle
 {
-    Map<String, BizAuth> permAuth;
+
 
     @Inject
     public SocketServerVerticle( ){
@@ -35,11 +31,16 @@ public class SocketServerVerticle extends AbstractVerticle
             HttpServer httpServer = vertx.createHttpServer();
 
             httpServer
-                .requestHandler(router)
+                .webSocketHandler(router)
                 .listen(8082)
+                .map(serverSingle -> {
+                    System.out.println("Socket JS server deployed on port : " + serverSingle.actualPort());
+                    return serverSingle;
+                })
                 .subscribe(server -> {
                     startPromise$.complete();
                     System.out.println("Socket JS server deployed on port : " + server.actualPort());
+                    getVertx().eventBus().consumer()
                 });
         }catch (Throwable excp){
             excp.printStackTrace();
@@ -48,7 +49,7 @@ public class SocketServerVerticle extends AbstractVerticle
 
     }
 
-    public Router mountEventBus(){
+    /*public Router mountEventBus(){
         Router router = Router.router(vertx);
         router.route("/eventbus/*")
                 .handler(CorsHandler.create("*").allowCredentials(true))
@@ -62,8 +63,8 @@ public class SocketServerVerticle extends AbstractVerticle
 
         router.mountSubRouter("/eventbus", sockJSHandler.bridge(options));
         return router;
-    }
-    public Router mountRealtimeBus(){
+    }*/
+    /*public Router mountRealtimeBus(){
         Router router = Router.router(vertx);
         router.route("/realtime/*")
                 .handler(CorsHandler.create("*").allowCredentials(true))
@@ -93,5 +94,5 @@ public class SocketServerVerticle extends AbstractVerticle
 
         }));
         return router;
-    }
+    }*/
 }

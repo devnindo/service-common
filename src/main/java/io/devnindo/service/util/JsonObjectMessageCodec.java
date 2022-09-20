@@ -10,7 +10,7 @@ public class JsonObjectMessageCodec implements MessageCodec<JsonObject, JsonObje
     public void encodeToWire(Buffer buffer, JsonObject json) {
         // Encode object to string
 
-
+        System.out.println("EVENT BUS: LOCAL ENCODING DOES HAPPEN");
         // Length of JSON: is NOT characters count
         byte[] byteData = json.toByteData();
         buffer.appendInt(byteData.length);
@@ -20,7 +20,7 @@ public class JsonObjectMessageCodec implements MessageCodec<JsonObject, JsonObje
     @Override
     public JsonObject decodeFromWire(int pos, Buffer buffer) {
 
-
+        System.out.println("EVENT BUS: LOCAL ENCODING DOES HAPPEN DURING WIRE");
         // Length of JSON
         int length = buffer.getInt(pos);
 

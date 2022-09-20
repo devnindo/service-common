@@ -22,7 +22,7 @@ class JsonTest {
     }
 
 
-    @Test @Disabled
+    @Test
     void vertx_bus_transport(){
         Vertx vertx = Vertx.vertx();
         JsonObject aSample = new JsonObject();

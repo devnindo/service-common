@@ -1,23 +1,29 @@
 package io.devnindo.service.util;
 
+import io.devnindo.datatype.json.JsonObject;
+import io.devnindo.datatype.json.Jsonable;
 import io.vertx.core.buffer.Buffer;
-import io.vertx.core.eventbus.MessageCodec;
-import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.ClusterSerializable;
-import io.vertx.core.shareddata.Shareable;
 
-public class DataSharable<T> implements ClusterSerializable
+
+public class DataSharable implements ClusterSerializable
 {
-    byte[] byteData;
-    public DataSharable(T jsObj)
+    byte[] buf;
+    public DataSharable(Jsonable dataObj)
     {
         //byteData = jsObj.toByteData();
+        JsonObject js = new JsonObject();
+        js.put("type", "JSONABLE");
+        js.put("class", dataObj.getClass());
+        js.put("data", dataObj.toJson());
+        buf = js.toByteData();
     }
 
 
     @Override
     public void writeToBuffer(Buffer buffer) {
-
+        buffer.appendInt(buf.length);
+        buffer.appendBytes(buf);
     }
 
     @Override

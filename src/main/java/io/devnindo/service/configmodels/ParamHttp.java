@@ -7,5 +7,5 @@ public interface ParamHttp
     String X_VIEWPORT = "X-Viewport";
     String USER_AGENT = "User-Agent";
     String X_CSRF_TOKEN = "X-CSRF-Token";
-    String CONTENT_APP_JSON = "application/json";
+    String CONTENT_JSON = "application/json";
 }

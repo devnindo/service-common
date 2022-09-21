@@ -62,7 +62,7 @@ public class ServerVerticle extends AbstractVerticle {
 
 
          router.post("/api/:" + ParamService.ACTION_ID)
-             .consumes(ParamHttp.CONTENT_APP_JSON)
+             .consumes(ParamHttp.CONTENT_JSON)
              .handler(this.routeHandler());
 
 //         setUploadRoute(router);

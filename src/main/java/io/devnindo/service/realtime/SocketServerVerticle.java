@@ -1,9 +1,12 @@
 package io.devnindo.service.realtime;
 
 
+import io.devnindo.datatype.json.Json;
+import io.devnindo.service.configmodels.ParamHttp;
 import io.vertx.core.Promise;
 import io.devnindo.datatype.json.JsonObject;
 import io.vertx.rxjava3.core.AbstractVerticle;
+import io.vertx.rxjava3.core.buffer.Buffer;
 import io.vertx.rxjava3.core.http.HttpServer;
 import io.vertx.rxjava3.core.http.HttpServerRequest;
 import io.vertx.rxjava3.ext.web.Router;
@@ -27,11 +30,25 @@ public class SocketServerVerticle extends AbstractVerticle
         //super.start();
         try{
 
-            Router router = mountEventBus();
+            Router router = Router.router(vertx);
+            router
+                .route("/rlt/:tokenId")
+                .consumes(ParamHttp.CONTENT_JSON)
+                .handler(rc -> {
+                    String tokenId = rc.pathParam("tokenId");
+                    // tokenId will be a signed jwt
+                    // jwt.data::{topicId, ttl, permission}
+                    String topicId = tokenId;
+                    rc.request().toWebSocket().subscribe(ws ->{
+                        vertx.eventBus().consumer(topicId, msg -> {
+                            Json json = (Json) msg.body();
+                            ws.write(Buffer.buffer(json.toByteData()));
+                        });
+                    });
+                });
             HttpServer httpServer = vertx.createHttpServer();
 
             httpServer
-                .webSocketHandler(router)
                 .listen(8082)
                 .map(serverSingle -> {
                     System.out.println("Socket JS server deployed on port : " + serverSingle.actualPort());

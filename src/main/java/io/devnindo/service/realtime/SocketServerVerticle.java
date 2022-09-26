@@ -5,6 +5,7 @@ import io.devnindo.datatype.json.Json;
 import io.devnindo.service.configmodels.ParamHttp;
 import io.vertx.core.Promise;
 import io.devnindo.datatype.json.JsonObject;
+import io.vertx.ext.web.handler.sockjs.SockJSHandlerOptions;
 import io.vertx.rxjava3.core.AbstractVerticle;
 import io.vertx.rxjava3.core.buffer.Buffer;
 import io.vertx.rxjava3.core.http.HttpServer;
@@ -50,14 +51,9 @@ public class SocketServerVerticle extends AbstractVerticle
 
             httpServer
                 .listen(8082)
-                .map(serverSingle -> {
-                    System.out.println("Socket JS server deployed on port : " + serverSingle.actualPort());
-                    return serverSingle;
-                })
                 .subscribe(server -> {
-                    startPromise$.complete();
                     System.out.println("Socket JS server deployed on port : " + server.actualPort());
-                    getVertx().eventBus().consumer()
+                    startPromise$.complete();
                 });
         }catch (Throwable excp){
             excp.printStackTrace();
@@ -81,19 +77,34 @@ public class SocketServerVerticle extends AbstractVerticle
         router.mountSubRouter("/eventbus", sockJSHandler.bridge(options));
         return router;
     }*/
-    /*public Router mountRealtimeBus(){
+    public Router mountRealtimeBus(){
         Router router = Router.router(vertx);
-        router.route("/realtime/*")
-                .handler(CorsHandler.create("*").allowCredentials(true))
-
-        ;
 
         SockJSHandlerOptions options = new SockJSHandlerOptions()
                 .setRegisterWriteHandler(true)
                 .setHeartbeatInterval(2000) ;
-
         SockJSHandler sockJSHandler = SockJSHandler.create(vertx, options);
-        router.mountSubRouter("/realtime/:token", sockJSHandler.socketHandler(sockJSSocket -> {
+        sockJSHandler.socketHandler(socket -> {
+            HttpServerRequest request = socket.routingContext().request();
+            String accessToken = request.getParam("token");
+            if(accessToken.equals("test-socket-bus") != false) // accesstoken not valid
+            {
+                socket.close(401, "Unauthorized");
+            }
+        });
+
+        router.route("/realtime/:token")
+                .handler(
+                    CorsHandler.create("*")
+                    .allowedHeader(ParamHttp.CONTENT_TYPE)
+                )
+                .handler(sockJSHandler)
+
+        ;
+
+
+/*
+        router.route("/:token", sockJSHandler.socketHandler(sockJSSocket -> {
             HttpServerRequest request = sockJSSocket.routingContext().request();
             String accessToken = request.getParam("token");
 
@@ -109,7 +120,7 @@ public class SocketServerVerticle extends AbstractVerticle
             // Just echo the data back
             //sockJSSocket.handler(sockJSSocket::write);
 
-        }));
+        }));*/
         return router;
-    }*/
+    }
 }

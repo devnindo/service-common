@@ -1,16 +1,18 @@
 package io.devnindo.service.realtime;
 
 
-import io.devnindo.datatype.json.Json;
 import io.devnindo.service.configmodels.ParamHttp;
+import io.devnindo.service.exec.action.request.BizAccessInfo;
+import io.devnindo.service.exec.auth.BizSessionHandler;
+import io.devnindo.service.util.Values;
 import io.vertx.core.Promise;
 import io.devnindo.datatype.json.JsonObject;
 import io.vertx.ext.web.handler.sockjs.SockJSHandlerOptions;
 import io.vertx.rxjava3.core.AbstractVerticle;
-import io.vertx.rxjava3.core.buffer.Buffer;
 import io.vertx.rxjava3.core.http.HttpServer;
 import io.vertx.rxjava3.core.http.HttpServerRequest;
 import io.vertx.rxjava3.ext.web.Router;
+import io.vertx.rxjava3.ext.web.RoutingContext;
 import io.vertx.rxjava3.ext.web.handler.CorsHandler;
 import io.vertx.rxjava3.ext.web.handler.sockjs.SockJSHandler;
 
@@ -20,10 +22,13 @@ import javax.inject.Inject;
 public class SocketServerVerticle extends AbstractVerticle
 {
 
+    private final BizSessionHandler sessionHandler;
+    private final SocketManager socketManager;
 
-    @Inject
-    public SocketServerVerticle( ){
-
+    public SocketServerVerticle(BizSessionHandler sessionHandler$, SocketManager socketManager$)
+    {
+        sessionHandler = sessionHandler$;
+        socketManager = socketManager$;
     }
 
     @Override
@@ -33,32 +38,52 @@ public class SocketServerVerticle extends AbstractVerticle
 
             Router router = Router.router(vertx);
             router
-                .route("/rlt/:tokenId")
+                .route("/rlt")
                 .consumes(ParamHttp.CONTENT_JSON)
                 .handler(rc -> {
-                    String tokenId = rc.pathParam("tokenId");
-                    // tokenId will be a signed jwt
-                    // jwt.data::{topicId, ttl, permission}
-                    String topicId = tokenId;
-                    rc.request().toWebSocket().subscribe(ws ->{
-                        vertx.eventBus().consumer(topicId, msg -> {
-                            Json json = (Json) msg.body();
-                            ws.write(Buffer.buffer(json.toByteData()));
-                        });
-                    });
+
+                    sessionHandler
+                            .executeOn(initAccessInfo0(rc))
+                            .flatMap(bizUser -> upgradeToSocket0(rc, bizUser))
+                            .subscribe();
+
                 });
-            HttpServer httpServer = vertx.createHttpServer();
+
+            HttpServer httpServer = vertx.createHttpServer(router);
 
             httpServer
                 .listen(8082)
                 .subscribe(server -> {
-                    System.out.println("Socket JS server deployed on port : " + server.actualPort());
+                    System.out.println("web-socket server deployed on port : " + server.actualPort());
                     startPromise$.complete();
                 });
         }catch (Throwable excp){
             excp.printStackTrace();
         }
 
+
+    }
+
+    private BizAccessInfo initAccessInfo0(RoutingContext routingCtx$)
+    {
+
+
+        JsonObject accessInfo = new JsonObject();
+        HttpServerRequest httpReq = routingCtx$.request();
+
+        String accessToken = httpReq.getHeader(ParamHttp.AUTHORIZATION);
+        if(accessToken==null)
+        {
+            accessToken = Values.NOT_AVAILABLE;
+        }
+        String reqIp = httpReq.remoteAddress().host();
+        String agentInfo = httpReq.getHeader(ParamHttp.USER_AGENT);
+
+
+        return accessInfo.put($BizAccessInfo.ACCESS_TOKEN, accessToken)
+                .put($BizAccessInfo.IP, reqIp)
+                .put($BizAccessInfo.USER_AGENT, agentInfo)
+                .toBean(BizAccessInfo.class);
 
     }
 
@@ -91,6 +116,7 @@ public class SocketServerVerticle extends AbstractVerticle
             {
                 socket.close(401, "Unauthorized");
             }
+            socket.write("ping");
         });
 
         router.route("/realtime/:token")

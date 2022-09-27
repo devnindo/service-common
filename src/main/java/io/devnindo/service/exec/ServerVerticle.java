@@ -5,7 +5,6 @@ import io.devnindo.service.configmodels.ParamHttp;
 import io.devnindo.service.configmodels.ConfigServer;
 import io.devnindo.service.configmodels.ParamService;
 import io.devnindo.service.exec.action.request.$BizAccessInfo;
-import io.devnindo.service.exec.action.request.$BizUserClientInfo;
 import io.devnindo.service.util.Values;
 import io.devnindo.datatype.util.ClzUtil;
 import io.vertx.core.Handler;
@@ -124,66 +123,13 @@ public class ServerVerticle extends AbstractVerticle {
         }
         String reqIp = httpReq.remoteAddress().host();
         String agentInfo = httpReq.getHeader(ParamHttp.USER_AGENT);
-        JsonObject clientInfo = new JsonObject()
-                .put($BizUserClientInfo.IP, reqIp)
-                .put($BizUserClientInfo.USER_AGENT, agentInfo);
+
 
         return accessInfo.put($BizAccessInfo.ACCESS_TOKEN, accessToken)
-                .put($BizAccessInfo.CLIENT_INFO, clientInfo);
+                .put($BizAccessInfo.IP, reqIp)
+                .put($BizAccessInfo.USER_AGENT, agentInfo);
 
     }
-/*
-    @Deprecated
-    private void setUploadRoute(Router router) {
-        Route uploadRoute = router.post("/blob/upload/:" + ServiceParam.ACTION_ID);
-        uploadRoute.handler(BodyHandler.create().setUploadsDirectory("/tmp"));
-        uploadRoute.handler(this.uploadHandler());
-    }
-    @Deprecated
-    private Handler<RoutingContext> uploadHandler() {
-        return routingCtx -> {
-            HttpServerResponse httpResponse = routingCtx.response();
-            httpResponse.putHeader("Content-Type", "application/json");
-
-            List<FileUpload> uploadedFileList = routingCtx.fileUploads();
-            JsonObject metadata = new JsonObject();
-
-            MultiMap metaAttributes = routingCtx.request().formAttributes();
-            for (Map.Entry<String, String> entry : metaAttributes.entries()) {
-                metadata.put(entry.getKey(), entry.getValue());
-            }
-
-            List<JsonObject> uploadedBlobInfo = uploadedFileList.stream().map(f -> {
-                return new JsonObject()
-                    .put("uploaded_file", new File(f.uploadedFileName()).getAbsolutePath())
-                    .put("file_name", f.fileName())
-                    .put("form_key", f.name())
-                    .put("mime_type", f.contentType())
-                    .put("size", f.size());
-            }).collect(Collectors.toList());
-
-            String actionIdName = routingCtx.request().getParam(ServiceParam.ACTION_ID);
-            JsonObject reqBody = metadata.put("blob_info", uploadedBlobInfo);
-            JsonObject accessInfo = getAccessInfo0(routingCtx);
-
-
-            JsonObject bizRequest = new JsonObject()
-                .put(ServiceParam.ACTION_ID, actionIdName)
-                .put(ServiceParam.ACCESS_INFO, accessInfo)
-                .put(ServiceParam.REQUEST_DATA, reqBody);
-
-            executor.executeOn(bizRequest)
-                .subscribe(srvResponse -> {
-                    httpResponse.setStatusCode(srvResponse.status.code);
-                    httpResponse.end(srvResponse.toJson().encode());
-                }, error -> {
-                    httpResponse.setStatusCode(500);
-                    httpResponse.end(ClzUtil.throwableString(error));
-                });
-
-
-        };
-    }*/
 
 
 

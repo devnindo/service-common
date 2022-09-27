@@ -8,17 +8,22 @@ public class BizAccessInfo implements DataBean
      
     String accessToken;
 
+    String ip;
 
-     
-    BizUserClientInfo clientInfo; // screen-size, os+version, ip-address
+    String userAgent;
 
+    public String getIp() {
+        return ip;
+    }
+
+    public String getUserAgent() {
+        return userAgent;
+    }
 
     public String getAccessToken() {
         return accessToken;
     }
 
-    public BizUserClientInfo getClientInfo() {
-        return clientInfo;
-    }
+
 
 }

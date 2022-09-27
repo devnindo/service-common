@@ -1,6 +1,6 @@
 package io.devnindo.service.realtime;
 
-public abstract class AbstractActivity
+public class RltEntity
 {
 
 }

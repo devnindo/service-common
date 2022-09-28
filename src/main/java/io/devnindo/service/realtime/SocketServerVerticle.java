@@ -1,16 +1,24 @@
 package io.devnindo.service.realtime;
 
 
+import io.devnindo.datatype.util.Either;
+import io.devnindo.datatype.validation.Violation;
+import io.devnindo.service.configmodels.ConfigServer;
 import io.devnindo.service.configmodels.ParamHttp;
 import io.devnindo.service.exec.action.request.BizAccessInfo;
 import io.devnindo.service.exec.auth.BizSessionHandler;
+import io.devnindo.service.exec.auth.JwtHandlerIF;
 import io.devnindo.service.util.Values;
 import io.vertx.core.Promise;
 import io.devnindo.datatype.json.JsonObject;
+import io.vertx.core.http.HttpServerOptions;
+import io.vertx.core.net.PemKeyCertOptions;
 import io.vertx.ext.web.handler.sockjs.SockJSHandlerOptions;
 import io.vertx.rxjava3.core.AbstractVerticle;
+import io.vertx.rxjava3.core.eventbus.MessageConsumer;
 import io.vertx.rxjava3.core.http.HttpServer;
 import io.vertx.rxjava3.core.http.HttpServerRequest;
+import io.vertx.rxjava3.core.http.WebSocket;
 import io.vertx.rxjava3.ext.web.Router;
 import io.vertx.rxjava3.ext.web.RoutingContext;
 import io.vertx.rxjava3.ext.web.handler.CorsHandler;
@@ -22,13 +30,17 @@ import javax.inject.Inject;
 public class SocketServerVerticle extends AbstractVerticle
 {
 
-    private final BizSessionHandler sessionHandler;
-    private final SocketManager socketManager;
-
-    public SocketServerVerticle(BizSessionHandler sessionHandler$, SocketManager socketManager$)
+    private final HttpServerOptions serverOps;
+    private final JwtHandlerIF jwtHandler;
+    public SocketServerVerticle(JwtHandlerIF jwtHandler$, ConfigServer serverConfig$)
     {
-        sessionHandler = sessionHandler$;
-        socketManager = socketManager$;
+        jwtHandler = jwtHandler$;
+        serverOps = new HttpServerOptions()
+                .setCompressionSupported(true)
+                .setSsl(serverConfig$.getSslEnabled())
+                .setPemKeyCertOptions(new PemKeyCertOptions()
+                        .setCertPath(serverConfig$.getSslCertLocation())
+                        .setKeyPath(serverConfig$.getSslKeyLocation()));
     }
 
     @Override
@@ -38,21 +50,26 @@ public class SocketServerVerticle extends AbstractVerticle
 
             Router router = Router.router(vertx);
             router
-                .route("/rlt")
-                .consumes(ParamHttp.CONTENT_JSON)
+                .route("/rlt/:token")
                 .handler(rc -> {
-
-                    sessionHandler
-                            .executeOn(initAccessInfo0(rc))
-                            .flatMap(bizUser -> upgradeToSocket0(rc, bizUser))
-                            .subscribe();
+                    String token = rc.pathParam("token");
+                    Either<Violation, RltTopic> topicEither = jwtHandler.validateJWT(token, RltTopic.class);
+                    if(topicEither.isLeft())
+                        rc.request().re
+                    rc
+                      .request()
+                      .toWebSocket()
+                      .subscribe(ws -> {
+                          MessageConsumer msgConsumer = vertx.eventBus().consumer();
+                      });
 
                 });
 
-            HttpServer httpServer = vertx.createHttpServer(router);
+            HttpServer httpServer = vertx.createHttpServer(serverOps);
 
             httpServer
-                .listen(8082)
+                .requestHandler(router)
+                .listen(serverOps.getPort())
                 .subscribe(server -> {
                     System.out.println("web-socket server deployed on port : " + server.actualPort());
                     startPromise$.complete();
@@ -64,28 +81,6 @@ public class SocketServerVerticle extends AbstractVerticle
 
     }
 
-    private BizAccessInfo initAccessInfo0(RoutingContext routingCtx$)
-    {
-
-
-        JsonObject accessInfo = new JsonObject();
-        HttpServerRequest httpReq = routingCtx$.request();
-
-        String accessToken = httpReq.getHeader(ParamHttp.AUTHORIZATION);
-        if(accessToken==null)
-        {
-            accessToken = Values.NOT_AVAILABLE;
-        }
-        String reqIp = httpReq.remoteAddress().host();
-        String agentInfo = httpReq.getHeader(ParamHttp.USER_AGENT);
-
-
-        return accessInfo.put($BizAccessInfo.ACCESS_TOKEN, accessToken)
-                .put($BizAccessInfo.IP, reqIp)
-                .put($BizAccessInfo.USER_AGENT, agentInfo)
-                .toBean(BizAccessInfo.class);
-
-    }
 
     /*public Router mountEventBus(){
         Router router = Router.router(vertx);

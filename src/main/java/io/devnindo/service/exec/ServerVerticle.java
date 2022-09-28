@@ -50,7 +50,6 @@ public class ServerVerticle extends AbstractVerticle {
     //    System.out.println("Starting Verticle: "+ServerVerticle.class.getName());
 
          router.route().handler(BodyHandler.create())
-
                       .handler(CorsHandler.create("*")
                            .allowedMethod(HttpMethod.POST)
                            .allowedHeader(ParamHttp.CONTENT_TYPE)

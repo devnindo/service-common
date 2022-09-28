@@ -1,6 +1,7 @@
 package io.devnindo.service.exec.auth;
 
 import io.devnindo.datatype.json.JsonObject;
+import io.devnindo.datatype.schema.DataBean;
 import io.devnindo.datatype.util.Either;
 import io.devnindo.datatype.util.JsonUtil;
 import io.devnindo.datatype.validation.Violation;
@@ -61,6 +62,15 @@ public class DefaultJwtHandler implements JwtHandlerIF
         JsonObject payloadJS = new JsonObject(decoded);
 
         return Either.right(payloadJS.getJsonObject("data"));
+    }
+
+    public <T extends DataBean> Either<Violation, T> validateJWT(String jwToken, Class<T> beanClz)
+    {
+        Either<Violation, JsonObject> dataEither = validateJWT(jwToken);
+        if(dataEither.isLeft())
+            return Either.left(dataEither.left());
+        else
+            return dataEither.right().toBeanEither(beanClz);
     }
 
 

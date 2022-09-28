@@ -2,13 +2,16 @@ package io.devnindo.service.realtime;
 
 import io.devnindo.datatype.schema.DataBean;
 
+import java.security.Permission;
 import java.time.Instant;
 
 public class RltTopic implements DataBean
 {
     Long userId;
     String topicId;
-    Instant expireUTC;
+    Long maxAge; // in seconds
+
+    Permission permission;
 
     public Long getUserId() {
         return userId;
@@ -26,11 +29,22 @@ public class RltTopic implements DataBean
         this.topicId = topicId;
     }
 
-    public Instant getExpireUTC() {
-        return expireUTC;
+    public Long getMaxAge() {
+        return maxAge;
     }
 
-    public void setExpireUTC(Instant expireUTC) {
-        this.expireUTC = expireUTC;
+    public void setMaxAge(Long maxAge) {
+        this.maxAge = maxAge;
+    }
+
+    public boolean canUserWrite() {
+        return RltPermission.read_write.equals(permission);
+    }
+
+
+    public  String getRltId(){
+        return userId+"-"+topicId;
     }
 }
+
+

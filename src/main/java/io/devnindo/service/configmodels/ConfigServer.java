@@ -15,16 +15,16 @@ import io.devnindo.datatype.schema.Required;
  */
 public class ConfigServer implements DataBean{
     
-      @Required
+    @Required
     Integer port;
     
-      @Required
+    @Required
     Boolean sslEnabled;
     
-      @Required
+    @Required
     String sslCertLocation;
     
-      @Required
+    @Required
     String sslKeyLocation;
 
     public Integer getPort() {
@@ -42,6 +42,24 @@ public class ConfigServer implements DataBean{
     public String getSslKeyLocation() {
         return sslKeyLocation;
     }
-    
-    
+
+    public ConfigServer setPort(Integer port) {
+        this.port = port;
+        return this;
+    }
+
+    public ConfigServer setSslEnabled(Boolean sslEnabled) {
+        this.sslEnabled = sslEnabled;
+        return this;
+    }
+
+    public ConfigServer setSslCertLocation(String sslCertLocation) {
+        this.sslCertLocation = sslCertLocation;
+        return this;
+    }
+
+    public ConfigServer setSslKeyLocation(String sslKeyLocation) {
+        this.sslKeyLocation = sslKeyLocation;
+        return this;
+    }
 }

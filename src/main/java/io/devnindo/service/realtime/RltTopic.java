@@ -1,16 +1,19 @@
 package io.devnindo.service.realtime;
 
 import io.devnindo.datatype.schema.DataBean;
+import io.devnindo.datatype.schema.Required;
 
 import java.security.Permission;
 import java.time.Instant;
 
 public class RltTopic implements DataBean
 {
+    @Required
     Long userId;
+    @Required
     String topicId;
-    Long maxAge; // in seconds
-
+    Integer maxAge; // in seconds
+    @Required
     Permission permission;
 
     public Long getUserId() {
@@ -29,21 +32,21 @@ public class RltTopic implements DataBean
         this.topicId = topicId;
     }
 
-    public Long getMaxAge() {
+    public Integer getMaxAge() {
         return maxAge;
     }
 
-    public void setMaxAge(Long maxAge) {
-        this.maxAge = maxAge;
-    }
 
     public boolean canUserWrite() {
         return RltPermission.read_write.equals(permission);
     }
 
+    public Long getMaxAgeMillis(){
+        if(maxAge==null)
+            return null;
 
-    public  String getRltId(){
-        return userId+"-"+topicId;
+        return (maxAge + 3) * 1000L;
+
     }
 }
 

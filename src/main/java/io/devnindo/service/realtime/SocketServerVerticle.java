@@ -32,9 +32,12 @@ public class SocketServerVerticle extends AbstractVerticle
 
     private final HttpServerOptions serverOps;
     private final JwtHandlerIF jwtHandler;
-    public SocketServerVerticle(JwtHandlerIF jwtHandler$, ConfigServer serverConfig$)
+    private final RltManager rltManager;
+
+    public SocketServerVerticle(RltManager rltManager$, ConfigServer serverConfig$)
     {
-        jwtHandler = jwtHandler$;
+
+        rltManager = rltManager$;
         serverOps = new HttpServerOptions()
                 .setCompressionSupported(true)
                 .setSsl(serverConfig$.getSslEnabled())
@@ -51,19 +54,7 @@ public class SocketServerVerticle extends AbstractVerticle
             Router router = Router.router(vertx);
             router
                 .route("/rlt/:token")
-                .handler(rc -> {
-                    String token = rc.pathParam("token");
-                    Either<Violation, RltTopic> topicEither = jwtHandler.validateJWT(token, RltTopic.class);
-                    if(topicEither.isLeft())
-                        rc.request().re
-                    rc
-                      .request()
-                      .toWebSocket()
-                      .subscribe(ws -> {
-                          MessageConsumer msgConsumer = vertx.eventBus().consumer();
-                      });
-
-                });
+                .handler(rltManager::initRltSocket);
 
             HttpServer httpServer = vertx.createHttpServer(serverOps);
 
@@ -80,6 +71,7 @@ public class SocketServerVerticle extends AbstractVerticle
 
 
     }
+
 
 
     /*public Router mountEventBus(){

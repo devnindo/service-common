@@ -8,16 +8,20 @@ public class BizAccessInfo implements DataBean
      
     String accessToken;
 
-    String ip;
+    BizUserClientInfo clientInfo;
 
-    String userAgent;
-
-    public String getIp() {
-        return ip;
+    public BizAccessInfo setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+        return this;
     }
 
-    public String getUserAgent() {
-        return userAgent;
+    public BizUserClientInfo getClientInfo() {
+        return clientInfo;
+    }
+
+    public BizAccessInfo setClientInfo(BizUserClientInfo clientInfo) {
+        this.clientInfo = clientInfo;
+        return this;
     }
 
     public String getAccessToken() {

@@ -31,7 +31,6 @@ public class SocketServerVerticle extends AbstractVerticle
 {
 
     private final HttpServerOptions serverOps;
-    private final JwtHandlerIF jwtHandler;
     private final RltManager rltManager;
 
     public SocketServerVerticle(RltManager rltManager$, ConfigServer serverConfig$)
@@ -39,6 +38,7 @@ public class SocketServerVerticle extends AbstractVerticle
 
         rltManager = rltManager$;
         serverOps = new HttpServerOptions()
+                .setPort(serverConfig$.getPort())
                 .setCompressionSupported(true)
                 .setSsl(serverConfig$.getSslEnabled())
                 .setPemKeyCertOptions(new PemKeyCertOptions()
@@ -53,7 +53,7 @@ public class SocketServerVerticle extends AbstractVerticle
 
             Router router = Router.router(vertx);
             router
-                .route("/rlt/:token")
+                .get("/rlt/:token")
                 .handler(rltManager::initRltSocket);
 
             HttpServer httpServer = vertx.createHttpServer(serverOps);
@@ -62,6 +62,7 @@ public class SocketServerVerticle extends AbstractVerticle
                 .requestHandler(router)
                 .listen(serverOps.getPort())
                 .subscribe(server -> {
+                    System.out.println(serverOps.getPort());
                     System.out.println("web-socket server deployed on port : " + server.actualPort());
                     startPromise$.complete();
                 });

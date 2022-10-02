@@ -20,7 +20,7 @@ public class RltManager
 {
     private final Vertx vertx;
     private final JwtHandlerIF jwtHandler;
-    ConcurrentMap<Long, Pair<MessageConsumer, ServerWebSocket>> userRltMap;
+    ConcurrentMap<Long, RtlRegistry> userRltMap;
     @Inject
     public RltManager(Vertx vertx$, JwtHandlerIF jwtHandler$)
     {
@@ -37,9 +37,9 @@ public class RltManager
             rc.response().setStatusCode(400).end();
 
         RltTopic rltTopic = topicEither.right();
-        Pair<MessageConsumer, ServerWebSocket> rltRegistry = userRltMap.get(rltTopic.getUserId());
+        RtlRegistry rltRegistry = userRltMap.get(rltTopic.getUserId());
         if(rltRegistry != null){
-            closeSocketBus(rltRegistry);
+            rltRegistry.webSocket.close((short)1003, "NEW_TOPIC_REGISTER");
         }
 
         rc.request().toWebSocket().subscribe(ws -> this.registerTopic(rltTopic, ws));
@@ -48,25 +48,23 @@ public class RltManager
     private void registerTopic(RltTopic topic, ServerWebSocket socket)
     {
         MessageConsumer<JsonObject> msgConsumer = vertx.eventBus().consumer(topic.getTopicId());
-        Pair<MessageConsumer, ServerWebSocket> pair = Pair.of(msgConsumer, socket);
-        userRltMap.put(topic.getUserId(), pair);
-
+        RtlRegistry rltRegistry = new RtlRegistry(topic, socket, msgConsumer);
         msgConsumer.handler(h -> {
             socket.writeTextMessage(h.body().encode());
         });
+        socket.closeHandler(h -> {
+            msgConsumer
+                .rxUnregister()
+                .subscribe(() -> System.out.println("SocketBus has been closed for: "+topic.getTopicId()));
+        });
 
         if(topic.maxAge != null)
-            vertx.setTimer(topic.getMaxAgeMillis(), h ->  closeSocketBus(pair));
+            vertx.setTimer(topic.getMaxAgeMillis(), h ->  socket.close((short)1000, "AGE_EXPIRED"));
 
-
+        userRltMap.put(topic.getUserId(), rltRegistry);
 
     }
 
-    private void closeSocketBus(Pair<MessageConsumer, ServerWebSocket> pair)
-    {
-        pair.first.rxUnregister()
-                .andThen(pair.second.close())
-                .subscribe(() -> System.out.println("Socket Closed for Topic: "));
-    }
+
 
 }

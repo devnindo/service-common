@@ -5,6 +5,9 @@ import io.devnindo.service.configmodels.ParamHttp;
 import io.devnindo.service.configmodels.ConfigServer;
 import io.devnindo.service.configmodels.ParamService;
 import io.devnindo.service.exec.action.request.$BizAccessInfo;
+import io.devnindo.service.exec.action.request.BizAccessInfo;
+import io.devnindo.service.exec.action.request.BizUserClientInfo;
+import io.devnindo.service.exec.auth.BizUser;
 import io.devnindo.service.util.Values;
 import io.devnindo.datatype.util.ClzUtil;
 import io.vertx.core.Handler;
@@ -112,7 +115,6 @@ public class ServerVerticle extends AbstractVerticle {
     {
 
 
-        JsonObject accessInfo = new JsonObject();
         HttpServerRequest httpReq = routingCtx$.request();
 
         String accessToken = httpReq.getHeader(ParamHttp.AUTHORIZATION);
@@ -123,11 +125,13 @@ public class ServerVerticle extends AbstractVerticle {
         String reqIp = httpReq.remoteAddress().host();
         String agentInfo = httpReq.getHeader(ParamHttp.USER_AGENT);
 
+        BizAccessInfo accessInfo = new BizAccessInfo();
+        BizUserClientInfo clientInfo = new BizUserClientInfo();
+        clientInfo.setIp(reqIp).setUserAgent(agentInfo);
 
-        return accessInfo.put($BizAccessInfo.ACCESS_TOKEN, accessToken)
-                .put($BizAccessInfo.IP, reqIp)
-                .put($BizAccessInfo.USER_AGENT, agentInfo);
-
+        return accessInfo.setAccessToken(accessToken)
+                .setClientInfo(clientInfo)
+                .toJson();
     }
 
 

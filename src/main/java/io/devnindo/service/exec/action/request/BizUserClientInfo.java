@@ -17,4 +17,14 @@ public class BizUserClientInfo implements DataBean
     public String getUserAgent() {
         return userAgent;
     }
+
+    public BizUserClientInfo setIp(String ip) {
+        this.ip = ip;
+        return this;
+    }
+
+    public BizUserClientInfo setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
+        return this;
+    }
 }

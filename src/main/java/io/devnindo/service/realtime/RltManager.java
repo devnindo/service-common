@@ -1,7 +1,6 @@
 package io.devnindo.service.realtime;
 
 import io.devnindo.datatype.json.JsonObject;
-import io.devnindo.datatype.tuples.Pair;
 import io.devnindo.datatype.util.Either;
 import io.devnindo.datatype.validation.Violation;
 import io.devnindo.service.exec.auth.JwtHandlerIF;
@@ -12,7 +11,7 @@ import io.vertx.rxjava3.ext.web.RoutingContext;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -24,6 +23,8 @@ public class RltManager
     ConcurrentMap<Long, RtlRegistry> userRltMap;
 
     private  Long periodId;
+
+    private Long testId;
     @Inject
     public RltManager(Vertx vertx$, JwtHandlerIF jwtHandler$)
     {
@@ -55,19 +56,19 @@ public class RltManager
         msgConsumer.handler(h -> {
             socket.writeTextMessage(h.body().encode());
         });
-        socket.binaryMessageHandler(h->{
-            h.getBytes()
+        socket.textMessageHandler(h->{
+            JsonObject js = new JsonObject(h.getBytes());
+            rltRegistry.bleep();
+            System.out.println("# SERVER RECEIVED: "+js.encode());
         });
         socket.closeHandler(h -> {
             msgConsumer
                 .rxUnregister()
                 .subscribe(() -> {
-                    System.out.println("SocketBus has been closed for: "+topic.getTopicId());
+                    System.out.println("# SERVER SOCKET CLOSED FOR: "+topic.getTopicId());
                     userRltMap.remove(topic.getUserId());
                 });
         });
-
-
 
         //if(topic.maxAge != null)
        //     vertx.setTimer(topic.getMaxAgeMillis(), h ->  socket.close((short)1000, "AGE_EXPIRED"));
@@ -75,6 +76,10 @@ public class RltManager
         userRltMap.put(topic.getUserId(), rltRegistry);
         if(!hasPeriodicCheckerStarted())
             startPeriodicCheck();
+
+        if(testId == null)
+            testId = startPeriodicTest(topic);
+
 
     }
 
@@ -89,10 +94,18 @@ public class RltManager
                     registry.webSocket.close((short)1000, "AGE_EXPIRED");
                     return;
                 }
-                else if(registry.nonResponsive(10)){
+                else if(registry.nonResponsive(20)){
                     registry.webSocket.close((short)1001, "NON_RESPONSIVE");
                 }
            });
+        });
+    }
+
+    @Deprecated
+    private Long startPeriodicTest(RltTopic topic){
+        return vertx.setPeriodic(5000, h-> {
+            JsonObject busMsg = new JsonObject().put("msg", "hello client: "+ Instant.now());
+            vertx.eventBus().publish(topic.getTopicId(), busMsg);
         });
     }
 

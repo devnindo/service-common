@@ -18,6 +18,8 @@ import io.vertx.rxjava3.core.Vertx;
 import io.vertx.rxjava3.core.http.HttpClient;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Random;
 
 public class SockTest {
 
@@ -28,7 +30,7 @@ public class SockTest {
                 .setTopicId("game:50")
                 .setUserId(123L)
                 .setPermission(RltPermission.read_write)
-                .setMaxAge(10);
+                .setExpireDatime(Instant.now().plus(10, ChronoUnit.MINUTES));
     }
 
     public static JwtHandlerIF jwtHdler(){
@@ -42,7 +44,7 @@ public class SockTest {
             return jwtHandler.generateJWT(sampleTopic().toJson());
     }
 
-    public static Vertx initVertx(){
+    public static Vertx initServerVertx(){
         Vertx vertx = Vertx.vertx();
         EventBus eventBus = vertx.eventBus().getDelegate();
         eventBus.registerDefaultCodec(JsonObject.class, new JsonObjectMessageCodec());
@@ -50,29 +52,29 @@ public class SockTest {
         return vertx;
     }
 
-    public static void testSocketClient(Vertx vertx, String topicToken){
-        HttpClient client = vertx.createHttpClient();
+    public static void testSocketClient( String topicToken){
+        Vertx clientVertx = Vertx.vertx();
+        HttpClient client = clientVertx.createHttpClient();
+        Random random = new Random();
         client.webSocket(8080, "localhost", "/rlt/"+topicToken)
                 .doOnError(throwable -> throwable.printStackTrace())
                 .doOnSuccess(ws -> {
-                    RltTopic sampleTopic = sampleTopic();
-                    vertx.setPeriodic(3000, h-> {
-                        System.out.println("Vertx Periodic triggered");
-                        JsonObject busMsg = new JsonObject().put("msg", "hello: "+Instant.now());
-                        vertx.eventBus().publish(sampleTopic.getTopicId(), busMsg);
-                        System.out.println();
-                    });
+                   /* clientVertx.setPeriodic(10000, h-> {
+
+                      JsonObject serverMsg = new JsonObject().put("msg", "hello server: "+Instant.now());
+                      ws.writeTextMessage(serverMsg.encode());
+
+                    });*/
                 })
                 .subscribe(ws -> {
                     ws.textMessageHandler(str -> {
-                        System.out.println("### MSG RECEIVED: ");
-                        System.out.println(str);
+                        System.out.println("# CLIENT RECEIVED: "+str);
                     });
                 });
     }
 
     public static void main(String... args){
-        Vertx vertx = initVertx();
+        Vertx vertx = initServerVertx();
         JwtHandlerIF jwtHandler = jwtHdler();
         RltManager manager = new RltManager(vertx, jwtHandler);
         String topicToken = signedTopic(jwtHandler);
@@ -82,7 +84,7 @@ public class SockTest {
 
         vertx.deployVerticle(new SocketServerVerticle(manager, configServer))
                 .doOnError(throwable -> throwable.printStackTrace())
-                .doOnSuccess(t ->  testSocketClient(vertx, topicToken))
+                .doOnSuccess(t ->  testSocketClient(topicToken))
                 .subscribe()
         ;
 

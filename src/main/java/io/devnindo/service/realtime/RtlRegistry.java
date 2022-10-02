@@ -18,9 +18,10 @@ public class RtlRegistry
         this.topic = topic;
         this.webSocket = webSocket;
         this.msgConsumer = msgConsumer;
+        lastPulse = Instant.now();
     }
 
-    public void setPulse(){
+    public void bleep(){
         lastPulse = Instant.now();
     }
 

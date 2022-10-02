@@ -12,7 +12,7 @@ public class RltTopic implements DataBean
     Long userId;
     @Required
     String topicId;
-    Integer maxAge; // in seconds
+    Instant expireDatime; // in seconds
     @Required
     RltPermission permission;
 
@@ -34,13 +34,17 @@ public class RltTopic implements DataBean
         return this;
     }
 
-    public Integer getMaxAge() {
-        return maxAge;
+    public Instant getExpireDatime() {
+        return expireDatime;
     }
 
-    public RltTopic setMaxAge(Integer maxAge) {
-        this.maxAge = maxAge;
+    public RltTopic setExpireDatime(Instant expireDatime) {
+        this.expireDatime = expireDatime;
         return this;
+    }
+
+    public boolean shouldExpire(){
+        return Instant.now().isAfter(expireDatime);
     }
 
     public RltPermission getPermission() {
@@ -56,13 +60,7 @@ public class RltTopic implements DataBean
         return RltPermission.read_write.equals(permission);
     }
 
-    public Long getMaxAgeMillis(){
-        if(maxAge==null)
-            return null;
 
-        return (maxAge + 3) * 1000L;
-
-    }
 }
 
 

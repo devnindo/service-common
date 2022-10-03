@@ -127,7 +127,9 @@ public class ServerVerticle extends AbstractVerticle {
 
         BizAccessInfo accessInfo = new BizAccessInfo();
         BizUserClientInfo clientInfo = new BizUserClientInfo();
-        clientInfo.setIp(reqIp).setUserAgent(agentInfo);
+        clientInfo
+                .setIp(reqIp)
+                .setUserAgent(agentInfo);
 
         return accessInfo.setAccessToken(accessToken)
                 .setClientInfo(clientInfo)

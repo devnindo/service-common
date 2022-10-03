@@ -7,10 +7,7 @@ import io.devnindo.service.configmodels.ConfigServer;
 import io.devnindo.service.exec.auth.DefaultJwtHandler;
 import io.devnindo.service.exec.auth.JWTConfig;
 import io.devnindo.service.exec.auth.JwtHandlerIF;
-import io.devnindo.service.realtime.RltManager;
-import io.devnindo.service.realtime.RltPermission;
-import io.devnindo.service.realtime.RltTopic;
-import io.devnindo.service.realtime.SocketServerVerticle;
+import io.devnindo.service.realtime.*;
 import io.devnindo.service.util.JsonArrayMessageCodec;
 import io.devnindo.service.util.JsonObjectMessageCodec;
 import io.vertx.core.eventbus.EventBus;
@@ -19,18 +16,31 @@ import io.vertx.rxjava3.core.http.HttpClient;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class SockTest {
 
+    static Random random = new Random();
+    static JwtHandlerIF jwtHandler = jwtHdler();
+    public static List<RltTopic> sampleTopicList(int sampleSize){
 
-    public static RltTopic sampleTopic(){
+        List<RltTopic> topicList = new ArrayList<>();
 
-        return new RltTopic()
-                .setTopicId("game:50")
-                .setUserId(123L)
-                .setPermission(RltPermission.read_write)
-                .setExpireDatime(Instant.now().plus(10, ChronoUnit.MINUTES));
+        for(int idx=1; idx <= sampleSize; idx++)
+        {
+            RltTopic topic = new RltTopic()
+                    .setTopicId("game:"+idx)
+                    .setUserId(123L)
+                    .setPermission(RltPermission.read_write)
+                    .setExpireDatime(Instant.now().plus(10, ChronoUnit.MINUTES));
+
+            topicList.add(topic);
+
+        }
+        return topicList;
+
     }
 
     public static JwtHandlerIF jwtHdler(){
@@ -40,10 +50,15 @@ public class SockTest {
                 .setSecret("devnindo-genjutsu-secret-rat");
         return new DefaultJwtHandler(config);
     }
-    public static String signedTopic(JwtHandlerIF jwtHandler){
-            return jwtHandler.generateJWT(sampleTopic().toJson());
-    }
 
+
+    private static void startServerTest(Vertx serverVertx, List<RltTopic> topicList){
+        serverVertx.setPeriodic(2000, h-> {
+            RltTopic topic = topicList.get(random.nextInt(topicList.size()));
+            JsonObject busMsg = new JsonObject().put("msg", topic.getTopicId()+" "+ Instant.now());
+            serverVertx.eventBus().publish(topic.getTopicId(), busMsg);
+        });
+    }
     public static Vertx initServerVertx(){
         Vertx vertx = Vertx.vertx();
         EventBus eventBus = vertx.eventBus().getDelegate();
@@ -52,40 +67,52 @@ public class SockTest {
         return vertx;
     }
 
-    public static void testSocketClient( String topicToken){
-        Vertx clientVertx = Vertx.vertx();
-        HttpClient client = clientVertx.createHttpClient();
-        Random random = new Random();
+    private static void startClientListening(HttpClient client, RltTopic topic){
+        String topicToken = jwtHandler.generateJWT(topic.toJson());
         client.webSocket(8080, "localhost", "/rlt/"+topicToken)
                 .doOnError(throwable -> throwable.printStackTrace())
                 .doOnSuccess(ws -> {
-                   /* clientVertx.setPeriodic(10000, h-> {
+                    ws.closeHandler(h-> System.out.printf("#CLIENT SOCKET CLOSED FOR TOPIC: %s %s\n", topic.getTopicId(), ws.closeReason()));
+               /* clientVertx.setPeriodic(10000, h-> {
 
-                      JsonObject serverMsg = new JsonObject().put("msg", "hello server: "+Instant.now());
-                      ws.writeTextMessage(serverMsg.encode());
+                  JsonObject serverMsg = new JsonObject().put("msg", "hello server: "+Instant.now());
+                  ws.writeTextMessage(serverMsg.encode());
 
-                    });*/
+                });*/
                 })
+
                 .subscribe(ws -> {
                     ws.textMessageHandler(str -> {
                         System.out.println("# CLIENT RECEIVED: "+str);
                     });
                 });
     }
+    public static void testSocketClient(  List<RltTopic> topicList){
+        Vertx clientVertx = Vertx.vertx();
+        RltTopic topic1 = topicList.get(0);
+        RltTopic topic2 = topicList.get(1);
+
+        HttpClient client = clientVertx.createHttpClient();
+        startClientListening(client, topic1);
+        clientVertx.setTimer(10000, h -> {
+            startClientListening(client, topic2);
+        });
+
+    }
 
     public static void main(String... args){
         Vertx vertx = initServerVertx();
-        JwtHandlerIF jwtHandler = jwtHdler();
+        List<RltTopic> topicList = sampleTopicList(2);
         RltManager manager = new RltManager(vertx, jwtHandler);
-        String topicToken = signedTopic(jwtHandler);
+
         ConfigServer configServer = new ConfigServer()
                 .setPort(8080)
                 .setSslEnabled(false);
 
         vertx.deployVerticle(new SocketServerVerticle(manager, configServer))
                 .doOnError(throwable -> throwable.printStackTrace())
-                .doOnSuccess(t ->  testSocketClient(topicToken))
-                .subscribe()
+                .doOnSuccess(t ->  testSocketClient( topicList))
+                .subscribe(t-> startServerTest(vertx, topicList))
         ;
 
 

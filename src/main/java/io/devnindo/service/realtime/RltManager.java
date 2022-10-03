@@ -12,6 +12,9 @@ import io.vertx.rxjava3.ext.web.RoutingContext;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.time.Instant;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -23,8 +26,6 @@ public class RltManager
     ConcurrentMap<Long, RtlRegistry> userRltMap;
 
     private  Long periodId;
-
-    private Long testId;
     @Inject
     public RltManager(Vertx vertx$, JwtHandlerIF jwtHandler$)
     {
@@ -41,7 +42,7 @@ public class RltManager
             rc.response().setStatusCode(400).end();
 
         RltTopic rltTopic = topicEither.right();
-        RtlRegistry rltRegistry = userRltMap.get(rltTopic.getUserId());
+        RtlRegistry rltRegistry = userRltMap.remove(rltTopic.getUserId());
         if(rltRegistry != null){
             rltRegistry.webSocket.close((short)1003, "NEW_TOPIC_REGISTER");
         }
@@ -66,7 +67,7 @@ public class RltManager
                 .rxUnregister()
                 .subscribe(() -> {
                     System.out.println("# SERVER SOCKET CLOSED FOR: "+topic.getTopicId());
-                    userRltMap.remove(topic.getUserId());
+
                 });
         });
 
@@ -77,8 +78,6 @@ public class RltManager
         if(!hasPeriodicCheckerStarted())
             startPeriodicCheck();
 
-        if(testId == null)
-            testId = startPeriodicTest(topic);
 
 
     }
@@ -88,26 +87,23 @@ public class RltManager
     }
 
     private void startPeriodicCheck(){
-        periodId = vertx.setPeriodic(200, h->{
+        periodId = vertx.setPeriodic(500, h->{
+            System.out.println("# SERVER REGISTRY LOG: "+userRltMap.size());
            userRltMap.values().forEach(registry -> {
                 if(registry.topic.shouldExpire()){
+                    userRltMap.remove(registry.topic.getUserId());
                     registry.webSocket.close((short)1000, "AGE_EXPIRED");
                     return;
                 }
-                else if(registry.nonResponsive(20)){
+                else if(registry.nonResponsive(10)){
+                    userRltMap.remove(registry.topic.getUserId());
                     registry.webSocket.close((short)1001, "NON_RESPONSIVE");
                 }
            });
         });
     }
 
-    @Deprecated
-    private Long startPeriodicTest(RltTopic topic){
-        return vertx.setPeriodic(5000, h-> {
-            JsonObject busMsg = new JsonObject().put("msg", "hello client: "+ Instant.now());
-            vertx.eventBus().publish(topic.getTopicId(), busMsg);
-        });
-    }
+
 
 
 }

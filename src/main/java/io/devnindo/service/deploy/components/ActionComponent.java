@@ -5,6 +5,7 @@
  */
 package io.devnindo.service.deploy.components;
 
+import io.devnindo.service.deploy.test.ActionTestExecutor;
 import io.devnindo.service.exec.action.BizAction;
 
 import javax.inject.Provider;
@@ -17,5 +18,7 @@ import java.util.Map;
 public interface ActionComponent {
      //Set<BizAction> actionSet();
      public Map<Class<? extends BizAction>, Provider<BizAction>> actionMap();
+
+     public ActionTestExecutor testExecutor();
 
 }

@@ -17,26 +17,24 @@ import java.util.Map;
  * */
 
 @Singleton
-public class TestExecutor
+public class ActionTestExecutor
 {
     private final Map<Class<? extends BizAction>, Provider<BizAction>> actionMap;
-    private final BizUser bizUser;
+
 
     @Inject
-    public TestExecutor(
-            Map<Class<? extends BizAction>, Provider<BizAction>> actionMap$,
-            BizUser bizUser$)
+    public ActionTestExecutor(
+            Map<Class<? extends BizAction>, Provider<BizAction>> actionMap$)
     {
         actionMap = actionMap$;
-        bizUser = bizUser$;
     }
 
-    public Single<BizResponse> test(Class<? extends BizAction> actionClz$, JsonObject data$){
+    public Single<BizResponse> test(Class<? extends BizAction> actionClz$, BizUser bizUser$, JsonObject data$){
         if(actionMap.containsKey(actionClz$))
         {
             BizAction bizAction = actionMap.get(actionClz$).get();
             //first 3 field not needed for simple test;
-            BizRequest request = new BizRequest(null, null, null, bizUser, data$);
+            BizRequest request = new BizRequest(null, null, null, bizUser$, data$);
             return bizAction.executeOn(request);
         }
         else return Single.just(BizResponse.ACTION_NOT_FOUND);

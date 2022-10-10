@@ -27,11 +27,11 @@ dependencies {
     implementation('io.devnindo.core:type-common:0.9.5') {changing = true}
     implementation  group: 'io.github.classgraph', name: 'classgraph', version: '4.8.149'
 
-    api 'io.vertx:vertx-rx-java3:4.3.3'
-    api 'io.vertx:vertx-core:4.3.3:sources'
+    api 'io.vertx:vertx-rx-java3:4.3.4'
+    api 'io.vertx:vertx-core:4.3.4:sources'
 
-    implementation 'io.vertx:vertx-web:4.3.3'
-    implementation 'io.vertx:vertx-web-client:4.3.3'
+    implementation 'io.vertx:vertx-web:4.3.4'
+    implementation 'io.vertx:vertx-web-client:4.3.4'
 
     implementation 'org.apache.httpcomponents:httpclient:4.5.13'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'

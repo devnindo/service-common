@@ -72,7 +72,7 @@ public class SockTest {
         client.webSocket(8080, "localhost", "/rlt/"+topicToken)
                 .doOnError(throwable -> throwable.printStackTrace())
                 .doOnSuccess(ws -> {
-                    ws.closeHandler(h-> System.out.printf("#CLIENT SOCKET CLOSED FOR TOPIC: %s %s\n", topic.getTopicId(), ws.closeReason()));
+                    ws.closeHandler(h-> System.out.printf("# CLIENT SOCKET CLOSED TOPIC: %s REASON %s\n", topic.getTopicId(), ws.closeReason()));
                /* clientVertx.setPeriodic(10000, h-> {
 
                   JsonObject serverMsg = new JsonObject().put("msg", "hello server: "+Instant.now());
@@ -91,18 +91,22 @@ public class SockTest {
         Vertx clientVertx = Vertx.vertx();
         RltTopic topic1 = topicList.get(0);
         RltTopic topic2 = topicList.get(1);
+        RltTopic topic3 = topicList.get(2);
 
         HttpClient client = clientVertx.createHttpClient();
         startClientListening(client, topic1);
+        startClientListening(client, topic2);
         clientVertx.setTimer(10000, h -> {
-            startClientListening(client, topic2);
+            startClientListening(client, topic3);
         });
 
     }
+    // TEST 1: two client with same user id tries to connect almost same time
+    // TEST 2: a topic expire happens
 
     public static void main(String... args){
         Vertx vertx = initServerVertx();
-        List<RltTopic> topicList = sampleTopicList(2);
+        List<RltTopic> topicList = sampleTopicList(3);
         RltManager manager = new RltManager(vertx, jwtHandler);
 
         ConfigServer configServer = new ConfigServer()

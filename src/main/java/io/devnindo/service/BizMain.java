@@ -58,9 +58,9 @@ public abstract class BizMain {
      }
 
 
-    public  abstract  ActionComponent actionComponent( );
+    protected abstract  ActionComponent actionComponent( );
 
-    public DeployComponent deployComponent( )
+    protected DeployComponent deployComponent( )
     {
         if(RuntimeMode.DEV.equals(runtimeMode))
             return DaggerDevDeployComponent

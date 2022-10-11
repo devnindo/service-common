@@ -37,11 +37,14 @@ public class ServerVerticle extends AbstractVerticle {
         serverConfig = serverConfig$;
         executor = executor$;
         serverOps = new HttpServerOptions()
+                .setPort(serverConfig$.getPort())
                 .setCompressionSupported(true)
-                .setSsl(serverConfig.getSslEnabled())
-                .setPemKeyCertOptions(new PemKeyCertOptions()
-                        .setCertPath(serverConfig.getSslCertLocation())
-                        .setKeyPath(serverConfig.getSslKeyLocation()));
+                .setSsl(serverConfig.getSslEnabled());
+        if(Boolean.TRUE.equals(serverConfig$.getSslEnabled())){
+            serverOps.setPemKeyCertOptions(new PemKeyCertOptions()
+                     .setCertPath(serverConfig.getSslCertLocation())
+                      .setKeyPath(serverConfig.getSslKeyLocation()));
+        }
     }
 
 
@@ -70,10 +73,13 @@ public class ServerVerticle extends AbstractVerticle {
 
          vertx.createHttpServer(serverOps)
              .requestHandler(router)
-             .listen(serverConfig.getPort())
+             .listen()
              .subscribe((server) -> {
                  startFuture.complete();
                  System.out.println("HTTP Server deployed with port: " + server.actualPort());
+             }, (err)->{
+                 System.out.println("# Server Deploy Failed");
+                 err.printStackTrace();
              });
 
          //startFuture.complete();

@@ -21,8 +21,6 @@ public interface DeployComponent
 {
     BizSessionHandler sessionHandler();
     BizManagerApi managerClient();
-    BizLogalyzerApi logalyzerClient();
-
     Vertx vertx();
     WebClient webClient();
     ConfigDeploy deployConfig();

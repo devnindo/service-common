@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.devnindo.core"
-version = "0.9.1"
+version = "0.9.2"
 
 
 apply from: 'remote-repo.gradle'
@@ -43,4 +43,15 @@ test {
         events "passed", "skipped", "failed"
         showStandardStreams true
     }
+}
+
+task publishProject(type: GradleBuild) {
+    tasks = [
+            'clean',
+            'test',
+            'build',
+            'generateMetadataFileFor-project-Publication',
+            'publish-project-PublicationToMavenRepository',
+            'publish'
+    ]
 }

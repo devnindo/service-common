@@ -36,8 +36,8 @@ repositories {
 publishing {
     publications {
 
-        
-         "-${project.name}-"(MavenPublication)
+        //${project.name}
+         "-project-"(MavenPublication)
          {
             from components.java
          }

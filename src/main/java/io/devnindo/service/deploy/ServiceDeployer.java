@@ -11,10 +11,9 @@ import io.devnindo.service.configmodels.ConfigDeploy;
 import io.devnindo.service.configmodels.ServiceIdentity;
 import io.devnindo.datatype.json.JsonArray;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.disposables.Disposable;
 import io.vertx.core.DeploymentOptions;
-import io.vertx.core.Verticle;
 import io.devnindo.datatype.json.JsonObject;
+import io.vertx.core.Verticle;
 import io.vertx.rxjava3.core.Vertx;
 
 import java.util.function.Supplier;
@@ -34,7 +33,6 @@ public class ServiceDeployer {
     final ConfigDeploy deployConfig;
     final BizExecutor executor;
     final Vertx vertx;
-    final BizLogalyzerApi logalyzerApi;
     final BizManagerApi managerApi;
     
     @Inject
@@ -42,7 +40,6 @@ public class ServiceDeployer {
                            BizExecutor executor$,
                            ServiceIdentity identity$,
                            ConfigDeploy deployConfig$,
-                           BizLogalyzerApi logalyzerApi$,
                            BizManagerApi managerApi$
         ) 
     {
@@ -50,7 +47,6 @@ public class ServiceDeployer {
         executor = executor$;
         serviceIdentity = identity$;
         deployConfig = deployConfig$;
-        this.logalyzerApi = logalyzerApi$;
         managerApi = managerApi$;
         
     }
@@ -95,50 +91,21 @@ public class ServiceDeployer {
 
         DeploymentOptions serverDepOps = new DeploymentOptions()
                                             .setInstances(deployConfig.getServerVerticleCount());
-                                            
-        /*DeploymentOptions blockingVerDepOps = new DeploymentOptions()
-                                        .setInstances(deployConfig.getBlockingExecCount())
-                                        .setWorkerPoolSize(deployConfig.getExecWorkerPoolSize());
-        */
-        /*DeploymentOptions asyncVerDepOps = new DeploymentOptions()
-                                        .setInstances(deployConfig.getExecVerticleCount()) ;*/
-        
-         
-//        DeploymentOptions fiberedVerDepOps = new DeploymentOptions()
-//                .setInstances(deployConfig.getFiberedExecCount());
-         
-        DeploymentOptions careTakerDepOps = new DeploymentOptions().setInstances(1);
-         
-         final Boolean enableSSL = false; //ServerParams.SSL_ENABLED.of(config$);
-       
-        Supplier<Verticle> serverSupplier = ()-> new ServerVerticle(executor, deployConfig.getServerConfig());
-        Supplier<Verticle> careTakerSupplier = () -> new CareTakerVerticle(managerApi, logalyzerApi);
 
-        // Supplier<Verticle> execSupplier = () -> new BlockingExecVerticle(executor);
-       // Supplier<Verticle> execSupplier = () -> new ExecVerticle(executor);
-       // Supplier<Verticle> fiberedExecSupplier = () -> new FiberedExecVerticle(executor);
-        //$currentStep("SERVER_VERTICLE_DEPLOY");
+        Supplier<Verticle> serverSupplier = ()-> new ServerVerticle(executor, deployConfig.getServerConfig());
+
         
         JsonObject discoveryData = serviceDiscoveryData(serviceIdentity, deployConfig.toJson());
 
         Single<String> serverDeploy = vertx.rxDeployVerticle(serverSupplier, serverDepOps);
-        Single<String> careTakerDeploy = vertx.rxDeployVerticle(careTakerSupplier, careTakerDepOps);
 
-        //Single<String> blockingExecDeploy = vertx.rxDeployVerticle(execSupplier, blockingVerDepOps);
-        //Single<String> execDeploy = vertx.rxDeployVerticle(execSupplier, asyncVerDepOps);
-        // Single<String> fiberedExecDeploy = vertx.rxDeployVerticle(fiberedExecSupplier, fiberedVerDepOps);
-        //Single<JsonObject> managerRegister = managerApi.registerService(discoveryData);
-        
-        Disposable disposable = Single.zip(serverDeploy,  careTakerDeploy,
-                (srvDeployID, careTakerDeployID)->{
-
-            return discoveryData;
-        })
-            .subscribe( managerApi::registerService
-                //deployInfo -> System.out.println(deployInfo.encodePrettily()),
-                //error -> {error.printStackTrace(System.err);}
-                
-        );
+        serverDeploy
+            .doOnSuccess((str)-> managerApi.registerService(discoveryData))
+            .doOnError(error->{
+                System.out.println("# SERVICE DEPLOY ERROR");
+                error.printStackTrace();
+            })
+            .subscribe();
   
     }
      

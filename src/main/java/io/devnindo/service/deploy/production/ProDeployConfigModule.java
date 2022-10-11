@@ -5,6 +5,7 @@
  */
 package io.devnindo.service.deploy.production;
 
+import io.devnindo.service.deploy.dev.DummyManagerApi;
 import io.devnindo.service.exec.auth.BizSessionHandler;
 import io.devnindo.service.deploy.components.BeanConfigModule;
 import io.devnindo.service.configmodels.ConfigApiClient;
@@ -12,7 +13,6 @@ import io.devnindo.service.configmodels.ConfigDeploy;
 import io.devnindo.service.configmodels.ProductionDeployConfig;
 import io.devnindo.service.exec.auth.JWTConfig;
 import io.devnindo.service.exec.auth.JWTSessionHandler;
-import io.devnindo.service.exec.BizLogalyzerApi;
 import io.devnindo.service.exec.BizManagerApi;
 import io.devnindo.service.util.DeployParams;
 import dagger.Module;
@@ -46,18 +46,11 @@ public  class ProDeployConfigModule
     @Provides
     @Singleton
     @Named(DeployParams.MANAGER_API)
-    public ConfigApiClient managerApi()
+    public ConfigApiClient managerApiConfig()
     {
         return config.getManagerApi();
     }
 
-    @Provides
-    @Singleton
-    @Named(DeployParams.LOG_ANALYZER_API)
-    public ConfigApiClient loggerApi()
-    {
-        return config.getLogalyzerApi();
-    }
 
     @Provides @Singleton
     public JWTConfig sessionHandlerConfig(){ return config.getJwtSessionConfig(); }
@@ -69,16 +62,10 @@ public  class ProDeployConfigModule
     }
     
     @Provides @Singleton
-    public BizManagerApi managerClient(ProManagerClient client$)
+    public BizManagerApi managerApi(DummyManagerApi managerApi$)
     {
-        return client$;
+        return managerApi$;
     }
-    
-    @Provides @Singleton
-    public BizLogalyzerApi logalyzerClient(ProLogalyzerClient client$)
-    {
-        return client$;
-    }
-    
+
 
 }

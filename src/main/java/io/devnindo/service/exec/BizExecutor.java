@@ -83,14 +83,6 @@ public class BizExecutor {
                         BizException bizException = BizException.class.cast(error$);
                         return BizResponse.error(bizException.toJson());
                 });
-        /*.onErrorResumeNext(error -> {
-         *//**
-     *  chaining managerApi to make sure erros are being loggged
-     *  for proper notifications
-     * *//*
-     *//*return managerApi.logError(new BizErrorLog(request, (BizException) error))
-                            .map(js -> BizResponse.INTERNAL_ERROR);*//*
-                });*/
     }
 
     Single<BizResponse> executeOn(JsonObject msgObj$)
@@ -126,27 +118,6 @@ public class BizExecutor {
                         );
 
         return reqSingle.flatMap(this::executeOn);
-    }
-
-
-
-    private void logResponse(BizRequest request$, BizResponse response$)
-    {
-        if(response$.isSuccess())
-        {
-            JsonObject actionData = request$.toJson()
-                    .mergeIn(response$.loggableJson());
-
-            vertx.eventBus().send(ParamService.BIZLOG_QUEUE, actionData);
-            //.subscribe( merged -> {}, err -> err.printStackTrace(System.err));
-
-        }
-
-    }
-
-    boolean hasRegistered(String actionIdName$)
-    {
-        return actionMap.keySet().contains(actionIdName$);
     }
 
 

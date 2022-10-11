@@ -8,6 +8,7 @@ package io.devnindo.service.configmodels;
 import io.devnindo.service.exec.auth.JWTConfig;
 import io.devnindo.datatype.schema.DataBean;
 import io.devnindo.datatype.schema.Required;
+import io.vertx.core.Verticle;
 
 /**
  *

@@ -10,7 +10,6 @@ import io.devnindo.service.deploy.components.BeanConfigModule;
 import io.devnindo.service.configmodels.ConfigDeploy;
 import io.devnindo.service.exec.auth.JWTConfig;
 import io.devnindo.service.exec.auth.JWTSessionHandler;
-import io.devnindo.service.exec.BizLogalyzerApi;
 import io.devnindo.service.exec.BizManagerApi;
 import dagger.Module;
 import dagger.Provides;
@@ -52,14 +51,8 @@ public  class DevDeployConfigModule extends BeanConfigModule<ConfigDeploy> {
     @Provides @Singleton
     public BizManagerApi managerClient()
     {
-        return new DevManagerApi();
+        return new DummyManagerApi();
     }
-    
-    @Provides @Singleton
-    public BizLogalyzerApi logalyzerClient( )
-    {
-        return new DevLogalyzerApi();
-    }
-    
+
 
 }

@@ -10,28 +10,27 @@ import io.devnindo.service.exec.BizManagerApi;
 import io.devnindo.datatype.json.JsonObject;
 import io.reactivex.rxjava3.core.Single;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 /**
  *
  * @author prevy-sage
  */
-public class DevManagerApi implements BizManagerApi
+@Singleton
+public class DummyManagerApi implements BizManagerApi
 {
 
+    @Inject
+    DummyManagerApi(){
+
+    }
     @Override
     public Single<JsonObject> registerService(JsonObject jo) {
-        System.out.println("dummy registering service: \n"+jo.encodePrettily());
+        System.out.println("# PENDING IMPLEMENTATION: A central registration service");
         return Single.just(new JsonObject());
     }
 
-    @Override
-    public Single<JsonObject> logServiceDown(JsonObject jo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Single<JsonObject> logServiceHealth(JsonObject jo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public Single<JsonObject> logError(BizErrorLog errorLog) {

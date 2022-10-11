@@ -16,18 +16,12 @@ public class ProductionDeployConfig extends ConfigDeploy {
      
     ConfigApiClient managerApi;
     
-     
-    ConfigApiClient logalyzerApi;
+
 
     public ConfigApiClient getManagerApi() {
         return managerApi;
     }
 
-    public ConfigApiClient getLogalyzerApi() {
-        return logalyzerApi;
-    }
-
-    
     
     
 }

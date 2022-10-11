@@ -76,7 +76,7 @@ public class ServerVerticle extends AbstractVerticle {
              .listen()
              .subscribe((server) -> {
                  startFuture.complete();
-                 System.out.println("HTTP Server deployed with port: " + server.actualPort());
+                 System.out.println("# HTTP Server deployed with port: " + server.actualPort());
              }, (err)->{
                  System.out.println("# Server Deploy Failed");
                  err.printStackTrace();

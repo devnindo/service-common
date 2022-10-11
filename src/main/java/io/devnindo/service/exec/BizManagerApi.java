@@ -16,9 +16,6 @@ public interface BizManagerApi {
      
     public Single<JsonObject> registerService(JsonObject reqData$);
 
-    public Single<JsonObject> logServiceDown(JsonObject reqData$);
-    
-    public Single<JsonObject> logServiceHealth(JsonObject reqData$);
 
     public Single<JsonObject> logError(BizErrorLog errorLog$);
 }

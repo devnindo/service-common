@@ -5,8 +5,8 @@ import io.devnindo.datatype.json.JsonArray;
 import io.devnindo.datatype.json.JsonObject;
 import io.devnindo.service.configmodels.ConfigServer;
 import io.devnindo.service.exec.auth.DefaultJwtHandler;
-import io.devnindo.service.exec.auth.JWTConfig;
-import io.devnindo.service.exec.auth.JwtHandlerIF;
+import io.devnindo.service.exec.auth.JwtConfig;
+import io.devnindo.service.exec.auth.JwtHandler;
 import io.devnindo.service.realtime.*;
 import io.devnindo.service.util.JsonArrayMessageCodec;
 import io.devnindo.service.util.JsonObjectMessageCodec;
@@ -23,7 +23,7 @@ import java.util.Random;
 public class SockTest {
 
     static Random random = new Random();
-    static JwtHandlerIF jwtHandler = jwtHdler();
+    static JwtHandler jwtHandler = jwtHdler();
     public static List<RltTopic> sampleTopicList(int sampleSize){
 
         List<RltTopic> topicList = new ArrayList<>();
@@ -43,10 +43,10 @@ public class SockTest {
 
     }
 
-    public static JwtHandlerIF jwtHdler(){
-        JWTConfig config = new JWTConfig()
+    public static JwtHandler jwtHdler(){
+        JwtConfig config = new JwtConfig()
                 .setIssuer("devnindo")
-                .setExpireInSeconds(60*60)
+                .setExpireInSeconds(60*60L)
                 .setSecret("devnindo-genjutsu-secret-rat");
         return new DefaultJwtHandler(config);
     }

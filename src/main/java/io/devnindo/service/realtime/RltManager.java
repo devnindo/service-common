@@ -3,7 +3,7 @@ package io.devnindo.service.realtime;
 import io.devnindo.datatype.json.JsonObject;
 import io.devnindo.datatype.util.Either;
 import io.devnindo.datatype.validation.Violation;
-import io.devnindo.service.exec.auth.JwtHandlerIF;
+import io.devnindo.service.exec.auth.JwtHandler;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 import io.vertx.rxjava3.core.Vertx;
@@ -15,19 +15,18 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ConcurrentSkipListMap;
 
 @Singleton
 public class RltManager
 {
     private final Vertx vertx;
-    private final JwtHandlerIF jwtHandler;
+    private final JwtHandler jwtHandler;
     ConcurrentMap<Long, RltRegistry> userRltMap;
     ConcurrentMap<Long, Boolean> initRegistryMap;
 
     private  Long periodId;
     @Inject
-    public RltManager(Vertx vertx$, JwtHandlerIF jwtHandler$)
+    public RltManager(Vertx vertx$, JwtHandler jwtHandler$)
     {
         jwtHandler = jwtHandler$;
         vertx = vertx$;

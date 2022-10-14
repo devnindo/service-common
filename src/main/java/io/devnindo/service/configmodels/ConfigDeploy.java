@@ -5,10 +5,9 @@
  */
 package io.devnindo.service.configmodels;
 
-import io.devnindo.service.exec.auth.JWTConfig;
+import io.devnindo.service.exec.auth.JwtConfig;
 import io.devnindo.datatype.schema.DataBean;
 import io.devnindo.datatype.schema.Required;
-import io.vertx.core.Verticle;
 
 /**
  *
@@ -27,7 +26,7 @@ public class ConfigDeploy implements DataBean
     ConfigServer serverConfig;
 
       @Required
-    JWTConfig jwtSessionConfig;
+      JwtConfig jwtSessionConfig;
 
 
     public Integer getServerVerticleCount() {
@@ -43,7 +42,7 @@ public class ConfigDeploy implements DataBean
         return serverConfig;
     }
 
-    public JWTConfig getJwtSessionConfig() {
+    public JwtConfig getJwtSessionConfig() {
         return jwtSessionConfig;
     }
 }

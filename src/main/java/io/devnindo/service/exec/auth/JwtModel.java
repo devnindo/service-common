@@ -2,27 +2,32 @@ package io.devnindo.service.exec.auth;
 
 import io.devnindo.datatype.json.JsonObject;
 import io.devnindo.datatype.schema.DataBean;
+import io.devnindo.datatype.schema.Required;
 
 import java.time.Instant;
 
-public class JwToken implements DataBean
+public class JwtModel implements DataBean
 {
     Instant iat;
+    @Required
     Instant exp;
     JsonObject data; // no standard, contain token data
 
+    @Required
     String iss;
 
-    public JwToken(Instant exp$, JsonObject data$, String iss$)
+    public static final JwtModel init(Long expSeconds$, JsonObject data$, String iss$)
     {
-        iat = Instant.now();
-        exp = exp$;
-        data = data$;
-        iss = iss$;
+        JwtModel model = new JwtModel();
+        model.iat = Instant.now();
+        model.exp = Instant.now().plusSeconds(expSeconds$);
+        model.data = data$;
+        model.iss = iss$;
+        return model;
     }
 
     public boolean isExpired(){
-        return Instant.now().isBefore(exp);
+        return Instant.now().isAfter(exp);
     }
     public Instant getIat() {
         return iat;

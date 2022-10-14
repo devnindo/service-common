@@ -24,17 +24,16 @@ public final class BizUserIF
 
     public interface IChannel
     {
-        public IChannelClient channel(String channelId);
+        public IBuild channel(String channelId);
     }
 
-    public interface IChannelClient
+   /* public interface IChannelClient
     {
         public IBuild channelClient(String clientId$);
-    }
+    }*/
 
     public interface IBuild
     {
-        public IBuild signedDatime(Instant signedDatime$);
         public BizUser build();
     }
 }

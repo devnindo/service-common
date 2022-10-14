@@ -13,11 +13,11 @@ import javax.inject.Inject;
 public class JWTSessionHandler extends BizSessionHandler
 {
 
-    private final JwtHandlerIF jwtHandler;
+    private final JwtHandler jwtHandler;
     private static final Violation VALID_SESSION_VIOLATION = Violation.withCtx("SESSION_VALIDATION_CONSTRAINT", "VALID_SESSION");
 
     @Inject
-    public JWTSessionHandler(JWTConfig sessionConfig$)
+    public JWTSessionHandler(JwtConfig sessionConfig$)
     {
         jwtHandler = new DefaultJwtHandler(sessionConfig$);
     }

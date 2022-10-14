@@ -7,20 +7,29 @@ import io.devnindo.datatype.validation.Violation;
 public class TestJWT
 {
     public static void main(String... args){
-        JWTConfig jwtConfig = new JWTConfig();
-        jwtConfig.algorithm = "HS256";
-        jwtConfig.issuer = "devnindo-auth";
-        jwtConfig.secret = "ei-secret-jate-keu-na-jane";
-        jwtConfig.expireInSeconds = 60*60*24;
+        JwtConfig jwtConfig = new JwtConfig()
+                .setAlgorithm("HS256")
+                .setIssuer("devnindo-auth")
+                .setSecret("ei-secret-jate-keu-na-jane")
+                .setExpireInSeconds(60L);
 
-        JwtHandlerIF handler = new DefaultJwtHandler(jwtConfig);
+        JwtHandler handler = new DefaultJwtHandler(jwtConfig);
         JsonObject js = new JsonObject().put("id", "123").put("name", "Rashed");
 
         String token = handler.generateJWT(js);
         System.out.println(token);
         Either<Violation, JsonObject> jwtEither = handler.validateJWT(token);
+        System.out.println(jwtEither.left().toJson().encodePrettily());
+        try{
+            Thread.sleep(61*1000);
+            // retry validating after 61 seconds
+            jwtEither = handler.validateJWT(token);
+            System.out.println(jwtEither.left().toJson().encodePrettily());
+        }catch (InterruptedException excp){
+
+        }
+
      //   System.out.println(jwtEither.left().toJson().encodePrettily());
-       System.out.println(jwtEither.right().encodePrettily());
 
 
     }

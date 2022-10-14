@@ -11,7 +11,7 @@ public class BizUser implements DataBean
 
     String prefName;
 
-    Instant signedDatime;
+    Instant createdDatime;
 
     BizUserStatus status;
 
@@ -28,10 +28,6 @@ public class BizUser implements DataBean
      * */
     String domainId;
 
-    /**
-     *  clientId: src client through which user initiated the access
-     * */
-    String channelClientId;
 
     /**
      * Referenced Anonymous User is an user who is
@@ -68,8 +64,8 @@ public class BizUser implements DataBean
         return status;
     }
 
-    public Instant getSignedDatime() {
-        return signedDatime;
+    public Instant getCreatedDatime() {
+        return createdDatime;
     }
 
     public Long getUserId() {
@@ -88,9 +84,6 @@ public class BizUser implements DataBean
     }
 
 
-    public String getChannelClientId() {
-        return channelClientId;
-    }
 
 
 
@@ -104,7 +97,6 @@ public class BizUser implements DataBean
         _anonymous.role = Values.NOT_APPLICABLE;
         _anonymous.channelId = channelId$;
         _anonymous.domainId = domainId$;
-        _anonymous.channelClientId = channelClientId$;
 
         return  _anonymous;
     }
@@ -119,7 +111,6 @@ public class BizUser implements DataBean
         _anonymous.role = Values.NOT_APPLICABLE;
         _anonymous.channelId = Values.NOT_AVAILABLE;
         _anonymous.domainId = Values.NOT_AVAILABLE;
-        _anonymous.channelClientId = Values.NOT_AVAILABLE;
 
         return  _anonymous;
     }

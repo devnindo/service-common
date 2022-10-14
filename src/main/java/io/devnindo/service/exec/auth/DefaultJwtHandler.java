@@ -9,10 +9,12 @@ import io.devnindo.datatype.validation.Violation;
 import java.time.Instant;
 import java.util.Base64;
 
-public class DefaultJwtHandler implements JwtHandlerIF
+public class DefaultJwtHandler implements JwtHandler
 {
 
     private final static String  encodedHeader;
+
+
 
     static {
         String header = new JsonObject()
@@ -21,10 +23,10 @@ public class DefaultJwtHandler implements JwtHandlerIF
         encodedHeader = DataSigner.BASE64_ENCODER.encodeToString(header.getBytes());
     }
 
-    private final JWTConfig jwtConfig;
+    private final JwtConfig jwtConfig;
     private final DataSigner dataSigner;
 
-    public DefaultJwtHandler(JWTConfig config$)
+    public DefaultJwtHandler(JwtConfig config$)
     {
 
         jwtConfig = config$;
@@ -39,7 +41,7 @@ public class DefaultJwtHandler implements JwtHandlerIF
     }
 
     @Override
-    public String generateJWT(JsonObject data, Integer expireInSeconds){
+    public String generateJWT(JsonObject data, Long expireInSeconds){
 
 
         return generateJWT0(data, expireInSeconds);
@@ -59,9 +61,15 @@ public class DefaultJwtHandler implements JwtHandlerIF
 
         byte[] decodedBytes = Base64.getUrlDecoder().decode(payload);
         String decoded = new String(decodedBytes);
-        JsonObject payloadJS = new JsonObject(decoded);
+        JwtModel model = new JsonObject(decoded).toBean(JwtModel.class);
+        if(model.isExpired()){
+            System.out.println(model.getIat());
+            System.out.println(model.getExp());
+            System.out.println(Instant.now());
+            return Either.left(Violation.of("JWT_EXPIRE_TIME"));
+        }
 
-        return Either.right(payloadJS.getJsonObject("data"));
+        return Either.right(model.getData());
     }
 
     public <T extends DataBean> Either<Violation, T> validateJWT(String jwToken, Class<T> beanClz)
@@ -74,13 +82,13 @@ public class DefaultJwtHandler implements JwtHandlerIF
     }
 
 
-    private String generateJWT0(JsonObject data, int expireInSeconds){
-        JsonObject payload = new JsonObject();
-        payload.put("exp", Instant.now().plusSeconds(expireInSeconds));
-        payload.put("iat", Instant.now().getEpochSecond());
-        payload.put("iss", jwtConfig.getIssuer());
-        payload.put("data", data);
-        return encodeJWT0(payload.encode());
+    private String generateJWT0(JsonObject data, Long expireInSeconds){
+        JwtModel model = JwtModel.init(
+                expireInSeconds,
+                data,
+                jwtConfig.getIssuer());
+
+        return encodeJWT0(model.toJson().encode());
     }
     private String encodeJWT0(String payload){
         String encodedPayload = JsonUtil.BASE64_ENCODER.encodeToString (payload.getBytes());
@@ -88,6 +96,5 @@ public class DefaultJwtHandler implements JwtHandlerIF
         return encodedData+"."+dataSigner.sign(encodedData);
 
     }
-
 
 }

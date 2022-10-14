@@ -3,7 +3,7 @@ package io.devnindo.service.exec.auth;
 import java.time.Instant;
 
 public final class BizUserBuilder
-    implements BizUserIF.IBuild, BizUserIF.IUserId, BizUserIF.IPrefName, BizUserIF.IRole, BizUserIF.IDomain, BizUserIF.IChannel, BizUserIF.IChannelClient
+    implements BizUserIF.IBuild, BizUserIF.IUserId, BizUserIF.IPrefName, BizUserIF.IRole, BizUserIF.IDomain, BizUserIF.IChannel
 {
 
     private final BizUser bizUser;
@@ -28,8 +28,6 @@ public final class BizUserBuilder
     }
 
 
-
-
     @Override
     public BizUserIF.IRole prefName(String prefName$) {
         bizUser.prefName = prefName$;
@@ -50,25 +48,15 @@ public final class BizUserBuilder
     }
 
     @Override
-    public BizUserIF.IChannelClient channel(String channelId$) {
+    public BizUserIF.IBuild channel(String channelId$) {
         bizUser.channelId = channelId$;
         return this;
     }
 
-    @Override
-    public BizUserIF.IBuild channelClient(String clientId$) {
-        bizUser.channelClientId = clientId$;
-        return this;
-    }
-
-    @Override
-    public BizUserIF.IBuild signedDatime(Instant signedDatime$) {
-        bizUser.signedDatime = signedDatime$;
-        return this;
-    }
 
     @Override
     public BizUser build() {
+        bizUser.createdDatime = Instant.now();
         return bizUser;
     }
 }

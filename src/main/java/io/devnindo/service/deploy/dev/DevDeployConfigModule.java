@@ -8,7 +8,7 @@ package io.devnindo.service.deploy.dev;
 import io.devnindo.service.exec.auth.BizSessionHandler;
 import io.devnindo.service.deploy.components.BeanConfigModule;
 import io.devnindo.service.configmodels.ConfigDeploy;
-import io.devnindo.service.exec.auth.JWTConfig;
+import io.devnindo.service.exec.auth.JwtConfig;
 import io.devnindo.service.exec.auth.JWTSessionHandler;
 import io.devnindo.service.exec.BizManagerApi;
 import dagger.Module;
@@ -37,7 +37,7 @@ public  class DevDeployConfigModule extends BeanConfigModule<ConfigDeploy> {
     }
 
     @Provides @Singleton
-    public JWTConfig sessionHandlerConfig(){
+    public JwtConfig sessionHandlerConfig(){
 
         return config.getJwtSessionConfig();
     }

@@ -1,30 +1,18 @@
 package io.devnindo.service.realtime;
 
 
-import io.devnindo.datatype.util.Either;
-import io.devnindo.datatype.validation.Violation;
 import io.devnindo.service.configmodels.ConfigServer;
 import io.devnindo.service.configmodels.ParamHttp;
-import io.devnindo.service.exec.action.request.BizAccessInfo;
-import io.devnindo.service.exec.auth.BizSessionHandler;
-import io.devnindo.service.exec.auth.JwtHandlerIF;
-import io.devnindo.service.util.Values;
 import io.vertx.core.Promise;
-import io.devnindo.datatype.json.JsonObject;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.net.PemKeyCertOptions;
 import io.vertx.ext.web.handler.sockjs.SockJSHandlerOptions;
 import io.vertx.rxjava3.core.AbstractVerticle;
-import io.vertx.rxjava3.core.eventbus.MessageConsumer;
 import io.vertx.rxjava3.core.http.HttpServer;
 import io.vertx.rxjava3.core.http.HttpServerRequest;
-import io.vertx.rxjava3.core.http.WebSocket;
 import io.vertx.rxjava3.ext.web.Router;
-import io.vertx.rxjava3.ext.web.RoutingContext;
 import io.vertx.rxjava3.ext.web.handler.CorsHandler;
 import io.vertx.rxjava3.ext.web.handler.sockjs.SockJSHandler;
-
-import javax.inject.Inject;
 
 
 public class SocketServerVerticle extends AbstractVerticle

@@ -11,7 +11,7 @@ import io.devnindo.service.deploy.components.BeanConfigModule;
 import io.devnindo.service.configmodels.ConfigApiClient;
 import io.devnindo.service.configmodels.ConfigDeploy;
 import io.devnindo.service.configmodels.ProductionDeployConfig;
-import io.devnindo.service.exec.auth.JWTConfig;
+import io.devnindo.service.exec.auth.JwtConfig;
 import io.devnindo.service.exec.auth.JWTSessionHandler;
 import io.devnindo.service.exec.BizManagerApi;
 import io.devnindo.service.util.DeployParams;
@@ -53,7 +53,7 @@ public  class ProDeployConfigModule
 
 
     @Provides @Singleton
-    public JWTConfig sessionHandlerConfig(){ return config.getJwtSessionConfig(); }
+    public JwtConfig sessionHandlerConfig(){ return config.getJwtSessionConfig(); }
     
     @Provides @Singleton
     public BizSessionHandler bizSessionHandler(JWTSessionHandler provider$)

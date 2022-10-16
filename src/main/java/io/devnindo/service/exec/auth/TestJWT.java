@@ -19,7 +19,7 @@ public class TestJWT
         String token = handler.generateJWT(js);
         System.out.println(token);
         Either<Violation, JsonObject> jwtEither = handler.validateJWT(token);
-        System.out.println(jwtEither.left().toJson().encodePrettily());
+        System.out.println(jwtEither.right().encodePrettily());
         try{
             Thread.sleep(61*1000);
             // retry validating after 61 seconds

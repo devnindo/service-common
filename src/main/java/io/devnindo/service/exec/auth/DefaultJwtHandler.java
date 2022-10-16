@@ -62,12 +62,8 @@ public class DefaultJwtHandler implements JwtHandler
         byte[] decodedBytes = Base64.getUrlDecoder().decode(payload);
         String decoded = new String(decodedBytes);
         JwtModel model = new JsonObject(decoded).toBean(JwtModel.class);
-        if(model.isExpired()){
-            System.out.println(model.getIat());
-            System.out.println(model.getExp());
-            System.out.println(Instant.now());
+        if(model.isExpired())
             return Either.left(Violation.of("JWT_EXPIRE_TIME"));
-        }
 
         return Either.right(model.getData());
     }

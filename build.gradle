@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.devnindo.core"
-version = "0.9.2"
+version = "0.9.3"
 
 
 apply from: 'remote-repo.gradle'

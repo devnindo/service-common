@@ -3,7 +3,7 @@ package io.devnindo.service.exec.auth;
 import io.devnindo.datatype.schema.DataBean;
 import io.devnindo.datatype.schema.Required;
 
-public class JwtConfig implements DataBean
+public class JwtConfig implements DataBean, JwtConfigSpec
 {
     @Required
     protected String issuer;
@@ -11,10 +11,10 @@ public class JwtConfig implements DataBean
     @Required
     protected String secret;
 
-    protected String algorithm;
+    protected String algo;
 
     @Required
-    protected Long expireInSeconds;
+    protected Long expireInSec;
 
     public String getIssuer() {
         return issuer;
@@ -24,12 +24,12 @@ public class JwtConfig implements DataBean
         return secret;
     }
 
-    public String getAlgorithm() {
-        return algorithm;
+    public String getAlgo() {
+        return algo;
     }
 
-    public Long getExpireInSeconds() {
-        return expireInSeconds;
+    public Long getExpireInSec() {
+        return expireInSec;
     }
 
     public JwtConfig setIssuer(String issuer) {
@@ -43,12 +43,12 @@ public class JwtConfig implements DataBean
     }
 
     public JwtConfig setAlgorithm(String algorithm) {
-        this.algorithm = algorithm;
+        this.algo = algorithm;
         return this;
     }
 
-    public JwtConfig setExpireInSeconds(Long expireInSeconds) {
-        this.expireInSeconds = expireInSeconds;
+    public JwtConfig setExpireInSeconds(Long expireInSec) {
+        this.expireInSec = expireInSec;
         return this;
     }
 }

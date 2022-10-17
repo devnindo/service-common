@@ -13,7 +13,7 @@ public class DefaultJwtHandler implements JwtHandler
 {
 
     private final static String  encodedHeader;
-
+    JwtConfigSpec configSpec;
 
 
     static {
@@ -23,21 +23,20 @@ public class DefaultJwtHandler implements JwtHandler
         encodedHeader = DataSigner.BASE64_ENCODER.encodeToString(header.getBytes());
     }
 
-    private final JwtConfig jwtConfig;
     private final DataSigner dataSigner;
 
-    public DefaultJwtHandler(JwtConfig config$)
+    public DefaultJwtHandler(JwtConfigSpec configSpec$)
     {
 
-        jwtConfig = config$;
-        dataSigner = DataSigner.init(DataSigner.Algo.HS256, config$.getSecret());
+        configSpec = configSpec$;
+        dataSigner = DataSigner.init(DataSigner.Algo.HS256, configSpec$.getSecret());
     }
 
 
     @Override
     public String generateJWT(JsonObject data) {
 
-        return generateJWT0(data, jwtConfig.getExpireInSeconds());
+        return generateJWT0(data, configSpec.getExpireInSec());
     }
 
     @Override
@@ -82,7 +81,7 @@ public class DefaultJwtHandler implements JwtHandler
         JwtModel model = JwtModel.init(
                 expireInSeconds,
                 data,
-                jwtConfig.getIssuer());
+                configSpec.getIssuer());
 
         return encodeJWT0(model.toJson().encode());
     }

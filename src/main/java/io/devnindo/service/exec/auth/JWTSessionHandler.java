@@ -35,12 +35,12 @@ public class JWTSessionHandler extends BizSessionHandler
             token = _accessToken.substring("Bearer ".length());
 
         Either<Violation, JsonObject> jwtEither = jwtHandler.validateJWT(token);
-
+        // SHOULD GENERATE GLOBAL USER ON VIOLATION
         if(jwtEither.isLeft())
-            return Single.just(Either.left(jwtEither.left()));
+            return Single.just(Either.right(BizUser.globalAnonymous()));
         else
         {
-            Either<Violation, BizUser> bizUserEither = BeanSchema.of(BizUser.class).apply(jwtEither.right());
+            Either<Violation, BizUser> bizUserEither = jwtEither.right().toBeanEither(BizUser.class);
             if(bizUserEither.isLeft())
                 return Single.just(Either.left(VALID_SESSION_VIOLATION));
             else return Single.just(Either.right(bizUserEither.right()));

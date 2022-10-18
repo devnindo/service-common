@@ -46,7 +46,7 @@ public class SockTest {
     public static JwtHandler jwtHdler(){
         JwtConfig config = new JwtConfig()
                 .setIssuer("devnindo")
-                .setExpireInSeconds(60*60L)
+                .setExpireInSec(60*60L)
                 .setSecret("devnindo-genjutsu-secret-rat");
         return new DefaultJwtHandler(config);
     }

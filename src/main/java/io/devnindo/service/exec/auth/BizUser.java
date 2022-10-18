@@ -4,6 +4,7 @@ import io.devnindo.service.util.Values;
 import io.devnindo.datatype.schema.DataBean;
 
 import java.time.Instant;
+import java.util.UUID;
 
 public class BizUser implements DataBean
 {
@@ -87,12 +88,12 @@ public class BizUser implements DataBean
 
 
 
-    public static final BizUser referencedAnonymous(String channelId$, String channelClientId$, String domainId$)
+    public static final BizUser referencedAnonymous(String refId$, String channelId$,  String domainId$)
     {
         BizUser _anonymous = new  BizUser();
 
         _anonymous.userId = -1L;
-        _anonymous.prefName = "RAnonymous";
+        _anonymous.prefName = "ANONYMOUS "+ refId$;
         _anonymous.status = BizUserStatus.r_anonymous;
         _anonymous.role = Values.NOT_APPLICABLE;
         _anonymous.channelId = channelId$;

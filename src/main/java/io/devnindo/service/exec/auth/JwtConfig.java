@@ -42,12 +42,12 @@ public class JwtConfig implements DataBean, JwtConfigSpec
         return this;
     }
 
-    public JwtConfig setAlgorithm(String algorithm) {
+    public JwtConfig setAlgo(String algorithm) {
         this.algo = algorithm;
         return this;
     }
 
-    public JwtConfig setExpireInSeconds(Long expireInSec) {
+    public JwtConfig setExpireInSec(Long expireInSec) {
         this.expireInSec = expireInSec;
         return this;
     }

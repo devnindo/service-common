@@ -37,12 +37,10 @@ public abstract class BizAction<T extends DataBean> {
     }
 
     /**
-     *  doBiz is a default Rx-complaint biz action that has the
-     *  actionRequest as argument. BlockingBizAction simply provides an
-     *  implementation by providing another implementable function: doBlockingBiz
+     *  doBiz is a default Rx-complaint biz action that has
+     *  reqData and bizUse as argument. BlockingBizAction simply provides an
+     *  implementation with another implementable function: doBlockingBiz
      * */
-
-
 
     protected abstract Single<BizResponse> doBiz(T reqData, BizUser bizUser);
 
@@ -56,23 +54,26 @@ public abstract class BizAction<T extends DataBean> {
         if(eitherT.isLeft())
             return  Single.just(BizResponse.failed(eitherT.left()));
 
-        Either<Violation, Void> accessEither = accessAuth.checkAccess(request$);
+        Either<Violation, Void> accessEither = accessAuth.checkAccess(request$.bizUser);
         if(accessEither.isLeft())
             return Single.just(BizResponse.failed(accessEither.left()));
 
         this.$step("BIZ_STEP");
         BizUser bizUser = request$.bizUser;
         T reqData = eitherT.right();
-        Single<BizResponse> bizResponseSingle =  this.doBiz(reqData, bizUser)
-                                                    .onErrorResumeNext(this::onErrorResponse0);            ;
+        return this.doBiz(reqData, bizUser)
+                    .onErrorResumeNext(this::onErrorResponse0);
 
-        return bizResponseSingle;
 
     }
 
     private Single<BizResponse> onErrorResponse0(Throwable throwable$)
     {
-        // this casting is not meaningful rather errorprone
+
+        // Even though Blocking BizException directly use BizResponse to reply
+        // Single response; following throwable checking is required because
+        // BizAction is a default rx action and failing logic uses exception
+        // to pass control downstream.
         if(throwable$ instanceof BizException)
         {
             BizException bizException = (BizException)throwable$;

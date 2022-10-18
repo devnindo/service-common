@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.devnindo.core"
-version = "0.9.3"
+version = "0.9.6"
 
 
 apply from: 'remote-repo.gradle'
@@ -55,3 +55,7 @@ task publishProject(type: GradleBuild) {
             'publish'
     ]
 }
+
+
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'

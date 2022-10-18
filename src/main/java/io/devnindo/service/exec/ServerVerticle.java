@@ -4,6 +4,7 @@ package io.devnindo.service.exec;
 import io.devnindo.service.configmodels.ParamHttp;
 import io.devnindo.service.configmodels.ConfigServer;
 import io.devnindo.service.configmodels.ParamService;
+import io.devnindo.service.exec.action.BizException;
 import io.devnindo.service.exec.action.request.$BizAccessInfo;
 import io.devnindo.service.exec.action.request.BizAccessInfo;
 import io.devnindo.service.exec.action.request.BizUserClientInfo;
@@ -110,6 +111,10 @@ public class ServerVerticle extends AbstractVerticle {
                             httpResponse.setStatusCode(srvResponse.status.code);
                             httpResponse.end(srvResponse.toJson().encode());
                         }, error -> {
+                            if(error instanceof BizException){
+                               System.out.println(BizException.class.cast(error).toJson().encodePrettily());
+                            }
+
                             httpResponse.setStatusCode(500);
                             httpResponse.end(ClzUtil.throwableString(error));
                         });

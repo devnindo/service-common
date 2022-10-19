@@ -16,7 +16,7 @@ public class JWTSessionHandler extends BizSessionHandler
     private final JwtHandler jwtHandler;
     private static final Violation VALID_SESSION_VIOLATION = Violation.withCtx("SESSION_VALIDATION_CONSTRAINT", "VALID_SESSION");
 
-    @Inject
+
     public JWTSessionHandler(JwtConfig sessionConfig$)
     {
         jwtHandler = new DefaultJwtHandler(sessionConfig$);

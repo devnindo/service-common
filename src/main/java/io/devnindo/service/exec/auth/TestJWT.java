@@ -7,16 +7,24 @@ import io.devnindo.service.exec.action.request.BizAccessInfo;
 
 public class TestJWT
 {
-    private final static JwtConfig config = new JwtConfig()
+    /*private final static JwtConfig config = new JwtConfig()
             .setAlgo("HS256")
             .setSecret("এই গোপন কথা zeno keu na jane")
             .setExpireInSec(60 * 60 * 24 * 365L)
             .setIssuer("devnindo-auth");
+    */
+
+    private final static JwtConfig config = new JsonObject("{\n" +
+            "    \"issuer\": \"devnindo-auth\",\n" +
+            "    \"secret\": \"এই গোপন কথা zeno keu na jane\",\n" +
+            "    \"algo\": \"HS256\",\n" +
+            "    \"expire_in_sec\": 31536000\n" +
+            "  }").toBean(JwtConfig.class);
     public static void main(String... args){
 
         JWTSessionHandler sessionHandler = new JWTSessionHandler(config);
         BizAccessInfo accessInfo = new BizAccessInfo();
-        accessInfo.setAccessToken("Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRhIjp7InJvbGUiOiJOT1RfQVBQTElDQUJMRSIsImNyZWF0ZWRfZGF0aW1lIjpudWxsLCJwcmVmX25hbWUiOiJBTk9OWU1PVVMgZWFjYmE1NzUtMzMyMC00ZTNhLWFlZWItMTMzZTQ4YmQyMjdhIiwic3RhdHVzIjoicl9hbm9ueW1vdXMiLCJjaGFubmVsX2lkIjoibG9qZW5zIiwidXNlcl9pZCI6LTEsImRvbWFpbl9pZCI6ImVsZWFybmluZyJ9LCJpc3MiOiJkZXZuaW5kby1hdXRoIiwiaWF0IjoiMjAyMi0xMC0xOFQxNDoyNDowMS4yODA2MzE4MDBaIiwiZXhwIjoiMjAyMy0xMC0xOFQxNDoyNDowMS4yODA2MzE4MDBaIn0.Q_CIbmpCdStO2jKav2MEE07SiQcFJaF-zDOK57DK3nU");
+        accessInfo.setAccessToken("Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRhIjp7InJvbGUiOiJOT1RfQVBQTElDQUJMRSIsImNyZWF0ZWRfZGF0aW1lIjpudWxsLCJwcmVmX25hbWUiOiJBTk9OWU1PVVMgMzAxNzVjY2QtYWU2Mi00ZTZiLWI3NjctYjFiMmVmNmQzMzM2Iiwic3RhdHVzIjoicl9hbm9ueW1vdXMiLCJjaGFubmVsX2lkIjoibG9qZW5zIiwidXNlcl9pZCI6LTEsImRvbWFpbl9pZCI6ImVsZWFybmluZyJ9LCJpc3MiOiJkZXZuaW5kby1hdXRoIiwiaWF0IjoiMjAyMi0xMC0xOFQyMjowMzoyMS40MDY2MTM2MDBaIiwiZXhwIjoiMjAyMy0xMC0xOFQyMjowMzoyMS40MDY2MTM2MDBaIn0.QaabKvgWxRUSgtVsvA22FHXc3FkO_gDUU6aX_bA0vbk");
         sessionHandler.doBiz(accessInfo).subscribe(either -> {
             Either<Violation, Void> authEither = BizAuth.REFERENCE_ACCESS_AUTH.checkAccess(either.right());
             System.out.println("# ACCESS ALLOWED: "+authEither.isRight());

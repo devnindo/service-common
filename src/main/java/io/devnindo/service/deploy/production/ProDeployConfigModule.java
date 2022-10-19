@@ -52,13 +52,11 @@ public  class ProDeployConfigModule
     }
 
 
-    @Provides @Singleton
-    public JwtConfig sessionHandlerConfig(){ return config.getJwtSessionConfig(); }
     
     @Provides @Singleton
-    public BizSessionHandler bizSessionHandler(JWTSessionHandler provider$)
+    public BizSessionHandler bizSessionHandler()
     {
-        return provider$;
+        return new JWTSessionHandler(config.getJwtSessionConfig());
     }
     
     @Provides @Singleton

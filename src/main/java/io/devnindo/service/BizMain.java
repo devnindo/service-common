@@ -98,11 +98,11 @@ public abstract class BizMain {
     private static final BizMain initBizMain0( String runtimeMode)
             throws IllegalAccessException, IOException
     {
-        String _configDir = System.getProperty(PARAM_SERVICE_CONFIG);
-        Objects.requireNonNull(_configDir, PARAM_SERVICE_CONFIG+" dir must be specified as default JVM args");
+        String _configDir = "config";//System.getProperty(PARAM_SERVICE_CONFIG);
+       // Objects.requireNonNull(_configDir, PARAM_SERVICE_CONFIG+" dir must be specified as default JVM args");
 
-        String _servicePackage = System.getProperty(PARAM_SERVICE_PACKAGE);
-        Objects.requireNonNull(_servicePackage, PARAM_SERVICE_PACKAGE+" clz name must be specified as default JVM args");
+       // String _servicePackage = System.getProperty(PARAM_SERVICE_PACKAGE);
+       // Objects.requireNonNull(_servicePackage, PARAM_SERVICE_PACKAGE+" clz name must be specified as default JVM args");
 
 
 
@@ -115,7 +115,7 @@ public abstract class BizMain {
         runtimeConfig = JsonConfigUtil.readConfig(_configDir, runtimeMode, "runtime");
 
 
-        return ClzUtil.findClzAndReflect(BizMain.class.getName(), _servicePackage, runtimeMode, _configDir, identityConfig, deployConfig, runtimeConfig);
+        return ClzUtil.findClzAndReflect(BizMain.class.getName(), runtimeMode, _configDir, identityConfig, deployConfig, runtimeConfig);
 
 
 
@@ -158,8 +158,8 @@ public abstract class BizMain {
             throws InvocationTargetException, IllegalAccessException, IOException {
 
         // once done in BizMain0. Repeating is not a good practice
-        String _configDir = System.getProperty(PARAM_SERVICE_CONFIG);
-        Objects.requireNonNull(_configDir, PARAM_SERVICE_CONFIG+" dir must be specified as default JVM args");
+        String _configDir = "config";//System.getProperty(PARAM_SERVICE_CONFIG);
+        //Objects.requireNonNull(_configDir, PARAM_SERVICE_CONFIG+" dir must be specified as default JVM args");
 
         for(Method m : main$.getClass().getDeclaredMethods()){
             PreBoot preBootAnt = m.getDeclaredAnnotation(PreBoot.class);
@@ -181,21 +181,26 @@ public abstract class BizMain {
     {
         return INSTANCE;
     }
-    public static void main(String[] args){
 
-
-        String _runtimeMode = calcRuntimeMode0(args);
-        System.out.println("# Provided runtime mode: "+_runtimeMode);
-
+    public static final void deployService (String runtimeMode$){
         try {
-            INSTANCE =   initBizMain0( _runtimeMode);
-            initPreBoot0(INSTANCE, _runtimeMode);
+            INSTANCE =   initBizMain0( runtimeMode$);
+            initPreBoot0(INSTANCE, runtimeMode$);
             INSTANCE.startDeploying0();
 
         } catch (IllegalAccessException | InvocationTargetException | IOException e) {
             System.out.println("# Service Deployment failed!");
             e.printStackTrace();
         }
+    }
+    public static void main(String[] args){
+
+
+        String _runtimeMode = calcRuntimeMode0(args);
+        System.out.println("# Provided runtime mode: "+_runtimeMode);
+        deployService(_runtimeMode);
+
+
        
     }
     

@@ -1,9 +1,9 @@
 package io.devnindo.service.worker;
 
+import java.time.Duration;
 import java.time.Period;
 
-public interface TimedTask
+public interface TimedTask extends Runnable
 {
-    public Period period();
-    public void run();
+    public Duration intervalDuration();
 }

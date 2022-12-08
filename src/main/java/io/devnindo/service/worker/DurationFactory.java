@@ -18,7 +18,7 @@ public class DurationFactory
     }
 
     public static final Duration everyDayAt(String clockTime){
-        return  Duration
+        return null; //Duration
     }
 
 

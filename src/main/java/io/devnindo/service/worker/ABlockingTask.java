@@ -6,7 +6,7 @@ public class ABlockingTask implements TimedTask
 {
     @Override
     public Duration intervalDuration() {
-        return  ;
+        return  null;
     }
 
     @Override

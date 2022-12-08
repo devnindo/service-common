@@ -9,6 +9,7 @@ package io.devnindo.service.configmodels;
  *
  * @author prevy-sage
  */
+@Deprecated
 public interface RuntimeMode {
     String DEV = "dev";
     String PRODUCTION = "production";

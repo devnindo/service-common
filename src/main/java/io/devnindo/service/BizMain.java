@@ -5,7 +5,7 @@
  */
 package io.devnindo.service;
 
-import io.devnindo.service.configmodels.RuntimeMode;
+import io.devnindo.service.deploy.RuntimeMode;
 import io.devnindo.service.deploy.base.BaseComponent;
 import io.devnindo.service.deploy.base.BaseModule;
 import io.devnindo.service.deploy.base.DaggerBaseComponent;
@@ -15,7 +15,6 @@ import io.devnindo.service.deploy.dev.DaggerDevDeployComponent;
 import io.devnindo.service.deploy.dev.DevDeployConfigModule;
 import io.devnindo.service.deploy.production.DaggerProDeployComponent;
 import io.devnindo.service.deploy.production.ProDeployConfigModule;
-import io.devnindo.service.deploy.test.ActionTestExecutor;
 import io.devnindo.service.util.JsonConfigUtil;
 import io.devnindo.datatype.util.ClzUtil;
 import io.devnindo.datatype.json.JsonObject;
@@ -34,8 +33,8 @@ import java.util.Objects;
 
 public abstract class BizMain {
 
-    public static final String PARAM_DEV = "dev";
-    public static final String PARAM_PRODUCTION = "production";
+   // public static final String PARAM_DEV = "dev";
+ //   public static final String PARAM_PRODUCTION = "production";
     public static final String PARAM_SERVICE_CONFIG = "service.config";
     public static final String PARAM_SERVICE_PACKAGE = "service.package";
 
@@ -43,13 +42,13 @@ public abstract class BizMain {
     protected final JsonObject identityConfig;
     protected final JsonObject deployConfig;
     protected final JsonObject runtimeConfig;
-    protected final String runtimeMode;
+    protected final RuntimeMode runtimeMode;
     protected final String configDir;
 
     // exposed through a public static function with no setter
     private static BizMain INSTANCE;
 
-     public BizMain(String runtimeMode$, String configDir$, JsonObject identityConfig$, JsonObject deployConfig$, JsonObject runtimeConfig$)
+     public BizMain(RuntimeMode runtimeMode$, String configDir$, JsonObject identityConfig$, JsonObject deployConfig$, JsonObject runtimeConfig$)
      {
         runtimeMode = runtimeMode$;
         configDir = configDir$;
@@ -68,7 +67,7 @@ public abstract class BizMain {
 
     protected DeployComponent deployComponent( )
     {
-        if(RuntimeMode.DEV.equals(runtimeMode))
+        if(RuntimeMode.dev.equals(runtimeMode))
             return DaggerDevDeployComponent
                     .builder()
                     .devDeployConfigModule(new DevDeployConfigModule(deployConfig))
@@ -85,17 +84,9 @@ public abstract class BizMain {
 
 
 
-    public static ActionTestExecutor initTestExec(String runtimeMode$)
-    {
-        try {
-            INSTANCE =   initBizMain0( runtimeMode$);
-            return INSTANCE.actionComponent().testExecutor();
-        } catch (IllegalAccessException | IOException excp) {
-            throw new RuntimeException(excp);
-        }
-    }
 
-    private static final BizMain initBizMain0( String runtimeMode)
+
+    private static final BizMain initBizMain0( RuntimeMode runtimeMode)
             throws IllegalAccessException, IOException
     {
         String _configDir = "config";//System.getProperty(PARAM_SERVICE_CONFIG);
@@ -138,23 +129,26 @@ public abstract class BizMain {
 
     }
 
-    private static final String calcRuntimeMode0(String[] systemArgs)
+    private static final RuntimeMode calcRuntimeMode0(String[] systemArgs)
     {
         String _runtimeMode;
         if(systemArgs.length == 0)
-            return PARAM_DEV;
+            return RuntimeMode.dev;
         else {
-            _runtimeMode = systemArgs[0];
-            if(_runtimeMode.equals(PARAM_DEV) || _runtimeMode.equals(PARAM_PRODUCTION))
-                return _runtimeMode;
-            else
+            try{
+
+               return RuntimeMode.valueOf(systemArgs[0]);
+
+            }catch (Exception exception){
                 throw new IllegalArgumentException("Runtime mode must be of {dev, production}");
+            }
+
 
         }
 
     }
 
-    private static void initPreBoot0(BizMain main$,   String runtimeMode$)
+    private static void initPreBoot0(BizMain main$,   RuntimeMode runtimeMode$)
             throws InvocationTargetException, IllegalAccessException, IOException {
 
         // once done in BizMain0. Repeating is not a good practice
@@ -182,7 +176,7 @@ public abstract class BizMain {
         return INSTANCE;
     }
 
-    public static final void deployService (String runtimeMode$){
+    public static final void deployService (RuntimeMode runtimeMode$){
         try {
             INSTANCE =   initBizMain0( runtimeMode$);
             initPreBoot0(INSTANCE, runtimeMode$);
@@ -196,7 +190,7 @@ public abstract class BizMain {
     public static void main(String[] args){
 
 
-        String _runtimeMode = calcRuntimeMode0(args);
+        RuntimeMode _runtimeMode = calcRuntimeMode0(args);
         System.out.println("# Provided runtime mode: "+_runtimeMode);
         deployService(_runtimeMode);
 

@@ -22,7 +22,6 @@ import io.devnindo.datatype.json.JsonObject;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Objects;
 
 /**
  *
@@ -33,25 +32,20 @@ import java.util.Objects;
 
 public abstract class BizMain {
 
-   // public static final String PARAM_DEV = "dev";
- //   public static final String PARAM_PRODUCTION = "production";
-    public static final String PARAM_SERVICE_CONFIG = "service.config";
-    public static final String PARAM_SERVICE_PACKAGE = "service.package";
 
     public final BaseComponent baseComponent;
+
     protected final JsonObject identityConfig;
     protected final JsonObject deployConfig;
     protected final JsonObject runtimeConfig;
     protected final RuntimeMode runtimeMode;
-    protected final String configDir;
 
     // exposed through a public static function with no setter
     private static BizMain INSTANCE;
 
-     public BizMain(RuntimeMode runtimeMode$, String configDir$, JsonObject identityConfig$, JsonObject deployConfig$, JsonObject runtimeConfig$)
+     public BizMain(RuntimeMode runtimeMode$,   JsonObject identityConfig$, JsonObject deployConfig$, JsonObject runtimeConfig$)
      {
         runtimeMode = runtimeMode$;
-        configDir = configDir$;
         deployConfig = deployConfig$;
         runtimeConfig = runtimeConfig$;
         identityConfig = identityConfig$;
@@ -63,7 +57,7 @@ public abstract class BizMain {
      }
 
 
-    protected abstract  ActionComponent actionComponent( );
+    public abstract  ActionComponent actionComponent( );
 
     protected DeployComponent deployComponent( )
     {
@@ -86,16 +80,10 @@ public abstract class BizMain {
 
 
 
-    private static final BizMain initBizMain0( RuntimeMode runtimeMode)
+    public static final BizMain init(RuntimeMode runtimeMode)
             throws IllegalAccessException, IOException
     {
-        String _configDir = "config";//System.getProperty(PARAM_SERVICE_CONFIG);
-       // Objects.requireNonNull(_configDir, PARAM_SERVICE_CONFIG+" dir must be specified as default JVM args");
-
-       // String _servicePackage = System.getProperty(PARAM_SERVICE_PACKAGE);
-       // Objects.requireNonNull(_servicePackage, PARAM_SERVICE_PACKAGE+" clz name must be specified as default JVM args");
-
-
+        String _configDir = "config";
 
         JsonObject identityConfig;
         JsonObject deployConfig ;
@@ -107,7 +95,6 @@ public abstract class BizMain {
 
 
         return ClzUtil.findClzAndReflect(BizMain.class.getName(), runtimeMode, _configDir, identityConfig, deployConfig, runtimeConfig);
-
 
 
     }
@@ -131,7 +118,7 @@ public abstract class BizMain {
 
     private static final RuntimeMode calcRuntimeMode0(String[] systemArgs)
     {
-        String _runtimeMode;
+
         if(systemArgs.length == 0)
             return RuntimeMode.dev;
         else {
@@ -176,9 +163,9 @@ public abstract class BizMain {
         return INSTANCE;
     }
 
-    public static final void deployService (RuntimeMode runtimeMode$){
+    private static final void deployService (RuntimeMode runtimeMode$){
         try {
-            INSTANCE =   initBizMain0( runtimeMode$);
+            INSTANCE =   init( runtimeMode$);
             initPreBoot0(INSTANCE, runtimeMode$);
             INSTANCE.startDeploying0();
 

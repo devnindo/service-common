@@ -1,30 +1,43 @@
 package io.devnindo.service.testunit;
 
+import io.devnindo.service.BizMain;
 import io.devnindo.service.deploy.RuntimeMode;
 import io.devnindo.service.deploy.components.ActionComponent;
 import io.devnindo.service.deploy.components.BizComponent;
+import io.devnindo.service.exec.action.BizAction;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 
+import java.io.IOException;
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class ApiTestModule
 {
-    private ActionComponent component ;
+    private ActionComponent actionComponent ;
 
     public abstract RuntimeMode runtimeMode();// return RuntimeMode
 
     private final <T extends BizComponent> T actionComponent(){
-        return (T) component;
+        return (T) actionComponent;
     }
 
     @BeforeAll
-    public    void init(){
-        System.out.println("# Before All Executed");
+    private void init(){
+        try {
+            actionComponent = BizMain.init(runtimeMode()).actionComponent();
+        } catch (IllegalAccessException | IOException exp) {
+            throw new RuntimeException(exp);
+        }
+    }
+
+    protected TestCase newCaseFor(Class<BizAction> actionClz){
+        BizAction bizAction = actionComponent.actionMap().get(actionClz).get();
+        return new TestCase(bizAction);
     }
 
     @AfterAll
-    public   void finish(){
+    private void finish(){
         System.out.println("# After All Executed");
     }
 }

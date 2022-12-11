@@ -5,6 +5,7 @@ import io.devnindo.service.exec.action.BizException;
 import io.devnindo.service.exec.action.request.BizRequest;
 import io.devnindo.service.exec.action.response.BizResponse;
 import io.devnindo.service.exec.auth.BizUser;
+import io.reactivex.rxjava3.core.Single;
 
 import java.util.function.BiConsumer;
 
@@ -49,9 +50,14 @@ public class TestCase implements
     public void execute() {
         // we are only interested to test with bizUser and jsonData
         BizRequest request = new BizRequest(null, null, null, bizUser, jsData);
-        bizAction.executeOn(request)
-                .flatMap(response -> {
+        Single<BizResponse> bizResponseSingle =  bizAction.executeOn(request);
+        bizResponseSingle.flatMap(response -> {
+                    try{
+                        assertRule.accept(response, null);
+                    }catch (AssertionError assertionError){
 
-        }).onErrorResumeNext();
+                    }
+        })
+        .onErrorResumeNext();
     }
 }

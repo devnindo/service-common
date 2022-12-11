@@ -2,7 +2,11 @@ package io.devnindo.service.testunit;
 
 import io.devnindo.datatype.json.JsonObject;
 import io.devnindo.service.exec.action.BizAction;
+import io.devnindo.service.exec.action.BizException;
+import io.devnindo.service.exec.action.response.BizResponse;
 import io.devnindo.service.exec.auth.BizUser;
+
+import java.util.function.BiConsumer;
 
 public final class TestCaseFlow
 {
@@ -18,9 +22,12 @@ public final class TestCaseFlow
     }
 
     public static interface DataIF{
-        ExecuteIF withData(JsonObject data);
+        AssertRuleIF withData(JsonObject data);
     }
 
+    public static interface AssertRuleIF{
+        ExecuteIF andRule(BiConsumer<BizResponse, BizException> assertRule$);
+    }
     public static interface ExecuteIF{
         void execute();
     }

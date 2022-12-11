@@ -31,9 +31,11 @@ public abstract class ApiTestModule
         }
     }
 
-    protected TestCase newCaseFor(Class<BizAction> actionClz){
+
+
+    protected TestCaseFlow.UserIF newCaseFor(Class<BizAction> actionClz){
         BizAction bizAction = actionComponent.actionMap().get(actionClz).get();
-        return new TestCase(bizAction);
+        return TestCase.init(bizAction);
     }
 
     @AfterAll

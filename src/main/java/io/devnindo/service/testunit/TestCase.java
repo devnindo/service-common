@@ -1,24 +1,30 @@
 package io.devnindo.service.testunit;
 import io.devnindo.datatype.json.JsonObject;
-import io.devnindo.service.deploy.components.ActionComponent;
 import io.devnindo.service.exec.action.BizAction;
+import io.devnindo.service.exec.action.BizException;
 import io.devnindo.service.exec.action.request.BizRequest;
 import io.devnindo.service.exec.action.response.BizResponse;
 import io.devnindo.service.exec.auth.BizUser;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import static io.devnindo.service.testunit.TestCaseFlow.*;
 public class TestCase implements
-         ExecuteIF,  DataIF,  UserIF
+         ExecuteIF,  DataIF,  UserIF, AssertRuleIF
 {
 
     private BizAction bizAction;
     private BizUser bizUser;
     private JsonObject jsData;
-    protected TestCase(BizAction bizAction$)
+
+    BiConsumer<BizResponse, BizException> assertRule;
+
+    private TestCase(BizAction bizAction$){
+        bizAction = bizAction$;
+    }
+    protected static final UserIF init(BizAction bizAction$)
     {
-         bizAction = bizAction$;
+        return new TestCase(bizAction$);
     }
 
     @Override
@@ -28,8 +34,14 @@ public class TestCase implements
     }
 
     @Override
-    public ExecuteIF withData(JsonObject jsData$) {
+    public AssertRuleIF withData(JsonObject jsData$) {
         jsData = jsData$;
+        return this;
+    }
+
+    @Override
+    public ExecuteIF andRule(BiConsumer<BizResponse, BizException> assertRule$) {
+        assertRule = assertRule$;
         return this;
     }
 
@@ -37,6 +49,9 @@ public class TestCase implements
     public void execute() {
         // we are only interested to test with bizUser and jsonData
         BizRequest request = new BizRequest(null, null, null, bizUser, jsData);
-        bizAction.executeOn(request);
+        bizAction.executeOn(request)
+                .flatMap(response -> {
+
+        }).onErrorResumeNext();
     }
 }

@@ -51,13 +51,25 @@ public class TestCase implements
         // we are only interested to test with bizUser and jsonData
         BizRequest request = new BizRequest(null, null, null, bizUser, jsData);
         Single<BizResponse> bizResponseSingle =  bizAction.executeOn(request);
-        bizResponseSingle.flatMap(response -> {
+        AssertionError[] assertionError = {};
+        bizResponseSingle.doOnSuccess(response -> {
                     try{
                         assertRule.accept(response, null);
-                    }catch (AssertionError assertionError){
-
+                    }catch (AssertionError err){
+                        assertionError[0] = err;
                     }
         })
-        .onErrorResumeNext();
+        .doOnError(error -> {
+            if(error instanceof BizException)
+            {
+                try{
+                    assertRule.accept(BizResponse.INTERNAL_ERROR, (BizException) error);
+                }catch (AssertionError err){
+                    assertionError[0] = err;
+                }
+            }
+        });
     }
+
+
 }

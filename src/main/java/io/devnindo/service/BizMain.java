@@ -28,7 +28,13 @@ import java.lang.reflect.Method;
  * @author prevy-sage
  */
  
-
+/**
+ *  1. BizMain should not be abstract
+ *  2. A ServiceModule interface should be introduced
+ *      a. provider function for BaseComponent, DeployComponent, ActionComponent
+ *      b. @PreBoot annotated function for external module
+ *
+ * */
 
 public abstract class BizMain {
 

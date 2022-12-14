@@ -77,7 +77,13 @@ public abstract class BizMain {
 
 
 
+    public static final RuntimeMode runtimeMode(){
+        return INSTANCE.runtimeMode;
+    }
 
+    public static final BaseComponent baseComponent(){
+        return INSTANCE.baseComponent;
+    }
 
 
     public static final BizMain init(RuntimeMode runtimeMode)

@@ -20,7 +20,8 @@ public class CompositionUtil
         if(vertx == null)
             return Single.error(new RuntimeException("Blocking step must be run in Vertx context"));
 
-        return blockingSingle$.subscribeOn(RxHelper.blockingScheduler(vertx, false))
+        return blockingSingle$
+                .subscribeOn(RxHelper.blockingScheduler(vertx, false))
                 .observeOn(RxHelper.scheduler(vertx));
     }
 }

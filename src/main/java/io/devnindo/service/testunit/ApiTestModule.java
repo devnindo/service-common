@@ -7,15 +7,19 @@ import io.devnindo.service.deploy.components.BizComponent;
 import io.devnindo.service.exec.action.BizAction;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.concurrent.CountDownLatch;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class ApiTestModule
 {
     private ActionComponent actionComponent ;
-
+    private CountDownLatch blockingLatch;
     public abstract RuntimeMode runtimeMode();// return RuntimeMode
 
     private final <T extends BizComponent> T actionComponent(){
@@ -26,6 +30,14 @@ public abstract class ApiTestModule
     private void init(){
         try {
             actionComponent = BizMain.init(runtimeMode()).actionComponent();
+            Method[] methodArr = this.getClass().getDeclaredMethods();
+            for(Method method: methodArr){
+                boolean testable =
+                if(){
+
+                }
+            }
+
         } catch (IllegalAccessException | IOException exp) {
             throw new RuntimeException(exp);
         }
@@ -41,5 +53,10 @@ public abstract class ApiTestModule
     @AfterAll
     private void finish(){
         System.out.println("# After All Executed");
+    }
+
+    private boolean testable(Method method)
+    {
+
     }
 }

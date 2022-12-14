@@ -2,6 +2,7 @@ package io.devnindo.service.util;
 
 
 import io.reactivex.rxjava3.core.Single;
+import io.vertx.rxjava3.ContextScheduler;
 import io.vertx.rxjava3.core.Context;
 import io.vertx.rxjava3.core.RxHelper;
 import io.vertx.rxjava3.core.Vertx;
@@ -13,7 +14,7 @@ public class CompositionUtil
     public static final <T> Single<T> composeVertexScheduler(Single<T> blockingSingle$)
     {
         Vertx vertx = null;
-        Context ctx = Vertx.currentContext();
+        final Context ctx = Vertx.currentContext();
         if(Objects.nonNull(ctx))
             vertx = ctx.owner();
 
@@ -22,6 +23,6 @@ public class CompositionUtil
 
         return blockingSingle$
                 .subscribeOn(RxHelper.blockingScheduler(vertx, false))
-                .observeOn(RxHelper.scheduler(vertx));
+                .observeOn(new ContextScheduler(ctx.getDelegate(), false));
     }
 }

@@ -30,13 +30,7 @@ public abstract class ApiTestModule
     private void init(){
         try {
             actionComponent = BizMain.init(runtimeMode()).actionComponent();
-            Method[] methodArr = this.getClass().getDeclaredMethods();
-            for(Method method: methodArr){
-                boolean testable =
-                if(){
 
-                }
-            }
 
         } catch (IllegalAccessException | IOException exp) {
             throw new RuntimeException(exp);
@@ -55,8 +49,4 @@ public abstract class ApiTestModule
         System.out.println("# After All Executed");
     }
 
-    private boolean testable(Method method)
-    {
-
-    }
 }

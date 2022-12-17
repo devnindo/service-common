@@ -2,6 +2,8 @@ package io.devnindo.service.testmains;
 
 
 import io.reactivex.rxjava3.core.Single;
+import io.vertx.rxjava3.ContextScheduler;
+import io.vertx.rxjava3.core.Context;
 import io.vertx.rxjava3.core.RxHelper;
 import io.vertx.rxjava3.core.Vertx;
 import io.vertx.rxjava3.core.eventbus.Message;
@@ -50,6 +52,7 @@ public class RxJavaTest {
 
     public static void main(String... args) throws InterruptedException
     {
+
         /*String queue = "blocking";
         vertx.eventBus().consumer(queue)
                 .toObservable()

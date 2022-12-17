@@ -6,16 +6,13 @@
 package io.devnindo.service;
 
 import io.devnindo.service.deploy.RuntimeMode;
+import io.devnindo.service.deploy.ServiceComponentProvider;
 import io.devnindo.service.deploy.base.BaseComponent;
 import io.devnindo.service.deploy.base.BaseModule;
 import io.devnindo.service.deploy.base.DaggerBaseComponent;
 import io.devnindo.service.deploy.base.PreBoot;
 import io.devnindo.service.deploy.components.*;
-import io.devnindo.service.deploy.dev.DaggerDevDeployComponent;
-import io.devnindo.service.deploy.dev.DevDeployConfigModule;
-import io.devnindo.service.deploy.production.DaggerProDeployComponent;
-import io.devnindo.service.deploy.production.ProDeployConfigModule;
-import io.devnindo.service.util.JsonConfigUtil;
+import io.devnindo.service.util.ServiceConfigUtil;
 import io.devnindo.datatype.util.ClzUtil;
 import io.devnindo.datatype.json.JsonObject;
 
@@ -36,7 +33,7 @@ import java.lang.reflect.Method;
  *
  * */
 
-public abstract class BizMain {
+public final class BizMain {
 
 
     public final BaseComponent baseComponent;
@@ -49,7 +46,7 @@ public abstract class BizMain {
     // exposed through a public static function with no setter
     private static BizMain INSTANCE;
 
-     public BizMain(RuntimeMode runtimeMode$,   JsonObject identityConfig$, JsonObject deployConfig$, JsonObject runtimeConfig$)
+     public BizMain(RuntimeMode runtimeMode$, JsonObject identityConfig$, JsonObject deployConfig$, JsonObject runtimeConfig$)
      {
         runtimeMode = runtimeMode$;
         deployConfig = deployConfig$;
@@ -63,23 +60,7 @@ public abstract class BizMain {
      }
 
 
-    public abstract  ActionComponent actionComponent( );
 
-    protected DeployComponent deployComponent( )
-    {
-        if(RuntimeMode.dev.equals(runtimeMode))
-            return DaggerDevDeployComponent
-                    .builder()
-                    .devDeployConfigModule(new DevDeployConfigModule(deployConfig))
-                    .baseDependency(baseComponent)
-                    .build();
-        else
-            return DaggerProDeployComponent
-                    .builder()
-                    .proDeployConfigModule(new ProDeployConfigModule(deployConfig))
-                    .baseDependency(baseComponent)
-                    .build();
-    }
 
 
 
@@ -91,42 +72,61 @@ public abstract class BizMain {
         return INSTANCE.baseComponent;
     }
 
-
-    public static final BizMain init(RuntimeMode runtimeMode)
-            throws IllegalAccessException, IOException
+    private static final BizMain init(RuntimeMode runtimeMode)
+            throws  IOException
     {
-        String _configDir = "config";
 
         JsonObject identityConfig;
         JsonObject deployConfig ;
         JsonObject runtimeConfig;
 
-        identityConfig = JsonConfigUtil.readIdentityConfig(_configDir);
-        deployConfig = JsonConfigUtil.readConfig(_configDir, runtimeMode, "deploy");
-        runtimeConfig = JsonConfigUtil.readConfig(_configDir, runtimeMode, "runtime");
+        identityConfig = ServiceConfigUtil.readIdentityConfig();
+        deployConfig = ServiceConfigUtil.readConfig(runtimeMode, "deploy");
+        runtimeConfig = ServiceConfigUtil.readConfig( runtimeMode, "runtime");
 
 
-        return ClzUtil.findClzAndReflect(BizMain.class.getName(), runtimeMode, _configDir, identityConfig, deployConfig, runtimeConfig);
+        return new BizMain(runtimeMode, identityConfig, deployConfig, runtimeConfig);
 
 
     }
 
-    private  void startDeploying0( ){
+    private  void preBootAndDeploy0( ) throws IllegalAccessException, IOException, InvocationTargetException {
 
-        ActionComponent _actionComponent;
-        _actionComponent = actionComponent();
+        ServiceComponentProvider componentProvider = ClzUtil.findClzAndReflect(ServiceComponentProvider.class);
 
-        DeployComponent _deployComponent = deployComponent();
+        preBoot0(componentProvider);
 
         BizComponent bizComponent = DaggerBizComponent.builder()
                 .identityConfigModule(new IdentityConfigModule(identityConfig))
-                .deployComponent(_deployComponent)
-                .actionComponent(_actionComponent)
+                .deployComponent(componentProvider.deployComponent(deployConfig))
+                .actionComponent(componentProvider.actionComponent(runtimeConfig))
                 .build();
 
         bizComponent.serverDeployer().deploy();
 
     }
+
+    private void preBoot0(ServiceComponentProvider componentProvider)
+            throws InvocationTargetException, IllegalAccessException, IOException {
+
+
+        for(Method m : componentProvider.getClass().getDeclaredMethods()){
+            PreBoot preBootAnt = m.getDeclaredAnnotation(PreBoot.class);
+            if(preBootAnt != null){
+                System.out.println("pre-booting: "+m.getName());
+                String configName = preBootAnt.config();
+                if(configName.isEmpty())
+                    m.invoke(componentProvider);
+                else {
+                    JsonObject configData = ServiceConfigUtil.readConfig( runtimeMode, configName);
+                    m.invoke(componentProvider, configData);
+                }
+            }
+
+        }
+    }
+
+
 
     private static final RuntimeMode calcRuntimeMode0(String[] systemArgs)
     {
@@ -147,51 +147,23 @@ public abstract class BizMain {
 
     }
 
-    private static void initPreBoot0(BizMain main$,   RuntimeMode runtimeMode$)
-            throws InvocationTargetException, IllegalAccessException, IOException {
 
-        // once done in BizMain0. Repeating is not a good practice
-        String _configDir = "config";//System.getProperty(PARAM_SERVICE_CONFIG);
-        //Objects.requireNonNull(_configDir, PARAM_SERVICE_CONFIG+" dir must be specified as default JVM args");
 
-        for(Method m : main$.getClass().getDeclaredMethods()){
-            PreBoot preBootAnt = m.getDeclaredAnnotation(PreBoot.class);
-            if(preBootAnt != null){
-                System.out.println("pre-booting: "+m.getName());
-                String configName = preBootAnt.config();
-                if(configName.isEmpty())
-                    m.invoke(main$);
-                else {
-                    JsonObject configData = JsonConfigUtil.readConfig(_configDir, runtimeMode$, configName);
-                    m.invoke(main$, configData);
-                }
-            }
 
-        }
-    }
 
-    public static BizMain instance()
-    {
-        return INSTANCE;
-    }
-
-    private static final void deployService (RuntimeMode runtimeMode$){
-        try {
-            INSTANCE =   init( runtimeMode$);
-            initPreBoot0(INSTANCE, runtimeMode$);
-            INSTANCE.startDeploying0();
-
-        } catch (IllegalAccessException | InvocationTargetException | IOException e) {
-            System.out.println("# Service Deployment failed!");
-            e.printStackTrace();
-        }
-    }
     public static void main(String[] args){
 
 
         RuntimeMode _runtimeMode = calcRuntimeMode0(args);
         System.out.println("# Provided runtime mode: "+_runtimeMode);
-        deployService(_runtimeMode);
+        try {
+            INSTANCE = init( _runtimeMode);
+            INSTANCE.preBootAndDeploy0();
+
+        } catch (IllegalAccessException | InvocationTargetException | IOException e) {
+            System.out.println("# Service Deployment failed!");
+            e.printStackTrace();
+        }
 
 
        

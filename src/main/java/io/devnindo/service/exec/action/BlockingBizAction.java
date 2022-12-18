@@ -1,5 +1,6 @@
 package io.devnindo.service.exec.action;
 
+import io.devnindo.service.exec.RxScheduler;
 import io.devnindo.service.exec.action.response.BizResponse;
 
 import io.devnindo.service.exec.auth.BizAuth;
@@ -35,7 +36,7 @@ public abstract class BlockingBizAction<T extends DataBean> extends BizAction<T>
             }
         });
 
-        return CompositionUtil.composeVertexScheduler(singleResponse) ;
+        return RxScheduler.composeScheduler(singleResponse) ;
 
     }
 

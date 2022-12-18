@@ -11,8 +11,8 @@ public interface BaseDependency {
     public Vertx vertx();
     public WebClient webClient();
 
-    @Named(ParamScheduler.EXEC_BLOCKING_SCHEDULER)
-    public Scheduler execScheduler();
-    @Named(ParamScheduler.VERTX_CTX_SCHEDULER)
-    public Scheduler vertxCtxScheduler();
+    @Named(ParamScheduler.BLOCKING_SCHEDULER)
+    public Scheduler blockingScheduler();
+    @Named(ParamScheduler.ASYNC_SCHEDULER)
+    public Scheduler asyncScheduler();
 }

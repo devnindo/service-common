@@ -12,6 +12,7 @@ import io.devnindo.service.deploy.base.BaseModule;
 import io.devnindo.service.deploy.base.DaggerBaseComponent;
 import io.devnindo.service.deploy.base.PreBoot;
 import io.devnindo.service.deploy.components.*;
+import io.devnindo.service.exec.RxScheduler;
 import io.devnindo.service.util.ServiceConfigUtil;
 import io.devnindo.datatype.util.ClzUtil;
 import io.devnindo.datatype.json.JsonObject;
@@ -59,11 +60,6 @@ public final class BizMain {
                  .build();
      }
 
-
-
-
-
-
     public static final RuntimeMode runtimeMode(){
         return INSTANCE.runtimeMode;
     }
@@ -72,26 +68,10 @@ public final class BizMain {
         return INSTANCE.baseComponent;
     }
 
-    private static final BizMain init(RuntimeMode runtimeMode)
-            throws  IOException
-    {
-
-        JsonObject identityConfig;
-        JsonObject deployConfig ;
-        JsonObject runtimeConfig;
-
-        identityConfig = ServiceConfigUtil.readIdentityConfig();
-        deployConfig = ServiceConfigUtil.readConfig(runtimeMode, "deploy");
-        runtimeConfig = ServiceConfigUtil.readConfig( runtimeMode, "runtime");
-
-
-        return new BizMain(runtimeMode, identityConfig, deployConfig, runtimeConfig);
-
-
-    }
 
     private  void preBootAndDeploy0( ) throws IllegalAccessException, IOException, InvocationTargetException {
 
+        RxScheduler.init(baseComponent.blockingScheduler(), baseComponent.asyncScheduler());
         ServiceComponentProvider componentProvider = ClzUtil.findClzAndReflect(ServiceComponentProvider.class);
 
         preBoot0(componentProvider);
@@ -135,14 +115,10 @@ public final class BizMain {
             return RuntimeMode.dev;
         else {
             try{
-
                return RuntimeMode.valueOf(systemArgs[0]);
-
             }catch (Exception exception){
                 throw new IllegalArgumentException("Runtime mode must be of {dev, production}");
             }
-
-
         }
 
     }
@@ -157,7 +133,14 @@ public final class BizMain {
         RuntimeMode _runtimeMode = calcRuntimeMode0(args);
         System.out.println("# Provided runtime mode: "+_runtimeMode);
         try {
-            INSTANCE = init( _runtimeMode);
+            JsonObject identityConfig;
+            JsonObject deployConfig ;
+            JsonObject runtimeConfig;
+
+            identityConfig = ServiceConfigUtil.readIdentityConfig();
+            deployConfig = ServiceConfigUtil.readConfig(_runtimeMode, "deploy");
+            runtimeConfig = ServiceConfigUtil.readConfig( _runtimeMode, "runtime");
+            INSTANCE = new BizMain(_runtimeMode, identityConfig, deployConfig, runtimeConfig);
             INSTANCE.preBootAndDeploy0();
 
         } catch (IllegalAccessException | InvocationTargetException | IOException e) {

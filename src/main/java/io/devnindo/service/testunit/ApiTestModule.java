@@ -29,7 +29,7 @@ public abstract class ApiTestModule
     @BeforeAll
     private void init(){
         try {
-            actionComponent = BizMain.init(runtimeMode()).actionComponent();
+            actionComponent =  //BizMain.init(runtimeMode()).actionComponent();
 
 
         } catch (IllegalAccessException | IOException exp) {

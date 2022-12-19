@@ -1,18 +1,17 @@
 package io.devnindo.service.exec;
 
 
+import io.devnindo.datatype.util.Values;
 import io.devnindo.service.configmodels.ParamHttp;
 import io.devnindo.service.configmodels.ConfigServer;
 import io.devnindo.service.configmodels.ParamService;
 import io.devnindo.service.exec.action.BizException;
-import io.devnindo.service.exec.action.request.$BizAccessInfo;
 import io.devnindo.service.exec.action.request.BizAccessInfo;
 import io.devnindo.service.exec.action.request.BizUserClientInfo;
-import io.devnindo.service.exec.auth.BizUser;
-import io.devnindo.service.util.Values;
 import io.devnindo.datatype.util.ClzUtil;
 import io.vertx.core.Handler;
 import io.vertx.core.Promise;
+import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerOptions;
 import io.devnindo.datatype.json.JsonObject;
@@ -91,7 +90,7 @@ public class ServerVerticle extends AbstractVerticle {
     private Handler<RoutingContext> routeHandler() {
         return routingCtx -> {
             HttpServerResponse httpResponse = routingCtx.response();
-            httpResponse.putHeader("Content-Type", "application/json");
+            httpResponse.putHeader(HttpHeaders.CONTENT_TYPE, "application/json");
 
             String actionIdName = routingCtx.request().getParam(ParamService.ACTION_ID);
 

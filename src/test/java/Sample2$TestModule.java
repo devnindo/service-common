@@ -2,12 +2,10 @@ import io.devnindo.service.deploy.RuntimeMode;
 import io.devnindo.service.testunit.ApiTestModule;
 import org.junit.jupiter.api.Test;
 
-public class Sample2$TestModule extends ApiTestModule {
 
-    @Override
-    public RuntimeMode runtimeMode() {
-        return RuntimeMode.dev;
-    }
+public class Sample2$TestModule{
+
+
 
     @Test
     public void test_1(){

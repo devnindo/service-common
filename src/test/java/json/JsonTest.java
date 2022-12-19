@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.CountDownLatch;
 
+
+@Disabled
 class JsonTest {
 
     @BeforeEach

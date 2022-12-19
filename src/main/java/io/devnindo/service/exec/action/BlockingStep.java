@@ -1,7 +1,6 @@
 package io.devnindo.service.exec.action;
 
 import io.devnindo.service.exec.RxScheduler;
-import io.devnindo.service.util.CompositionUtil;
 import io.devnindo.datatype.util.Either;
 import io.devnindo.datatype.validation.Violation;
 import io.reactivex.rxjava3.core.Single;
@@ -31,7 +30,7 @@ public abstract class  BlockingStep<IP, OP> extends BizStep<IP, OP>
                         }
                 );
 
-        return RxScheduler.composeScheduler(bizSingle)
+        return RxScheduler.compose(bizSingle)
                 // here only possible exception would be RuntimeException due to null-vertx-context
                 .onErrorResumeNext(error -> Single.error(this.$bizException(error)));
 

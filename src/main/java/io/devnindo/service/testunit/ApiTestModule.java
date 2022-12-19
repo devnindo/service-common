@@ -20,33 +20,35 @@ public abstract class ApiTestModule
 {
     private ActionComponent actionComponent ;
     private CountDownLatch blockingLatch;
-    public abstract RuntimeMode runtimeMode();// return RuntimeMode
 
     private final <T extends BizComponent> T actionComponent(){
         return (T) actionComponent;
     }
 
     @BeforeAll
-    private void init(){
-        try {
-            actionComponent =  //BizMain.init(runtimeMode()).actionComponent();
+    public void init(){
+        System.out.println("# @BeforeAll EXECUTED");
+        blockingLatch = new CountDownLatch(2);
 
-
-        } catch (IllegalAccessException | IOException exp) {
-            throw new RuntimeException(exp);
-        }
     }
 
 
-
+    protected  SimpleCase initSimpleCase(){
+        return new SimpleCase(blockingLatch);
+    }
     protected TestCaseFlow.UserIF newCaseFor(Class<BizAction> actionClz){
         BizAction bizAction = actionComponent.actionMap().get(actionClz).get();
         return TestCase.init(bizAction);
     }
 
     @AfterAll
-    private void finish(){
-        System.out.println("# After All Executed");
+    public void finish(){
+        try {
+            blockingLatch.await();
+            System.out.println("# After All Executed");
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

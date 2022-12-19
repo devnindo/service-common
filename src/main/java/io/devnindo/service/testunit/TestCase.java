@@ -6,6 +6,7 @@ import io.devnindo.service.exec.action.request.BizRequest;
 import io.devnindo.service.exec.action.response.BizResponse;
 import io.devnindo.service.exec.auth.BizUser;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.subscribers.TestSubscriber;
 
 import java.util.function.BiConsumer;
 
@@ -68,7 +69,7 @@ public class TestCase implements
                     assertionError[0] = err;
                 }
             }
-        });
+        }) ;
     }
 
 

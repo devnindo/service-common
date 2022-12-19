@@ -1,10 +1,9 @@
 package io.devnindo.service.exec.auth;
 
-import io.devnindo.service.util.Values;
 import io.devnindo.datatype.schema.DataBean;
+import io.devnindo.datatype.util.Values;
 
 import java.time.Instant;
-import java.util.UUID;
 
 public class BizUser implements DataBean
 {

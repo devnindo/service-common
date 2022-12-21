@@ -1,22 +1,16 @@
 package io.devnindo.service.testunit;
 
-import io.devnindo.service.BizMain;
-import io.devnindo.service.deploy.RuntimeMode;
 import io.devnindo.service.deploy.components.ActionComponent;
 import io.devnindo.service.deploy.components.BizComponent;
 import io.devnindo.service.exec.action.BizAction;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public abstract class ApiTestModule
+public abstract class ServiceTestModule
 {
     private ActionComponent actionComponent ;
     private CountDownLatch blockingLatch;

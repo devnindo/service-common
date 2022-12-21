@@ -1,11 +1,9 @@
-import io.devnindo.service.deploy.RuntimeMode;
-import io.devnindo.service.testunit.ApiTestModule;
+import io.devnindo.service.testunit.ServiceTestModule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestReporter;
 
 
-public class Sample1$TestModule extends ApiTestModule
+public class Sample1$TestModule extends ServiceTestModule
 {
 
 

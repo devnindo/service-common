@@ -8,6 +8,7 @@ import io.devnindo.service.exec.auth.BizUser;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.subscribers.TestSubscriber;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.function.BiConsumer;
 
 import static io.devnindo.service.testunit.TestCaseFlow.*;
@@ -19,10 +20,14 @@ public class TestCase implements
     private BizUser bizUser;
     private JsonObject jsData;
 
+    private CountDownLatch countDownLatch;
+
     BiConsumer<BizResponse, BizException> assertRule;
 
-    private TestCase(BizAction bizAction$){
+    private TestCase(BizAction bizAction$)
+    {
         bizAction = bizAction$;
+        countDownLatch = new CountDownLatch(1);
     }
     protected static final UserIF init(BizAction bizAction$)
     {
@@ -58,6 +63,8 @@ public class TestCase implements
                         assertRule.accept(response, null);
                     }catch (AssertionError err){
                         assertionError[0] = err;
+                    }finally {
+                        countDownLatch.countDown();
                     }
         })
         .doOnError(error -> {
@@ -67,9 +74,17 @@ public class TestCase implements
                     assertRule.accept(BizResponse.INTERNAL_ERROR, (BizException) error);
                 }catch (AssertionError err){
                     assertionError[0] = err;
+                }finally {
+                    countDownLatch.countDown();
                 }
             }
-        }) ;
+        }).subscribe();
+
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

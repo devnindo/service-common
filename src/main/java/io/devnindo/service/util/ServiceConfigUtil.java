@@ -24,4 +24,8 @@ public final class ServiceConfigUtil
     public static io.vertx.core.json.JsonObject toVertxJS(JsonObject obj){
         return new io.vertx.core.json.JsonObject(obj.getMap());
     }
+
+    public static final void attachShutdownHook(){
+
+    }
 }

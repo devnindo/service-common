@@ -1,4 +1,4 @@
-package action_module.dummy;
+package io.devnindo.service.testunit.module_example.dummy;
 
 import dagger.Module;
 import dagger.Provides;
@@ -28,7 +28,7 @@ public class DummyVldModule
     @Provides
     @Singleton
     @Named("DUMMY_VLD")
-    public static Validator dummyVld(){
+    public static BeanValidator<DummyData> dummyVld(){
         return BeanValidator.create("DUMMY_VLD", DummyData.class, c -> {
             c.required($DummyData.NAME);
             c.required($DummyData.SLEEPING_TIME);

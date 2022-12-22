@@ -1,4 +1,4 @@
-package action_module.dummy;
+package io.devnindo.service.testunit.module_example.dummy.action;
 
 import io.devnindo.datatype.json.JsonObject;
 import io.devnindo.datatype.schema.BeanValidator;
@@ -6,6 +6,7 @@ import io.devnindo.service.exec.action.BlockingBizAction;
 import io.devnindo.service.exec.action.response.BizResponse;
 import io.devnindo.service.exec.auth.BizAuth;
 import io.devnindo.service.exec.auth.BizUser;
+import io.devnindo.service.testunit.module_example.dummy.DummyData;
 
 import javax.inject.Inject;
 import javax.inject.Named;

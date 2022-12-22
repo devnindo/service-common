@@ -1,4 +1,4 @@
-package action_module.dummy;
+package io.devnindo.service.testunit.module_example.dummy;
 
 import io.devnindo.datatype.schema.DataBean;
 

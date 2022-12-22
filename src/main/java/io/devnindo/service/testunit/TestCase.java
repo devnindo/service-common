@@ -85,6 +85,8 @@ public class TestCase implements
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        if(assertionError[0]!=null)
+            throw assertionError[0];
     }
 
 

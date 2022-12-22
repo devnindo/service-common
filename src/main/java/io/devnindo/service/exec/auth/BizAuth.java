@@ -1,6 +1,5 @@
 package io.devnindo.service.exec.auth;
 
-import io.devnindo.service.exec.action.request.BizRequest;
 import io.devnindo.datatype.util.Either;
 import io.devnindo.datatype.validation.Violation;
 
@@ -8,14 +7,15 @@ import java.util.Objects;
 
 public interface BizAuth
 {
-    Violation SINGLE_CHANNEL_ACCESS_AUTH_VIOLATION = Violation.withCtx("SINGLE_CHANNEL_ACCESS_AUTH", "VALID_ROLE");
-    Violation REFERENCE_ACCESS_AUTH_VIOLATION = Violation.withCtx("REF_ACCESS_AUTH", "VALID_REFERENCE");
+    Violation USER_ACCESS_VIOLATION = Violation.withCtx("USER_ACCESS_AUTH", "VALID_ROLE");
+    Violation REFERENCE_ACCESS_VIOLATION = Violation.withCtx("REF_ACCESS_AUTH", "VALID_REFERENCE");
 
+    Violation REGISTERED_ACCESS_VIOLATION = Violation.withCtx("REG_USER_AUTH", "REGISTRATION");
 
     public Either<Violation, Void> checkAccess(BizUser bizUser$);
 
     /**
-     *  NO AUTH is for global access, it always access unconditionally
+     *  NO AUTH is for global access, it allows access unconditionally
      * */
     BizAuth NO_AUTH = bizRequest$ -> Either.right(null);
     /**
@@ -25,29 +25,26 @@ public interface BizAuth
         // ref-anonymous allowed then any user with a role will also be allowed
         if(bizUser$.isRefAnonymous() || bizUser$.isRegisteredUser())
             return Either.right(null);
-        else return Either.left(REFERENCE_ACCESS_AUTH_VIOLATION);
+        else return Either.left(REFERENCE_ACCESS_VIOLATION);
 
     };
 
-    BizAuth ALL_USER_ACCESS_AUTH = bizUser$ -> {
+    BizAuth REGISTERED_ACCESS_AUTH = bizUser$ -> {
         // ref-anonymous allowed then any user with a role will also be allowed
         if(bizUser$.isRegisteredUser())
             return Either.right(null);
-        else return Either.left(REFERENCE_ACCESS_AUTH_VIOLATION);
+        else return Either.left(REGISTERED_ACCESS_VIOLATION);
 
     };
 
-    /**
-     * SingleChannelAuth: functional definition to allow access an user with a role
-     * to a domain service having one-to-one mapping to domain channel
-     * */
-    public static BizAuth singleChannelAuth(String... roles$)
+
+    public static BizAuth forRole(String... roles$)
     {
         Objects.requireNonNull(roles$);
         return bizUser$ -> {
 
             if(bizUser$.isRefAnonymous() || bizUser$.isGlobalAnonymous())
-                return Either.left(SINGLE_CHANNEL_ACCESS_AUTH_VIOLATION);
+                return Either.left(REGISTERED_ACCESS_VIOLATION);
 
             String userRole = bizUser$.role;
             for(String r : roles$){
@@ -55,7 +52,7 @@ public interface BizAuth
                     return Either.right(null);
             }
 
-            return Either.left(SINGLE_CHANNEL_ACCESS_AUTH_VIOLATION);
+            return Either.left(USER_ACCESS_VIOLATION);
 
         };
     }

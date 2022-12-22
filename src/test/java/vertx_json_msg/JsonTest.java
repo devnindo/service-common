@@ -1,4 +1,4 @@
-package json;
+package vertx_json_msg;
 
 import io.devnindo.datatype.json.*;
 import io.devnindo.service.util.JsonArrayMessageCodec;

@@ -6,7 +6,7 @@
 package io.devnindo.service;
 
 import io.devnindo.service.deploy.RuntimeMode;
-import io.devnindo.service.deploy.ServiceComponentProvider;
+import io.devnindo.service.deploy.BizComponentProvider;
 import io.devnindo.service.deploy.base.BaseComponent;
 import io.devnindo.service.deploy.base.BaseModule;
 import io.devnindo.service.deploy.base.DaggerBaseComponent;
@@ -72,29 +72,37 @@ public final class BizMain {
     private  void preBootAndDeploy0( ) throws IllegalAccessException, IOException, InvocationTargetException {
 
         RxScheduler.init(baseComponent.blockingScheduler(), baseComponent.asyncScheduler());
-        ServiceComponentProvider componentProvider = ClzUtil.findClzAndReflect(ServiceComponentProvider.class);
+        BizComponentProvider componentProvider = ClzUtil.findClzAndReflect(BizComponentProvider.class);
 
+        // Boot worker or other background watcher mechanism
         preBoot0(componentProvider);
+
+        ActionComponent actionComponent = componentProvider.actionComponent(runtimeConfig, baseComponent);
+        DeployComponent deployComponent;
+        if(RuntimeMode.dev.equals(runtimeMode))
+            deployComponent = componentProvider.devDeployComponent(deployConfig, baseComponent);
+        else
+            deployComponent = componentProvider.proDeployComponent(deployConfig, baseComponent);
 
         BizComponent bizComponent = DaggerBizComponent.builder()
                 .identityConfigModule(new IdentityConfigModule(identityConfig))
-                .deployComponent(componentProvider.deployComponent(deployConfig))
-                .actionComponent(componentProvider.actionComponent(runtimeConfig))
+                .deployComponent(deployComponent)
+                .actionComponent(actionComponent)
                 .build();
 
         bizComponent.serverDeployer().deploy();
 
     }
 
-    private void preBoot0(ServiceComponentProvider componentProvider)
+    private void preBoot0(BizComponentProvider componentProvider)
             throws InvocationTargetException, IllegalAccessException, IOException {
 
 
         for(Method m : componentProvider.getClass().getDeclaredMethods()){
-            PreBoot preBootAnt = m.getDeclaredAnnotation(PreBoot.class);
-            if(preBootAnt != null){
+            PreBoot preBootAnn = m.getDeclaredAnnotation(PreBoot.class);
+            if(preBootAnn != null){
                 System.out.println("pre-booting: "+m.getName());
-                String configName = preBootAnt.config();
+                String configName = preBootAnn.config();
                 if(configName.isEmpty())
                     m.invoke(componentProvider);
                 else {

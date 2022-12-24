@@ -13,7 +13,7 @@ import java.util.function.BiConsumer;
 
 import static io.devnindo.service.testunit.TestCaseFlow.*;
 public class TestCase implements
-         ExecuteIF,  DataIF,  UserIF, AssertRuleIF
+          DataIF,  UserIF, AssertRuleIF
 {
 
     private BizAction bizAction;
@@ -22,7 +22,6 @@ public class TestCase implements
 
     private CountDownLatch countDownLatch;
 
-    BiConsumer<BizResponse, BizException> assertRule;
 
     private TestCase(BizAction bizAction$)
     {
@@ -47,38 +46,31 @@ public class TestCase implements
     }
 
     @Override
-    public ExecuteIF andRule(BiConsumer<BizResponse, BizException> assertRule$) {
-        assertRule = assertRule$;
-        return this;
-    }
-
-    @Override
-    public void execute() {
-        // we are only interested to test with bizUser and jsonData
+    public void assertRule(BiConsumer<BizResponse, BizException> assertRule$) {
         BizRequest request = new BizRequest(null, null, null, bizUser, jsData);
         Single<BizResponse> bizResponseSingle =  bizAction.executeOn(request);
-        AssertionError[] assertionError = {};
+        AssertionError[] assertionError = {null};
         bizResponseSingle.doOnSuccess(response -> {
                     try{
-                        assertRule.accept(response, null);
+                        assertRule$.accept(response, null);
                     }catch (AssertionError err){
                         assertionError[0] = err;
                     }finally {
                         countDownLatch.countDown();
                     }
-        })
-        .doOnError(error -> {
-            if(error instanceof BizException)
-            {
-                try{
-                    assertRule.accept(BizResponse.INTERNAL_ERROR, (BizException) error);
-                }catch (AssertionError err){
-                    assertionError[0] = err;
-                }finally {
-                    countDownLatch.countDown();
-                }
-            }
-        }).subscribe();
+                })
+                .doOnError(error -> {
+                    if(error instanceof BizException)
+                    {
+                        try{
+                            assertRule$.accept(BizResponse.INTERNAL_ERROR, (BizException) error);
+                        }catch (AssertionError err){
+                            assertionError[0] = err;
+                        }finally {
+                            countDownLatch.countDown();
+                        }
+                    }
+                }).subscribe();
 
         try {
             countDownLatch.await();
@@ -88,6 +80,4 @@ public class TestCase implements
         if(assertionError[0]!=null)
             throw assertionError[0];
     }
-
-
 }

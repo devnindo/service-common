@@ -26,10 +26,8 @@ public final class TestCaseFlow
     }
 
     public static interface AssertRuleIF{
-        ExecuteIF andRule(BiConsumer<BizResponse, BizException> assertRule$);
+        void assertRule(BiConsumer<BizResponse, BizException> assertRule$);
     }
-    public static interface ExecuteIF{
-        void execute();
-    }
+
 
 }

@@ -21,6 +21,14 @@ public final class ServiceConfigUtil
         return new JsonObject(content);
     }
 
+    public static final JsonObject readDeployConfig(RuntimeMode mode$) throws IOException {
+        return readConfig(mode$, "deploy");
+    }
+
+    public static final JsonObject readRuntimeConfig(RuntimeMode mode$) throws IOException {
+        return readConfig(mode$, "runtime");
+    }
+
     public static io.vertx.core.json.JsonObject toVertxJS(JsonObject obj){
         return new io.vertx.core.json.JsonObject(obj.getMap());
     }

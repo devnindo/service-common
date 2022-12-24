@@ -1,6 +1,9 @@
+package module_test;
+
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-
+@Disabled
 public class Sample2$TestModule{
 
 

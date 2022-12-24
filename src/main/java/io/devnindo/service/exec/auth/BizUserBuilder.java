@@ -1,9 +1,9 @@
 package io.devnindo.service.exec.auth;
 
 import java.time.Instant;
-
+import static io.devnindo.service.exec.auth.BizUserIF.*;
 public final class BizUserBuilder
-    implements BizUserIF.IBuild, BizUserIF.IUserId, BizUserIF.IPrefName, BizUserIF.IRole, BizUserIF.IDomain, BizUserIF.IChannel
+    implements IBuild, IUserId, IPrefName, IRole, IDomain, IChannel
 {
 
     private final BizUser bizUser;
@@ -14,14 +14,14 @@ public final class BizUserBuilder
         bizUser.status = BizUserStatus.reg_user;
     }
 
-    public static final BizUserBuilder init()
+    public static final IUserId init()
     {
         return new BizUserBuilder();
     }
 
 
     @Override
-    public BizUserIF.IPrefName userId(Long userId$) {
+    public  IPrefName userId(Long userId$) {
 
         bizUser.userId = userId$;
         return this;
@@ -29,26 +29,26 @@ public final class BizUserBuilder
 
 
     @Override
-    public BizUserIF.IRole prefName(String prefName$) {
+    public  IRole prefName(String prefName$) {
         bizUser.prefName = prefName$;
         return this;
     }
 
 
     @Override
-    public BizUserIF.IDomain role(String role$) {
+    public  IDomain role(String role$) {
         bizUser.role = role$;
         return this;
     }
 
     @Override
-    public BizUserIF.IChannel domain(String domainId$) {
+    public  IChannel domain(String domainId$) {
         bizUser.domainId = domainId$;
         return this;
     }
 
     @Override
-    public BizUserIF.IBuild channel(String channelId$) {
+    public  IBuild channel(String channelId$) {
         bizUser.channelId = channelId$;
         return this;
     }

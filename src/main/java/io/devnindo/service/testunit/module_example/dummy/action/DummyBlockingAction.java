@@ -26,13 +26,16 @@ public class DummyBlockingAction extends BlockingBizAction<DummyData>
     @Override
     protected BizResponse doBlockingBiz(DummyData reqData$, BizUser bizUser$) {
 
-        System.out.println("Action Dummy: "+reqData$.getName());
         try {
-            Thread.sleep(reqData$.getSleepingTime());
-            System.out.println(Thread.currentThread().getName());
+            Thread crt = Thread.currentThread();
+            String msg = """
+                    # %s runs in Thread: %s--%s
+                    """.formatted(reqData$.getName(), crt.getName(), crt.hashCode());
+            System.out.println(msg);
+            Thread.sleep(reqData$.getSleepingTime()*1000);
         } catch (InterruptedException e) {
 
         }
-        return BizResponse.success(new JsonObject().put("response", 123));
+        return BizResponse.success(new JsonObject().put("reply", reqData$.getReply()));
     }
 }

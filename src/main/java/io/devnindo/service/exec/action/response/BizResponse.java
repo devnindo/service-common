@@ -19,8 +19,7 @@ import java.time.Instant;
 public class BizResponse implements Jsonable
 {
     final Object data;
-    public final Status status;  
-    protected static final JsonObject EMPTY_LOGGABLE = new JsonObject();
+    public final Status status;
     public final Instant responseDatime = Instant.now();
 
     public static enum Status
@@ -37,11 +36,7 @@ public class BizResponse implements Jsonable
             code = code$;
         }
     }
-//    public BizResponse(Object merged$, Status status$) {
-//        merged = merged$;
-//        status = status$;
-//        loggableData = merged$;
-//    }
+
     
     public BizResponse(Object data$, Status status$)
     {
@@ -68,8 +63,7 @@ public class BizResponse implements Jsonable
     {
         return new BizResponse(data$, Status.SUCCESS);
     }
-    
-   // public static final BizResponse DATA_NOT_FOUND = new BizResponse(null);
+
     
     public boolean isSuccess()
     {
@@ -93,13 +87,6 @@ public class BizResponse implements Jsonable
                 .put("data", data);
     }
 
-    public JsonObject loggableJson(){
-        return new JsonObject()
-                .put("resp_status", status.name())
-                .put("resp_datime", responseDatime);
-
-    }
-    
     
     public static final BizResponse ACTION_NOT_FOUND = new BizResponse(new JsonObject(), Status.ACTION_NOT_FOUND);
     public static final BizResponse INTERNAL_ERROR = new BizResponse(new JsonObject(), Status.INTERNAL_ERROR) ;

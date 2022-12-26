@@ -11,19 +11,17 @@ import io.devnindo.service.exec.action.BizAction;
 import io.devnindo.service.util.ServiceConfigUtil;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;
 
-import javax.inject.Provider;
 import java.io.IOException;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public abstract class ServiceTestModule
+public abstract class BizTestModule
 {
     private static ActionComponent actionComponent ;
 
-    private final <T extends BizComponent> T actionComponent(){
+    private final <T extends ActionComponent> T actionComponent(){
         return (T) actionComponent;
     }
 
@@ -44,8 +42,12 @@ public abstract class ServiceTestModule
 
     }
 
+    @BeforeEach
+    void logActionInstance(){
+        System.out.println("#ACTION COMPONENT: "+actionComponent().hashCode());
+    }
 
-    protected TestCaseFlow.UserIF newCaseFor(Class<? extends BizAction> actionClz){
+    protected TestCaseFlow.UserIF forAction(Class<? extends BizAction> actionClz){
         BizAction bizAction = actionComponent.actionMap().get(actionClz).get();
         return TestCase.init(bizAction);
     }

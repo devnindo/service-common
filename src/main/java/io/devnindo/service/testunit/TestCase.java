@@ -5,11 +5,13 @@ import io.devnindo.service.exec.action.BizException;
 import io.devnindo.service.exec.action.request.BizRequest;
 import io.devnindo.service.exec.action.response.BizResponse;
 import io.devnindo.service.exec.auth.BizUser;
+import io.devnindo.service.util.ThreadUtil;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.subscribers.TestSubscriber;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import static io.devnindo.service.testunit.TestCaseFlow.*;
 public class TestCase implements
@@ -46,13 +48,14 @@ public class TestCase implements
     }
 
     @Override
-    public void assertRule(BiConsumer<BizResponse, BizException> assertRule$) {
+    public void applyRule(BiConsumer<BizResponse, BizException> rule$) {
         BizRequest request = new BizRequest(null, null, null, bizUser, jsData);
         Single<BizResponse> bizResponseSingle =  bizAction.executeOn(request);
         AssertionError[] assertionError = {null};
         bizResponseSingle.doOnSuccess(response -> {
                     try{
-                        assertRule$.accept(response, null);
+                        ThreadUtil.logCurrent("SingleOnSuccess");
+                        rule$.accept(response, null);
                     }catch (AssertionError err){
                         assertionError[0] = err;
                     }finally {
@@ -63,7 +66,7 @@ public class TestCase implements
                     if(error instanceof BizException)
                     {
                         try{
-                            assertRule$.accept(BizResponse.INTERNAL_ERROR, (BizException) error);
+                            rule$.accept(BizResponse.INTERNAL_ERROR, (BizException) error);
                         }catch (AssertionError err){
                             assertionError[0] = err;
                         }finally {
@@ -73,6 +76,7 @@ public class TestCase implements
                 }).subscribe();
 
         try {
+            ThreadUtil.logCurrent("ApplyRule");
             countDownLatch.await();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

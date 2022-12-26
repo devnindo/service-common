@@ -7,6 +7,7 @@ import io.devnindo.service.exec.action.response.BizResponse;
 import io.devnindo.service.exec.auth.BizAuth;
 import io.devnindo.service.exec.auth.BizUser;
 import io.devnindo.service.testunit.module_example.dummy.DummyData;
+import io.devnindo.service.util.ThreadUtil;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -26,16 +27,8 @@ public class DummyBlockingAction extends BlockingBizAction<DummyData>
     @Override
     protected BizResponse doBlockingBiz(DummyData reqData$, BizUser bizUser$) {
 
-        try {
-            Thread crt = Thread.currentThread();
-            String msg = """
-                    # %s runs in Thread: %s--%s
-                    """.formatted(reqData$.getName(), crt.getName(), crt.hashCode());
-            System.out.println(msg);
-            Thread.sleep(reqData$.getSleepingTime()*1000);
-        } catch (InterruptedException e) {
-
-        }
+        ThreadUtil.logCurrent(reqData$.getName());
+        ThreadUtil.sleepingBlock(reqData$.getSleepingTime());
         return BizResponse.success(new JsonObject().put("reply", reqData$.getReply()));
     }
 }

@@ -1,20 +1,34 @@
 package module_test;
 
+import io.devnindo.service.testunit.BizTestModule;
+import io.devnindo.service.testunit.module_example.dummy.action.DummyBlockingAction;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-@Disabled
-public class Sample2$TestModule{
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
+public class Sample2$TestModule extends BizTestModule {
 
 
 
     @Test
     public void test_1(){
-        System.out.println("test_1 of module: "+getClass().getName());
+        forAction(DummyBlockingAction.class)
+                .withUser(UserForTest.seniorRashed())
+                .withData(DataForTest.module_2_data_1())
+                .applyRule((bizResponse, bizException) -> {
+                    assertEquals(Boolean.TRUE, bizResponse.isSuccess());
+                });
     }
 
     @Test
     public void test_2(){
-        System.out.println("test_2 of module: "+getClass().getName());
+        forAction(DummyBlockingAction.class)
+                .withUser(UserForTest.seniorRashed())
+                .withData(DataForTest.module_2_data_2())
+                .applyRule((bizResponse, bizException) -> {
+                    assertEquals(Boolean.TRUE, bizResponse.isSuccess());
+                });
     }
 }

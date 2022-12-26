@@ -7,6 +7,7 @@ import io.devnindo.service.exec.action.response.BizResponse;
 import io.devnindo.service.exec.auth.BizUser;
 
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public final class TestCaseFlow
 {
@@ -26,7 +27,7 @@ public final class TestCaseFlow
     }
 
     public static interface AssertRuleIF{
-        void assertRule(BiConsumer<BizResponse, BizException> assertRule$);
+        void applyRule(BiConsumer<BizResponse, BizException> assertRule$);
     }
 
 

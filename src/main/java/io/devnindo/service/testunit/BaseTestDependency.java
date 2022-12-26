@@ -17,10 +17,9 @@ public class BaseTestDependency implements BaseDependency
         VertxOptions vertxOptions = new VertxOptions().setEventLoopPoolSize(1);
         vertx = Vertx.vertx(vertxOptions);
         Runtime.getRuntime().addShutdownHook(new Thread(()->{
-            vertx
-                .close()
-                .doOnComplete(()->System.out.println("# Vertx is closed")
-            ).subscribe();
+            /*vertx.close()
+                .doOnComplete(()-> System.out.println("# Vertx is closed"))
+                .subscribe();*/
         }));
     }
     @Override

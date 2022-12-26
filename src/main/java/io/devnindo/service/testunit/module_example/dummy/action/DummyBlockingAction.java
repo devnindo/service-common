@@ -27,7 +27,7 @@ public class DummyBlockingAction extends BlockingBizAction<DummyData>
     @Override
     protected BizResponse doBlockingBiz(DummyData reqData$, BizUser bizUser$) {
 
-        ThreadUtil.logCurrent(reqData$.getName());
+        ThreadUtil.logCurrent(reqData$.getName()+"--ACTION");
         ThreadUtil.sleepingBlock(reqData$.getSleepingTime());
         return BizResponse.success(new JsonObject().put("reply", reqData$.getReply()));
     }

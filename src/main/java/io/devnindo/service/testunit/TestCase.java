@@ -54,7 +54,7 @@ public class TestCase implements
         AssertionError[] assertionError = {null};
         bizResponseSingle.doOnSuccess(response -> {
                     try{
-                        ThreadUtil.logCurrent("SingleOnSuccess");
+                        ThreadUtil.logCurrent(jsData.getString("name")+"--OnSuccess");
                         rule$.accept(response, null);
                     }catch (AssertionError err){
                         assertionError[0] = err;
@@ -76,7 +76,7 @@ public class TestCase implements
                 }).subscribe();
 
         try {
-            ThreadUtil.logCurrent("ApplyRule");
+            ThreadUtil.logCurrent(jsData.getString("name")+"--ApplyRule");
             countDownLatch.await();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

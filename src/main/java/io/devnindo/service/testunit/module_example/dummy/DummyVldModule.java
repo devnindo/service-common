@@ -3,7 +3,6 @@ package io.devnindo.service.testunit.module_example.dummy;
 import dagger.Module;
 import dagger.Provides;
 import io.devnindo.datatype.schema.BeanValidator;
-import io.devnindo.datatype.validation.Validator;
 import io.devnindo.service.exec.auth.BizAuth;
 
 import javax.inject.Named;

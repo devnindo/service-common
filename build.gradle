@@ -3,14 +3,14 @@ plugins {
   id 'java-library'
   id 'maven-publish'
   id 'devnindo-schemagen' version '0.9.17'
-  
+    id 'signing'
 }
 
 group = "io.devnindo.core"
-version = "0.9.6"
+version = "0.9.7"
 
 
-apply from: 'remote-repo.gradle'
+apply from: 'publish.gradle'
 
 
 sourceSets.main.java.srcDirs = ['build/classes/java/main','src/main/java']
@@ -26,7 +26,7 @@ dependencies {
     annotationProcessor('com.google.dagger:dagger-compiler:2.43.2')
     implementation  group: 'io.github.classgraph', name: 'classgraph', version: '4.8.149'
 
-    api('io.devnindo.core:type-common:0.9.7') {changing = true}
+    api('io.devnindo.core:devnindo-datatype:0.9.8') {changing = true}
     api 'io.vertx:vertx-rx-java3:4.3.4'
     api 'io.vertx:vertx-core:4.3.4:sources'
 

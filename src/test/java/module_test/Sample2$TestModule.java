@@ -2,7 +2,6 @@ package module_test;
 
 import io.devnindo.service.testunit.BizTestModule;
 import io.devnindo.service.testunit.module_example.dummy.action.DummyBlockingAction;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

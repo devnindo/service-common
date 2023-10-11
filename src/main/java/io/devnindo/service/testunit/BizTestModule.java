@@ -21,13 +21,18 @@ public abstract class BizTestModule
 {
     private static ActionComponent actionComponent ;
 
-    private final <T extends ActionComponent> T actionComponent(){
+    protected final <T extends ActionComponent> T actionComponent(){
         return (T) actionComponent;
     }
 
     @BeforeAll
      void init() throws IllegalAccessException, IOException {
-         if(actionComponent == null){
+        /**
+         *  to make sure single actionComponent instance in case
+         *  multiple test module concurrent initialization
+         * */
+         if(actionComponent == null)
+         {
              synchronized (ActionComponent.class){
                  if(actionComponent == null)
                  {
@@ -41,11 +46,12 @@ public abstract class BizTestModule
          }
 
     }
-
+/*
     @BeforeEach
     void logActionInstance(){
         System.out.println("#ACTION COMPONENT: "+actionComponent().hashCode());
     }
+*/
 
     protected TestCaseFlow.UserIF forAction(Class<? extends BizAction> actionClz){
         BizAction bizAction = actionComponent.actionMap().get(actionClz).get();

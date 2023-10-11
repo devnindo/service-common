@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.devnindo.core"
-version = "0.9.7"
+version = "0.9.8"
 
 
 apply from: 'publish.gradle'
@@ -22,21 +22,20 @@ configurations.all {
 
 dependencies {
 
-    implementation 'com.google.dagger:dagger:2.43.2'
-    annotationProcessor('com.google.dagger:dagger-compiler:2.43.2')
+    implementation 'com.google.dagger:dagger:2.45'
+    annotationProcessor('com.google.dagger:dagger-compiler:2.45')
     implementation  group: 'io.github.classgraph', name: 'classgraph', version: '4.8.149'
 
     api('io.devnindo.core:devnindo-datatype:0.9.8') {changing = true}
-    api 'io.vertx:vertx-rx-java3:4.3.4'
-    api 'io.vertx:vertx-core:4.3.4:sources'
+    api 'io.vertx:vertx-rx-java3:4.4.0'
+    api 'io.vertx:vertx-core:4.4.0:sources'
 
-    implementation 'io.vertx:vertx-web:4.3.4'
-    implementation 'io.vertx:vertx-web-client:4.3.4'
+    implementation 'io.vertx:vertx-web:4.4.0'
+    implementation 'io.vertx:vertx-web-client:4.4.0'
 
-    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
-    implementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+    implementation 'org.junit.jupiter:junit-jupiter:5.9.2'
 
-    implementation 'io.vertx:vertx-unit:4.3.6'
 }
 
 test {

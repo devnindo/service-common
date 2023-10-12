@@ -25,6 +25,10 @@ import io.vertx.rxjava3.ext.web.handler.BodyHandler;
 import io.vertx.rxjava3.ext.web.handler.CorsHandler;
 
 
+/**
+ *
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
+ */
 public class ServerVerticle extends AbstractVerticle {
 
 

@@ -11,7 +11,7 @@ import io.devnindo.datatype.schema.Required;
 
 /**
  *
- * @author prevy-sage
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
  */
 public class ConfigServer implements DataBean{
     

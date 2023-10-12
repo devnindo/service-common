@@ -9,6 +9,10 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ *
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
+ */
 public class BizErrorLog implements Jsonable {
 
 

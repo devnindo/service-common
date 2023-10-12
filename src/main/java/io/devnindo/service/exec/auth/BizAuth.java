@@ -5,6 +5,10 @@ import io.devnindo.datatype.validation.Violation;
 
 import java.util.Objects;
 
+/**
+ *
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
+ */
 public interface BizAuth
 {
     Violation USER_ACCESS_VIOLATION = Violation.withCtx("USER_ACCESS_AUTH", "VALID_ROLE");

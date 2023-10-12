@@ -12,7 +12,7 @@ import java.util.Map;
 
 /**
  *
- * @author prevy-sage
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
  */
 public interface ActionComponent {
      //Set<BizAction> actionSet();

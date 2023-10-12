@@ -13,7 +13,7 @@ import javax.inject.Singleton;
 
 /**
  *
- * @author prevy-sage
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
  */
 @Singleton
 @Component(modules = ProDeployConfigModule.class, dependencies = BaseDependency.class)

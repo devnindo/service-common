@@ -12,7 +12,7 @@ import io.devnindo.datatype.validation.Violation;
 import io.devnindo.datatype.json.JsonObject;
 /**
  *
- * @author prevy-sage
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
  */
 public abstract class BeanConfigModule<T extends DataBean> {
  

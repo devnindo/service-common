@@ -10,7 +10,7 @@ import io.reactivex.rxjava3.core.Single;
 
 /**
  *
- * @author prevy-sage
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
  */
 public interface BizManagerApi {
      

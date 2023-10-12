@@ -9,6 +9,11 @@ import io.devnindo.datatype.validation.Violation;
 import java.time.Instant;
 import java.util.Base64;
 
+
+/**
+ *
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
+ */
 public class DefaultJwtHandler implements JwtHandler
 {
 

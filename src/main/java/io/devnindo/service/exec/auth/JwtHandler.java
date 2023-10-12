@@ -5,6 +5,11 @@ import io.devnindo.datatype.schema.DataBean;
 import io.devnindo.datatype.util.Either;
 import io.devnindo.datatype.validation.Violation;
 
+
+/**
+ *
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
+ */
 public interface JwtHandler
 {
     public String generateJWT(JsonObject payload, Long expireInSeconds);

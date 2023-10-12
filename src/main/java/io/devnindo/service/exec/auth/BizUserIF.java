@@ -2,6 +2,10 @@ package io.devnindo.service.exec.auth;
 
 import java.time.Instant;
 
+/**
+ *
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
+ */
 public final class BizUserIF
 {
     public interface IUserId{

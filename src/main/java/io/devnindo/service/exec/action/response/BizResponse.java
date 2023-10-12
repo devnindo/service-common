@@ -14,7 +14,7 @@ import java.time.Instant;
 
 /**
  *
- * @author prevy-sage
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
  */
 public class BizResponse implements Jsonable
 {

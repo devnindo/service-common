@@ -3,6 +3,11 @@ package io.devnindo.service.exec.auth;
 import io.devnindo.datatype.schema.DataBean;
 import io.devnindo.datatype.schema.Required;
 
+
+/**
+ *
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
+ */
 public class JwtConfig implements DataBean, JwtConfigSpec
 {
     @Required

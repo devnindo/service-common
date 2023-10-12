@@ -24,7 +24,7 @@ import javax.inject.Inject;
 
 /**
  *
- * @author prevy-sage
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
  */
 public class ServiceDeployer {
 

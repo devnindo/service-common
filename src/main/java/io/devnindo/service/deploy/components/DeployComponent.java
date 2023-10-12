@@ -13,7 +13,7 @@ import io.vertx.rxjava3.ext.web.client.WebClient;
 
 /**
  *
- * @author prevy-sage
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
  */
 
 public interface DeployComponent 

@@ -5,6 +5,10 @@ import io.reactivex.rxjava3.core.Single;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ *
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
+ */
 public final class RxScheduler
 {
     private static  Scheduler blockingScheduler;

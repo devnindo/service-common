@@ -10,7 +10,7 @@ import io.devnindo.datatype.schema.AField;
 
 /**
  *
- * @author prevy-sage
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
  */
 public class ConfigApiClient implements DataBean{
      

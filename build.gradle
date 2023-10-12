@@ -3,7 +3,7 @@ plugins {
   id 'java-library'
   id 'maven-publish'
   id 'devnindo-schemagen' version '0.9.17'
-    id 'signing'
+  id 'signing'
 }
 
 group = "io.devnindo.core"

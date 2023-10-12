@@ -2,6 +2,11 @@ package io.devnindo.service.exec.auth;
 
 import java.time.Instant;
 import static io.devnindo.service.exec.auth.BizUserIF.*;
+
+/**
+ *
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
+ */
 public final class BizUserBuilder
     implements IBuild, IUserId, IPrefName, IRole, IDomain, IChannel
 {

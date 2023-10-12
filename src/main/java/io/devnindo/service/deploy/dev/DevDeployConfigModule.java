@@ -19,7 +19,7 @@ import javax.inject.Singleton;
 
 /**
  *
- * @author prevy-sage
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
  */
 //@Module(includes = CommonConfigModule.class)
 @Module

@@ -7,7 +7,7 @@ package io.devnindo.service.util;
 
 /**
  *
- * @author prevy-sage
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
  */
 public interface DeployParams {
     String AUTH_API = "AUTH_API";

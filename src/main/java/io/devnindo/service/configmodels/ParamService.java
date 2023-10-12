@@ -7,7 +7,7 @@ package io.devnindo.service.configmodels;
 
 /**
  *
- * @author prevy-sage
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
  */
 public interface ParamService {
     String BIZLOG_QUEUE = "queue.bizlog";

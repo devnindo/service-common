@@ -10,6 +10,11 @@ import io.reactivex.rxjava3.core.Single;
 
 import javax.inject.Inject;
 
+
+/**
+ *
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
+ */
 public class JWTSessionHandler extends BizSessionHandler
 {
 

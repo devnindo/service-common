@@ -5,6 +5,10 @@ import io.devnindo.datatype.util.Values;
 
 import java.time.Instant;
 
+/**
+ *
+ * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
+ */
 public class BizUser implements DataBean
 {
     Long userId;

@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 devnindo
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.devnindo.service.exec.action;
 
 import io.devnindo.service.exec.auth.BizAuth;
@@ -141,7 +156,7 @@ public abstract class BizAction<T extends DataBean> {
             String actionType;
             String actionID;
 
-            String[] splits = reqName$.split("\\.");
+            String[] splits = reqName$.split("\.");
             int splitCount = splits.length;
             if(splitCount != 3)
                 return Either.left("Action's package resolution format: module.{coomand, query}.constraint");
@@ -161,7 +176,7 @@ public abstract class BizAction<T extends DataBean> {
             String execType =  ExeTypes.UNKNOWN;
             String clzName = actionClz$.getName();
 
-            String[] splits = clzName.split("\\.");
+            String[] splits = clzName.split("\.");
             String moduleName;
             String actionType;
             String actionName;

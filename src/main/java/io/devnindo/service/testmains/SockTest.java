@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 devnindo
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.devnindo.service.testmains;
 
 
@@ -72,7 +87,8 @@ public class SockTest {
         client.webSocket(8080, "localhost", "/rlt/"+topicToken)
                 .doOnError(throwable -> throwable.printStackTrace())
                 .doOnSuccess(ws -> {
-                    ws.closeHandler(h-> System.out.printf("# CLIENT SOCKET CLOSED TOPIC: %s REASON %s\n", topic.getTopicId(), ws.closeReason()));
+                    ws.closeHandler(h-> System.out.printf("# CLIENT SOCKET CLOSED TOPIC: %s REASON %s
+", topic.getTopicId(), ws.closeReason()));
                /* clientVertx.setPeriodic(10000, h-> {
 
                   JsonObject serverMsg = new JsonObject().put("msg", "hello server: "+Instant.now());

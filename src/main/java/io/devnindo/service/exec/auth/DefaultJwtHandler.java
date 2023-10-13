@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 devnindo
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.devnindo.service.exec.auth;
 
 import io.devnindo.datatype.json.JsonObject;
@@ -10,10 +25,6 @@ import java.time.Instant;
 import java.util.Base64;
 
 
-/**
- *
- * @author <a href="https://github.com/skull-sage">Rashed Alam</a>
- */
 public class DefaultJwtHandler implements JwtHandler
 {
 
@@ -53,7 +64,7 @@ public class DefaultJwtHandler implements JwtHandler
 
     @Override
     public Either<Violation, JsonObject> validateJWT(String jwToken) {
-        String splits[] = jwToken.split("\\.");
+        String splits[] = jwToken.split("\.");
         if(splits.length < 3)
             return Either.left(Violation.withCtx("VALID_JWT", "VALID_FORMAT"));
 

@@ -46,6 +46,7 @@ test {
         showStandardStreams true
     }
 }
+/*
 
 task publishProject(type: GradleBuild) {
     tasks = [
@@ -57,6 +58,7 @@ task publishProject(type: GradleBuild) {
             'publish'
     ]
 }
+*/
 
 
 compileJava.options.encoding = 'UTF-8'

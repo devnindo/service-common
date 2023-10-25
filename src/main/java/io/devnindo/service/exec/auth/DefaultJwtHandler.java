@@ -64,7 +64,7 @@ public class DefaultJwtHandler implements JwtHandler
 
     @Override
     public Either<Violation, JsonObject> validateJWT(String jwToken) {
-        String splits[] = jwToken.split("\.");
+        String splits[] = jwToken.split("\\.");
         if(splits.length < 3)
             return Either.left(Violation.withCtx("VALID_JWT", "VALID_FORMAT"));
 

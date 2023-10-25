@@ -156,7 +156,7 @@ public abstract class BizAction<T extends DataBean> {
             String actionType;
             String actionID;
 
-            String[] splits = reqName$.split("\.");
+            String[] splits = reqName$.split("\\.");
             int splitCount = splits.length;
             if(splitCount != 3)
                 return Either.left("Action's package resolution format: module.{coomand, query}.constraint");
@@ -176,7 +176,7 @@ public abstract class BizAction<T extends DataBean> {
             String execType =  ExeTypes.UNKNOWN;
             String clzName = actionClz$.getName();
 
-            String[] splits = clzName.split("\.");
+            String[] splits = clzName.split("\\.");
             String moduleName;
             String actionType;
             String actionName;

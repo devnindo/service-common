@@ -87,8 +87,7 @@ public class SockTest {
         client.webSocket(8080, "localhost", "/rlt/"+topicToken)
                 .doOnError(throwable -> throwable.printStackTrace())
                 .doOnSuccess(ws -> {
-                    ws.closeHandler(h-> System.out.printf("# CLIENT SOCKET CLOSED TOPIC: %s REASON %s
-", topic.getTopicId(), ws.closeReason()));
+                    ws.closeHandler(h-> System.out.printf("# CLIENT SOCKET CLOSED TOPIC: %s REASON %s", topic.getTopicId(), ws.closeReason()));
                /* clientVertx.setPeriodic(10000, h-> {
 
                   JsonObject serverMsg = new JsonObject().put("msg", "hello server: "+Instant.now());

@@ -29,8 +29,7 @@ public abstract class BeanConfigModule<T extends DataBean> {
         Either<Violation, T> either = BeanSchema.of(dataBean$).apply(jsonObj$);
         if(either.isLeft())
         {
-            String msg = "provided json violates schema of dataBean: "+dataBean$+"
-";
+            String msg = "provided json violates schema of dataBean: "+dataBean$+"";
             msg += "violations: " +either.left().toJson().encodePrettily();
 
             throw new UnsupportedOperationException(msg);

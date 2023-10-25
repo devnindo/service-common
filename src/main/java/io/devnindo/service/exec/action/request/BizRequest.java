@@ -17,7 +17,7 @@ package io.devnindo.service.exec.action.request;
 
 import io.devnindo.service.exec.action.BizAction;
 import io.devnindo.service.exec.auth.BizUser;
-import io.devnindo.datatype.json.Jsonable;;
+import io.devnindo.datatype.json.Jsonable;
 import io.devnindo.datatype.json.JsonObject;
 
 import java.time.Instant;

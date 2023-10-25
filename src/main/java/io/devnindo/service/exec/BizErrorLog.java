@@ -17,7 +17,7 @@ package io.devnindo.service.exec;
 
 import io.devnindo.service.exec.action.BizException;
 import io.devnindo.service.exec.action.request.BizRequest;
-import io.devnindo.datatype.json.Jsonable;;
+import io.devnindo.datatype.json.Jsonable;
 import io.devnindo.datatype.json.JsonObject;
 
 import java.time.ZoneId;

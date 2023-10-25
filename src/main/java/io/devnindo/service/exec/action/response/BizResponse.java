@@ -16,7 +16,7 @@
 package io.devnindo.service.exec.action.response;
 
 import io.devnindo.datatype.json.JsonArray;
-import io.devnindo.datatype.json.Jsonable;;
+import io.devnindo.datatype.json.Jsonable;
 import io.devnindo.datatype.validation.Violation;
 import io.devnindo.datatype.json.JsonObject;
 

@@ -23,28 +23,9 @@ test {
         showStandardStreams true
     }
 }
-/*
-
-task publishProject(type: GradleBuild) {
-    tasks = [
-            'clean',
-            'test',
-            'build',
-            'generateMetadataFileFor-project-Publication',
-            'publish-project-PublicationToMavenRepository',
-            'publish'
-    ]
-}
-*/
-
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
-
-// task javadocJar(type: Jar, dependsOn: javadoc) {
-//     archiveClassifier.set('javadoc')
-//     from javadoc.destinationDir
-// }
 
 java {
     withJavadocJar()
@@ -62,7 +43,7 @@ dependencies {
 
     api('io.devnindo.core:devnindo-datatype:0.9.8') {changing = true}
     api 'io.vertx:vertx-rx-java3:4.4.0'
-    api 'io.vertx:vertx-core:4.4.0:sources'
+    api 'io.vertx:vertx-core:4.4.0'
 
     implementation 'io.vertx:vertx-web:4.4.0'
     implementation 'io.vertx:vertx-web-client:4.4.0'

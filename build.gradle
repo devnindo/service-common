@@ -9,33 +9,10 @@ plugins {
 group = "io.devnindo.core"
 version = "0.9.8"
 
-
-apply from: 'publish.gradle'
-
-
 sourceSets.main.java.srcDirs = ['build/classes/java/main','src/main/java']
 
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
-
-
-dependencies {
-
-    implementation 'com.google.dagger:dagger:2.45'
-    annotationProcessor('com.google.dagger:dagger-compiler:2.45')
-    implementation  group: 'io.github.classgraph', name: 'classgraph', version: '4.8.149'
-
-    api('io.devnindo.core:devnindo-datatype:0.9.8') {changing = true}
-    api 'io.vertx:vertx-rx-java3:4.4.0'
-    api 'io.vertx:vertx-core:4.4.0:sources'
-
-    implementation 'io.vertx:vertx-web:4.4.0'
-    implementation 'io.vertx:vertx-web-client:4.4.0'
-
-    implementation 'org.apache.httpcomponents:httpclient:4.5.14'
-    implementation 'org.junit.jupiter:junit-jupiter:5.9.2'
-
 }
 
 test {
@@ -63,3 +40,34 @@ task publishProject(type: GradleBuild) {
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
+
+// task javadocJar(type: Jar, dependsOn: javadoc) {
+//     archiveClassifier.set('javadoc')
+//     from javadoc.destinationDir
+// }
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+apply from: 'publish.gradle'
+
+
+dependencies {
+
+    implementation 'com.google.dagger:dagger:2.45'
+    annotationProcessor('com.google.dagger:dagger-compiler:2.45')
+    implementation  group: 'io.github.classgraph', name: 'classgraph', version: '4.8.149'
+
+    api('io.devnindo.core:devnindo-datatype:0.9.8') {changing = true}
+    api 'io.vertx:vertx-rx-java3:4.4.0'
+    api 'io.vertx:vertx-core:4.4.0:sources'
+
+    implementation 'io.vertx:vertx-web:4.4.0'
+    implementation 'io.vertx:vertx-web-client:4.4.0'
+
+    implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+    implementation 'org.junit.jupiter:junit-jupiter:5.9.2'
+
+}

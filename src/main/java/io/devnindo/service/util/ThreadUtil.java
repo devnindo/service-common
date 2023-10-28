@@ -28,9 +28,10 @@ public class ThreadUtil {
 
     public static final void logCurrent(String blockName$){
         Thread crt = Thread.currentThread();
-        String msg = """
-                       # %s runs on [%s::%s]
-                     """.formatted(blockName$, crt.getName(), crt.hashCode());
+        // String msg = """
+        //                # %s runs on [%s::%s]
+        //              """.formatted(blockName$, crt.getName(), crt.hashCode());
+        String msg = String.format("# %s runs on [%s::%s]", blockName$, crt.getName(), crt.hashCode());
         System.out.print(msg);
     }
 }

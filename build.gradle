@@ -1,9 +1,9 @@
 plugins {
-  id 'idea'
-  id 'java-library'
-  id 'maven-publish'
-  id 'devnindo-schemagen' version '0.9.17'
-  id 'signing'
+    id 'idea'
+    id 'java-library'
+    id 'maven-publish'
+    id 'io.devnindo.devnindo-schemagen' version '0.9.17'
+    id 'signing'
 }
 
 group = "io.devnindo.core"
@@ -17,7 +17,6 @@ configurations.all {
 
 test {
     useJUnitPlatform()
-   // maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
     testLogging {
         events "passed", "skipped", "failed"
         showStandardStreams true
@@ -26,6 +25,7 @@ test {
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
+sourceCompatibility = JavaVersion.VERSION_11
 
 java {
     withJavadocJar()

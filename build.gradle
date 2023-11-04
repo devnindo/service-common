@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.devnindo.core"
-version = "0.9.8"
+version = "0.9.9"
 
 sourceSets.main.java.srcDirs = ['build/classes/java/main','src/main/java']
 

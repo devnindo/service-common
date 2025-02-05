@@ -25,14 +25,13 @@ test {
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
-sourceCompatibility = JavaVersion.VERSION_11
 
 java {
     withJavadocJar()
     withSourcesJar()
 }
 
-apply from: 'publish.gradle'
+apply from: 'remote-repo.gradle'
 
 
 dependencies {
@@ -52,3 +51,5 @@ dependencies {
     implementation 'org.junit.jupiter:junit-jupiter:5.9.2'
 
 }
+
+sourcesJar.dependsOn compileJava

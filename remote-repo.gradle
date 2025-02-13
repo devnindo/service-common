@@ -5,8 +5,18 @@ def PrivateRepo = {
         username  prvUserName
         password  prvPassword
     }
-
 }
+
+def OssRepo = {
+    name = 'oss'
+    url = ossRepoURL
+    credentials {
+        username = ossrhUsername
+        password = ossrhPassword
+    }
+}
+
+
 
 repositories {
     mavenCentral()
@@ -16,13 +26,18 @@ repositories {
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        "${project.name}"(MavenPublication) {
             from components.java
+
+            repositories {
+                maven  OssRepo
+                maven  PrivateRepo
+            }
 
             pom {
                 name = 'Devnindo RPC Common'
                 description = "a RPC style framework written utilizing vertx and dagger DI library"
-                url = 'https://github.com/devnindo/devnindo-datatype'
+                url = 'https://github.com/devnindo/service-common'
                 licenses {
                     license {
                         name = 'The Apache License, Version 2.0'
@@ -49,18 +64,10 @@ publishing {
             }
         }
     }
-    /*repositories {
-        maven {
-            name = 'OSSRH'
-            url = uri('https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/')
-            credentials {
-                username = ossrhUsername
-                password = ossrhPassword
-            }
-        }
-    }*/
+
 }
 
 signing {
-    sign publishing.publications.mavenJava
+
+    sign project.name//publishing.publications."-project-"
 }
